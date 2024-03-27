@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['DJANGO_SECRET']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['xcm55.ru', 'localhost']
+SITE_ID = 1
 
 
 # Application definition
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     # 'allauth.socialaccount.providers.apple',
-    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.mailru',
     # 'allauth.socialaccount.providers.strava',
     # 'allauth.socialaccount.providers.telegram',
@@ -120,6 +121,12 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_VERIFICATION = "none"  # new
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+
 # Allauth provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -132,17 +139,16 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
-ACCOUNT_EMAIL_VERIFICATION = "none"  # new
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 LOGIN_REDIRECT_URL = "/"  # new
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC+6'
 
 USE_I18N = True
 
@@ -160,3 +166,39 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIZE_ID = 1
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
+# E-mail configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_USE_TLS = False
+EMAIL_PORT = 25
+EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = ''
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = "Команда XCM55 <registration@xcm55.ru>"
+
+# Security
+SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
+CSRF_COOKIE_SECURE = False
+# CSRF_FAILURE_VIEW = 'app.views.csrf_failure'
+CSRF_TRUSTED_ORIGINS = ['http://localhost',
+                        'https://xcm55.ru']
+try: 
+    from .local_settings import *
+except ImportError:
+    pass
