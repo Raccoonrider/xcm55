@@ -18,6 +18,8 @@ phonenumbers = "*"
 iuliia = "*"
 psycopg2 = "*"
 gunicorn = "*"
+django-crispy-forms = "*"
+crispy-bootstrap5 = "*"
 
 [dev-packages]
 
