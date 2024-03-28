@@ -34,7 +34,7 @@
 
             {% block body %}
                 {% if messages %}
-                    <div>
+                    <div class="alert alert-light">
                         <strong>{% trans "Messages:" %}</strong>
                         <ul>
                             {% for message in messages %}<li>{{ message }}</li>{% endfor %}
