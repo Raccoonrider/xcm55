@@ -13,7 +13,9 @@ services:
       - media:/home/app/media
       - static:/home/app/staticfiles
     ports:
-      - 8022:8000
+      - 25:25
+    expose:
+      - 8000
     depends_on:
       db:
         condition: service_healthy
@@ -37,6 +39,15 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - media:/home/media
+      - static:/home/static
+    ports:
+      - 8022:80
     restart: unless-stopped
 
 volumes:
