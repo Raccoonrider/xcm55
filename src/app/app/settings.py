@@ -206,13 +206,13 @@ LOGGING = {
 
 # E-mail configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_USE_TLS = False
-EMAIL_PORT = 25
-EMAIL_HOST_PASSWORD = ''
-EMAIL_HOST_USER = ''
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = "Команда XCM55 <registration@xcm55.ru>"
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = f'Команда XCM55 <{EMAIL_HOST_USER}>'
 
 # Security
 SESSION_COOKIE_SECURE = False
