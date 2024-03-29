@@ -1,7 +1,7 @@
 from django.db import models
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
-
+from common.enums import ResultStatus
 
 class Series(BaseViewableModel):
     pass
@@ -61,7 +61,16 @@ class Event(BaseViewableModel):
         blank=True, 
         verbose_name="Ссылка ВК",
         )
+    rules_doc = models.FileField(
+        blank=True,
+        verbose_name="Регламент",
+        upload_to="event_rules"
+    )
     finished = models.BooleanField()
+    routes = models.ManyToManyField(
+        to=Route,
+        through='EventRoute'
+    )
 
     class Meta:
         verbose_name = "Событие"
@@ -158,17 +167,10 @@ class Result(BaseModel):
         blank=True,
         verbose_name="Время"
     )
-    OTL = models.BooleanField(
-        default=False,
-        verbose_name="OTL (over time limit)"
-    )
-    DNF = models.BooleanField(
-        default=False,
-        verbose_name="DNF (did not finish)"
-    )
-    DSQ = models.BooleanField(
-        default=False,
-        verbose_name="DSQ (disqualified)"
+    status = models.IntegerField(
+        default=ResultStatus.OK,
+        choices=ResultStatus.choices(),
+        verbose_name="Статус",
     )
     
     class Meta:

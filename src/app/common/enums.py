@@ -27,3 +27,9 @@ class BaseEnum(IntEnum):
 class Gender(BaseEnum):
     M = 1
     F = 2
+
+class ResultStatus(BaseEnum):
+    OK = 0
+    OTL = 1
+    DNF = 2
+    DSQ = 3

@@ -31,12 +31,13 @@ class UserProfile(BaseModel):
         null=False,
         blank=False,
         verbose_name="Номер телефона",
+        help_text="Укажите номер телефона для связи с организаторами",
     )
     birthday = models.DateField(
         null=False,
         blank=False,
         verbose_name="Дата рождения",
-        
+        help_text="Укажите точную дату рождения для определения стартовой категории",
     )
     location = models.CharField(
         blank=True, 
