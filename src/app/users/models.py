@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -22,6 +23,7 @@ class UserProfile(BaseModel):
     gender = models.IntegerField(
         null=False,
         blank=False,
+        default=Gender.M,
         choices=Gender.choices(),
         verbose_name="Пол",
     )
@@ -34,6 +36,7 @@ class UserProfile(BaseModel):
         null=False,
         blank=False,
         verbose_name="Дата рождения",
+        
     )
     location = models.CharField(
         blank=True, 
@@ -43,6 +46,12 @@ class UserProfile(BaseModel):
     
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
+    
+    def get_update_url(self):
+        return reverse("user_profile_update")
+    
+    def get_createa_url(self):
+        return reverse("user_profile_create")
     
     class Meta:
         verbose_name = "Профиль пользователя"

@@ -1,8 +1,3 @@
-from pathlib import Path
-from uuid import uuid4
-import re
-
-
 from django.db import models
 
 from common.shortcuts import transliterate
