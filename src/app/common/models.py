@@ -8,29 +8,6 @@ from django.db import models
 from common.shortcuts import transliterate
 
 
-def make_path(prefix:str):
-    """Makes upload path with a given prefix"""
-    def wrapper(instance, filename):
-        suffix = Path(filename).suffix
-
-        if hasattr(instance, 'name') and instance.name:
-            name = instance.name
-        elif hasattr(instance, 'slug') and instance.slug:
-            name = instance.slug
-        elif hasattr(instance, 'series') and instance.series:
-            name = instance.series.name
-        else:
-            name = uuid4()
-        if hasattr(instance, 'date') and instance.date:
-            name = f"{instance.date.year}_{name}"
-
-        name = re.sub(r"[^\w ]", "", name)
-        name = re.sub(r" +", "_", name)
-
-        return f"{prefix}/{name}{suffix}"
-    return wrapper
-
-
 class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     saved = models.DateTimeField(auto_now=True)
@@ -58,7 +35,7 @@ class BaseViewableModel(BaseModel):
         )
     image = models.ImageField(
         null=True,
-        upload_to=make_path(prefix="img"), 
+        upload_to='img', 
         blank=True, 
         verbose_name="Картинка",
         )
@@ -68,3 +45,20 @@ class BaseViewableModel(BaseModel):
 
     def get_display_name(self):
         return self.name
+    
+    def __str__(self):
+        return self.name
+    
+    
+class BaseRelation(BaseModel):
+    """Basic model for Many-to-Many relationships"""
+    priority = models.IntegerField(
+        default=1,
+        null=False,
+        blank=True,
+        verbose_name="Приоритет"
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ('priority', 'pk')

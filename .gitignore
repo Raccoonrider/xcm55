@@ -170,3 +170,6 @@ try_*
 
 # Keys
 id_rsa*
+
+# Media
+media/

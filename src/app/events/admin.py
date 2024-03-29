@@ -1,19 +1,50 @@
 from django.contrib import admin
 
-from events.models import Event, Route, Series
-
+from events.models import *
 
 class BaseModelAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
 
-@admin.register(Event)
-class EventModelAdmin(BaseModelAdmin):
-    pass
-
 @admin.register(Series)
 class SeriesModelAdmin(BaseModelAdmin):
-    pass
+    model = Series
+    search_fields = ('name',)
+    list_display = ('__str__', 'active')
+    list_filter = ('active', )
+    ordering = ('-active', 'name')
+
+@admin.register(Event)
+class EventModelAdmin(BaseModelAdmin):
+    model = Event
+    search_fields = ('name', 'date', 'series')
+    list_display = ('__str__', 'date', 'time', 'route', 'series', 'finished', 'active')
+    list_filter = ('active', 'series')
+    ordering = ('-active', '-date')
 
 @admin.register(Route)
 class RouteModelAdmin(BaseModelAdmin):
-    pass
+    model = Route
+    search_fields = ('name', 'series')
+    list_display = ('__str__', 'series', 'active')
+    list_filter = ('active',)
+    ordering = ('-active', 'name')
+
+@admin.register(Result)
+class ResultModelAdmin(admin.ModelAdmin):
+    model = Result
+    list_display = ('event', 'route', )
+
+@admin.register(EventRoute)
+class EventRouteModelAdmin(admin.ModelAdmin):
+    model = EventRoute
+    list_display = ('__str__', 'event', 'route', 'route_category', 'active')
+    list_filter = ('active', 'event')
+    ordering = ('-active', '-event__date')
+
+@admin.register(EventSponsor)
+class EventSponsorModelAdmin(admin.ModelAdmin):
+    model = EventSponsor
+    list_display = ('__str__', 'event', 'sponsor', 'active')
+    list_filter = ('active', 'event')
+    ordering = ('-active', '-event__date')
+

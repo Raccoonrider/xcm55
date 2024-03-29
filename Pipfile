@@ -20,6 +20,7 @@ psycopg2 = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
+pillow = "*"
 
 [dev-packages]
 

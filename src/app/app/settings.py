@@ -54,6 +54,11 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.telegram',
     # 'allauth.socialaccount.providers.vk',
     # 'allauth.socialaccount.providers.yandex',
+
+    # Apps
+    'users',
+    'sponsors',
+    'events',
 ]
 
 MIDDLEWARE = [
@@ -133,13 +138,17 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+AUTH_USER_MODEL = "users.User"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS=7
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 # Allauth provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
