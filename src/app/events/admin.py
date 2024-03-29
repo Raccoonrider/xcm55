@@ -36,7 +36,8 @@ class RouteModelAdmin(BaseModelAdmin):
 class ResultModelAdmin(admin.ModelAdmin):
     model = Result
     search_fields = ('user_profile',)
-    list_display = ('event', 'route', 'user_profile', 'time')
+    list_display = ('event', 'route', 'user_profile', 'time', 'status')
+    ordering = ('-event__date', 'status')
 
 
 @admin.register(Application)
