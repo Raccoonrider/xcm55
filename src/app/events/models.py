@@ -36,7 +36,10 @@ class Route(BaseViewableModel):
     class Meta:
         verbose_name = "Маршрут"
         verbose_name_plural = "Mаршруты"
+        ordering = ('-active', '-created',)
 
+    def __str__(self):
+        return f"{self.name} {self.distance} км"
 
 
 class Event(BaseViewableModel):
@@ -47,10 +50,6 @@ class Event(BaseViewableModel):
     time = models.TimeField(
         null=True,
         verbose_name="Время старта",
-    )
-    route = models.ForeignKey(
-        to=Route,
-        on_delete=models.CASCADE,
     )
     series = models.ForeignKey(
         to=Series,
@@ -86,12 +85,6 @@ class EventRoute(BaseRelation):
         null=False,
         blank=False,
         verbose_name="Маршрут"
-    )
-    route_category = models.CharField(
-        null=False, 
-        blank=False, 
-        max_length=255, 
-        verbose_name="Категория",
     )
 
     class Meta:

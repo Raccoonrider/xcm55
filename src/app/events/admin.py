@@ -17,10 +17,10 @@ class SeriesModelAdmin(BaseModelAdmin):
 class EventModelAdmin(BaseModelAdmin):
     model = Event
     search_fields = ('name', 'date', 'series')
-    list_display = ('__str__', 'date', 'time', 'route', 'series', 'finished', 'active')
+    list_display = ('__str__', 'date', 'time', 'series', 'finished', 'active')
     list_filter = ('active', 'series')
-    ordering = ('-active', '-date')
-    autocomplete_fields = ('route', 'series')
+    ordering = ('-active', 'finished', '-date')
+    autocomplete_fields = ('series',)
 
 
 @admin.register(Route)
@@ -50,7 +50,7 @@ class ApplicationModelAdmin(admin.ModelAdmin):
 @admin.register(EventRoute)
 class EventRouteModelAdmin(admin.ModelAdmin):
     model = EventRoute
-    list_display = ('__str__', 'event', 'route', 'route_category', 'active')
+    list_display = ('__str__', 'event', 'route', 'active')
     list_filter = ('active', 'event')
     ordering = ('-active', '-event__date')
     autocomplete_fields = ('event', 'route',)
