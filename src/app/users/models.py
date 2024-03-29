@@ -3,6 +3,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from phonenumber_field.modelfields import PhoneNumberField
 
 from common.models import BaseModel
+from common.enums import Gender
 
 
 class UserProfile(BaseModel):
@@ -17,6 +18,12 @@ class UserProfile(BaseModel):
         blank=False, 
         max_length=255, 
         verbose_name="Фамилия",
+    )
+    gender = models.IntegerField(
+        null=False,
+        blank=False,
+        choices=Gender.choices(),
+        verbose_name="Пол",
     )
     phone_number = PhoneNumberField(
         null=False,

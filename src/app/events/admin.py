@@ -20,6 +20,8 @@ class EventModelAdmin(BaseModelAdmin):
     list_display = ('__str__', 'date', 'time', 'route', 'series', 'finished', 'active')
     list_filter = ('active', 'series')
     ordering = ('-active', '-date')
+    autocomplete_fields = ('route', 'series')
+
 
 @admin.register(Route)
 class RouteModelAdmin(BaseModelAdmin):
@@ -28,11 +30,22 @@ class RouteModelAdmin(BaseModelAdmin):
     list_display = ('__str__', 'series', 'active')
     list_filter = ('active',)
     ordering = ('-active', 'name')
+    autocomplete_fields = ('series',)
 
 @admin.register(Result)
 class ResultModelAdmin(admin.ModelAdmin):
     model = Result
-    list_display = ('event', 'route', )
+    search_fields = ('user_profile',)
+    list_display = ('event', 'route', 'user_profile', 'time')
+
+
+@admin.register(Application)
+class ApplicationModelAdmin(admin.ModelAdmin):
+    model = Application
+    search_fields = ('user_profile', 'event')
+    list_display = ('user_profile', 'event', 'route', 'created')
+    autocomplete_fields = ('event', 'route', 'user_profile', 'result')
+
 
 @admin.register(EventRoute)
 class EventRouteModelAdmin(admin.ModelAdmin):
@@ -40,11 +53,5 @@ class EventRouteModelAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'event', 'route', 'route_category', 'active')
     list_filter = ('active', 'event')
     ordering = ('-active', '-event__date')
-
-@admin.register(EventSponsor)
-class EventSponsorModelAdmin(admin.ModelAdmin):
-    model = EventSponsor
-    list_display = ('__str__', 'event', 'sponsor', 'active')
-    list_filter = ('active', 'event')
-    ordering = ('-active', '-event__date')
+    autocomplete_fields = ('event', 'route',)
 

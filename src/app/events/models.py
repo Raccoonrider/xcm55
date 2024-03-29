@@ -99,7 +99,7 @@ class EventRoute(BaseRelation):
         verbose_name_plural = 'Связь "Маршрут-событие"'
 
 
-class EventSponsor(BaseRelation):
+class Application(BaseModel):
     event = models.ForeignKey(
         to=Event,
         on_delete=models.CASCADE,
@@ -107,17 +107,35 @@ class EventSponsor(BaseRelation):
         blank=False,
         verbose_name="Событие",
     )
-    sponsor = models.ForeignKey(
-        to='sponsors.Sponsor',
+    route = models.ForeignKey(
+        to=Route,
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        verbose_name="Спонсор",
+        verbose_name="Маршрут"
+    )
+    user_profile = models.ForeignKey(
+        to='users.UserProfile',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Профиль пользователя"
+    )
+    payment_confirmed = models.BooleanField(
+        default=False,
+        verbose_name="Оплата прошла"
+    )
+    result = models.ForeignKey(
+        to='events.Result',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Результат"
     )
 
     class Meta:
-        verbose_name = 'Связь "Спонсор-событие"'
-        verbose_name_plural = 'Связь "Спонсор-событие"'
+        verbose_name = 'Заявка'
+        verbose_name_plural = 'Заявки'
 
 
 class Result(BaseModel):
@@ -135,7 +153,7 @@ class Result(BaseModel):
         blank=False,
         verbose_name="Маршрут"
     )
-    user = models.ForeignKey(
+    user_profile = models.ForeignKey(
         to='users.UserProfile',
         on_delete=models.SET_NULL,
         null=True,
