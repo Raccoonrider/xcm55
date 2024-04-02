@@ -28,6 +28,7 @@ class ApplicationCreate(FormView):
         application = Application()
         application.event = Event.objects.get(pk=self.event_pk)
         application.route = form.cleaned_data['route']
+        application.helmet_not_needed = form.cleaned_data['helmet_not_needed']
         application.user_profile = self.request.user.profile
         application.save()
         return HttpResponseRedirect('/')

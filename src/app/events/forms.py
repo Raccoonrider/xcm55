@@ -12,6 +12,13 @@ class ApplicationForm(forms.Form):
         initial=1,
     )
 
+    helmet_not_needed = forms.BooleanField(
+        initial=True,
+        required=False,
+        label="Буду в своём шлеме",
+        help_text="Если у Вас нет своего шлема, его можно будет взять напрокат на старте. Снимите эту галочку, чтобы мы знали, что он Вам понадобится."
+    )
+
     confirm_rules=forms.BooleanField(
         initial=False,
         required=True,

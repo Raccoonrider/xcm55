@@ -123,6 +123,11 @@ class Application(BaseModel):
         blank=False,
         verbose_name="Профиль пользователя"
     )
+    helmet_not_needed = models.BooleanField(
+        default=True,
+        verbose_name="Буду в своём шлеме",
+        help_text="Если у Вас нет своего шлема, его можно будет взять напрокат на старте. Снимите эту галочку, чтобы мы знали, что он Вам понадобится."
+    )
     payment_confirmed = models.BooleanField(
         default=False,
         verbose_name="Оплата прошла"
