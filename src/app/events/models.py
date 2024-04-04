@@ -1,7 +1,7 @@
 from django.db import models
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
-from common.enums import ResultStatus
+from common.enums import ResultStatus, Category, Gender
 
 class Series(BaseViewableModel):
     pass
@@ -123,6 +123,12 @@ class Application(BaseModel):
         blank=False,
         verbose_name="Профиль пользователя"
     )
+    category = models.IntegerField(
+        null=False,
+        blank=False,
+        choices=Category.choices(),
+        verbose_name="Категория"
+    )
     helmet_not_needed = models.BooleanField(
         default=True,
         verbose_name="Буду в своём шлеме",
@@ -181,3 +187,33 @@ class Result(BaseModel):
     class Meta:
         verbose_name = 'Результат'
         verbose_name_plural = 'Результаты'
+
+
+class AgeGroup(models.Model):
+    event = models.ForeignKey(
+        to=Event,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Событие",
+    )
+    age_min = models.IntegerField(
+        null=False,
+        blank=False,
+        verbose_name="Возраст, от"
+    )
+    age_max = models.IntegerField(
+        null=False,
+        blank=False,
+        verbose_name="Возраст, до"
+    )
+    gender = models.IntegerField(
+        null=False,
+        default=Gender.M,
+        choices=Gender.choices()
+    )
+
+    
+    class Meta:
+        verbose_name = 'Возрастная группа'
+        verbose_name_plural = 'Возрастные группы'

@@ -56,3 +56,11 @@ class EventRouteModelAdmin(admin.ModelAdmin):
     ordering = ('-active', '-event__date')
     autocomplete_fields = ('event', 'route',)
 
+@admin.register(AgeGroup)
+class AgeGroupModelAdmin(admin.ModelAdmin):
+    model = AgeGroup
+    list_display = ('event', 'gender', 'age_min', 'age_max')
+    list_filter = ('event',)
+    ordering = ('-event__date',)
+    autocomplete_fields = ('event',)
+

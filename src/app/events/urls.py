@@ -1,7 +1,7 @@
 from django.urls import include, path
 
-from events.views import ApplicationCreate
+from events.views import EventDetail, ApplicationCreate
 
 urlpatterns = [
-    path('<int:event_pk>/application/create/', ApplicationCreate.as_view(), name="application_create"),
+    path('<int:pk>/application/create/', ApplicationCreate.as_view(), name="application_create"),
     ]

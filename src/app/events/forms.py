@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from common.enums import Category
 from events.models import Event, Route, EventRoute, Application
 
 
@@ -10,6 +11,16 @@ class ApplicationForm(forms.Form):
         required=True,
         label="Дистанция",
         initial=1,
+    )
+
+    category=forms.ChoiceField(
+        choices=(
+            (Category.Default, 'Категория "Любители" (награждение по возрастным группам)'),
+            (Category.Elite, 'Категория "Элита"')
+        ),
+        required=True,
+        label="С кем я буду соревноваться",
+        initial=Category.Default,
     )
 
     helmet_not_needed = forms.BooleanField(
