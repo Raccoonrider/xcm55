@@ -16,9 +16,16 @@
         {% block css %}{% endblock %}
 
     </head>
-    <body class="container-md">
-        {% block body %}
-        {% endblock body %}
+    <body>
+        <div class="cover">
+            {% block cover %}
+            {% endblock cover %}
+        </div>
+        
+        <div class="container-md">
+            {% block body %}
+            {% endblock body %}
+        </div>
     </body>
     {% include 'base_js.html' %}
 </html>
