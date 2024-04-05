@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
 from common.enums import ResultStatus, Category, Gender
@@ -67,9 +68,19 @@ class Event(BaseViewableModel):
         upload_to="event_rules"
     )
     finished = models.BooleanField()
+    payment_info = models.CharField(
+        null=False,
+        blank=False,
+        max_length=255,
+        verbose_name="Номер карты",
+    )
     routes = models.ManyToManyField(
         to=Route,
         through='EventRoute'
+    )
+    sponsors = models.ManyToManyField(
+        to='sponsors.Sponsor',
+        through='sponsors.EventSponsor'
     )
 
     class Meta:
@@ -78,6 +89,13 @@ class Event(BaseViewableModel):
     
     def get_display_name(self):
         return f"{self.name} - {self.date.year}"
+    
+    def get_absolute_url(self):
+        return reverse('event_detail', kwargs={'pk':self.pk})
+
+    
+    def application_url(self):
+        return reverse('application_create', kwargs={'pk':self.pk})
         
 
 class EventRoute(BaseRelation):

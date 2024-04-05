@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block head_title %}
-
+    {{ event.get_display_name }}
 {% endblock head_title %}
 
 {% block css %}
@@ -14,7 +14,7 @@
         .cover {
           background-image: 
             linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)),
-            url("{% static 'app/img/cover.jpg' %}");
+            url("{% static 'app/img/cover.webp' %}");
           background-position: 50% 38%;
           background-size:cover;
 
@@ -30,66 +30,119 @@
 
 {% block body %}
     <main class="container-md">  
-    {% with text='Richard McClintock, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the Roman philosopher Cicero.' %}
+    <p class="lead m-5 text-center">
+        {{ event.description }}
+    </p>
+    <hr>
 
-        {% with image='app/img/about.jpg' header='О дистанции' button_text='Скачать трек' button_secondary_text='Смотреть карту'%}
+        {% with image='app/img/marathon.webp' header='Марафон' text=marathon.description button_text='Скачать трек' button_href=marathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=marathon.map_embed_src %}
             {% include 'hero-right.html'%}
         {% endwith %}
 
-        <hr class="featurette-divider">
+        <hr>
 
-        {% with image='app/img/judge.jpg' header='Регламент' button_text='Скачать регламент'%}
+        {% with image='app/img/half-marathon.webp' header='Полумарафон' text=halfmarathon.description button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
             {% include 'hero-left.html'%}
         {% endwith %}
 
-        <hr class="featurette-divider">
-        
-        {% with image='app/img/amateur.jpg' header='Категория "Любители"' button_text='Зарегистрироваться'%}
+        <hr>
+
+        {% with image='app/img/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
             {% include 'hero-right.html'%}
         {% endwith %}
-        
-        <hr class="featurette-divider">
 
-        {% with image='app/img/elite.jpg' header='Категория "Элита"' button_text='Зарегистрироваться'%}
+        <hr>
+        
+        {% with image='app/img/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
             {% include 'hero-left.html'%}
         {% endwith %}
 
-        <hr class="featurette-divider">
+        <hr>
         
-        {% with image='app/img/medals.jpg' header='Награждение' button_text='Зарегистрироваться'%}
+        {% with image='app/img/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие свою дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церимонии награждения медалями и ценными призами от наших спонсоров.' %}
         {% include 'hero-right.html'%}
         {% endwith %}
 
-        <hr class="featurette-divider">
+        <hr>
+
+        {% with image='app/img/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+            {% include 'hero-left.html'%}
+        {% endwith %}
+
+
+        <hr>
+        
 
         <div class="row flex-lg-row align-items-center g-5 py-5">
             <h1 class="display-5 fw-bold text-body-emphasis lh-1 text-center">
                 Участвуют
             </h1>
-            <div class="col-lg-6">
-                <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Элита"</h2>
-                <ul>
-                    <li>
-                        Горбачев Иван
-                    </li>
-                    <li>
-                        Булгак Николай
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-6">
-                <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Любители"</h2>
-                <ul>
-                    <li>
-                        Дружняев Константин
-                    </li>
-                </ul>
-            </div>
+            {% if elites %}
+                <div class="col-lg-6">
+                    <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Элита"</h2>
+                    <ul>
+                        {% for application in elites %}
+                        <li>
+                            {% if application == my_application %}
+                            <strong>
+                                {{ application.user_profile }}
+                            </strong>
+                            {% else %}
+                                {{ application.user_profile }}
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if amateurs %}
+                <div class="col-lg-6">
+                    <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Любители"</h2>
+                    <ul>
+                        {% for application in amateurs %}
+                        <li>
+                            {% if application == my_application %}
+                            <strong>
+                                {{ application.user_profile }}
+                            </strong>
+                            {% else %}
+                                {{ application.user_profile }}
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
 
-        <hr class="featurette-divider">
-
-    {% endwith %}
+        {% if event.sponsors.all %}
+            <hr>
+            <section class="py-5 py-xl-6">
+                <div class="container mb-5 mb-md-6">
+                    <div class="row justify-content-md-center">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 text-center">
+                            <h1 class="display-5 fw-bold text-body-emphasis lh-1 text-center">
+                                Наши спонсоры
+                            </h1>
+                    <p class="lead m-4 mb-md-5">Выражаем искреннюю благодарность нашим спонсорам за помощь в подготовке мероприятий</p>
+                    <hr class="w-50 mx-auto mb-0 text-secondary">
+                </div>
+                </div>
+            </div>
+            
+            <div class="container overflow-hidden">
+                <div class="row gy-5 gy-md-6">
+                    {% for s in event.sponsors.all %}
+                    <div class="col-4 col-md-3 align-self-center text-center">
+                        <a href="{{ s.xref }}">
+                            <img class="m-4 rounded shadow" width="300" height="150" src="{{ s.image.url }}"/>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            </section>
+        {% endif %}
     </main>
     
 {% endblock body %}

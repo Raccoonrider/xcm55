@@ -162,8 +162,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
-LOGIN_REDIRECT_URL = "/"  # new
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = "/profiles/logged_in/"  
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 # Internationalization

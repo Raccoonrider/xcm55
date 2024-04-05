@@ -17,4 +17,8 @@ class UserProfileCreateUpdate(FormView):
         self.request.user.profile = form.instance
         form.save()
         self.request.user.save()
-        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER', '/'))
+        return user_redirect(self.request)    
+
+def user_redirect(request):
+    redirect_url = request.session.get('redirect', '/')
+    return HttpResponseRedirect(redirect_url)
