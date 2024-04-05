@@ -17,15 +17,14 @@
 
     </head>
     <body>
-        <div class="cover">
+        
+        <header class="cover shadow-lg">
             {% block cover %}
             {% endblock cover %}
-        </div>
+        </header>
         
-        <div class="container-md">
-            {% block body %}
-            {% endblock body %}
-        </div>
+        {% block body %}
+        {% endblock body %}
     </body>
     {% include 'base_js.html' %}
 </html>

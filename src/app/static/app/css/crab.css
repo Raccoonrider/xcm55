@@ -1,0 +1,15 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.cover{
+    background-color: #111c3c;
+    display: flex;
+}
+
+img.event-logo {
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}

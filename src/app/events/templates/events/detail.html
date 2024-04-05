@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title %}
+
+{% endblock head_title %}
+
+{% block css %}
+    <link href="{% static 'app/css/hero.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/cover.css' %}" rel="stylesheet">
+
+    <style>       
+        .cover {
+          background-image: 
+            linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)),
+            url("{% static 'app/img/cover.jpg' %}");
+          background-position: 50% 38%;
+          background-size:cover;
+
+        }
+    </style>
+{% endblock css %}
+
+{% block cover %}
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    Кросс-кантри Краб марафон
+</h1>
+{% endblock cover %}
+
+{% block body %}
+    <main class="container-md">  
+    {% with text='Richard McClintock, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the Roman philosopher Cicero.' %}
+
+        {% with image='app/img/about.jpg' header='О дистанции' button_text='Скачать трек' button_secondary_text='Смотреть карту'%}
+            {% include 'hero-right.html'%}
+        {% endwith %}
+
+        <hr class="featurette-divider">
+
+        {% with image='app/img/judge.jpg' header='Регламент' button_text='Скачать регламент'%}
+            {% include 'hero-left.html'%}
+        {% endwith %}
+
+        <hr class="featurette-divider">
+        
+        {% with image='app/img/amateur.jpg' header='Категория "Любители"' button_text='Зарегистрироваться'%}
+            {% include 'hero-right.html'%}
+        {% endwith %}
+        
+        <hr class="featurette-divider">
+
+        {% with image='app/img/elite.jpg' header='Категория "Элита"' button_text='Зарегистрироваться'%}
+            {% include 'hero-left.html'%}
+        {% endwith %}
+
+        <hr class="featurette-divider">
+        
+        {% with image='app/img/medals.jpg' header='Награждение' button_text='Зарегистрироваться'%}
+        {% include 'hero-right.html'%}
+        {% endwith %}
+
+        <hr class="featurette-divider">
+
+        <div class="row flex-lg-row align-items-center g-5 py-5">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 text-center">
+                Участвуют
+            </h1>
+            <div class="col-lg-6">
+                <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Элита"</h2>
+                <ul>
+                    <li>
+                        Горбачев Иван
+                    </li>
+                    <li>
+                        Булгак Николай
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Любители"</h2>
+                <ul>
+                    <li>
+                        Дружняев Константин
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+    {% endwith %}
+    </main>
+    
+{% endblock body %}

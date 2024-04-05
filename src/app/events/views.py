@@ -6,6 +6,14 @@ from django.views import View
 from events.models import Event, Application
 from events.forms import ApplicationForm
 
+class EventDetail(View):
+    template_name = "events/detail.html"
+    model = Event
+
+    def get(self, *args, pk=None, **kwargs):
+        return render(request=self.request, template_name=self.template_name)
+
+
 class ApplicationCreate(FormView):
     template_name = "events/application.html"
     form_class = ApplicationForm

@@ -1,0 +1,16 @@
+.cover {
+    display: flex; 
+    flex-direction: column;
+    min-height: 300px;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    color: #FFF;
+  }
+
+.h-cover {
+    padding: 10px min(10%, 192px);
+    margin-top: auto;
+    margin-bottom: 0;
+    text-align: center;
+  }
