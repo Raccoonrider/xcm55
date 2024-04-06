@@ -59,7 +59,7 @@
 
         <hr>
         
-        {% with image='app/img/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие свою дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церимонии награждения медалями и ценными призами от наших спонсоров.' %}
+        {% with image='app/img/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церемонии награждения медалями и ценными призами от наших спонсоров.' %}
         {% include 'hero-right.html'%}
         {% endwith %}
 
@@ -134,7 +134,7 @@
                 <div class="row gy-5 gy-md-6">
                     {% for s in event.sponsors.all %}
                     <div class="col-4 col-md-3 align-self-center text-center">
-                        <a href="{{ s.xref }}">
+                        <a href="{{ s.xref }}" target="_blank">
                             <img class="m-4 rounded shadow" width="300" height="150" src="{{ s.image.url }}"/>
                         </a>
                     </div>
