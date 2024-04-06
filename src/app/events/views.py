@@ -82,7 +82,7 @@ class EventDetail(View):
                 'my_application': my_application,
                 'payment_window_active' : payment_window_active,
             }
-            return render(request=request, template_name='events\hx_payment_info.html', context=context)
+            return render(request=request, template_name='events/hx_payment_info.html', context=context)
         else:
             return HttpResponse("")
 
