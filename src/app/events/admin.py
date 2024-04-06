@@ -64,3 +64,11 @@ class AgeGroupModelAdmin(admin.ModelAdmin):
     ordering = ('-event__date',)
     autocomplete_fields = ('event',)
 
+@admin.register(PaymentWindow)
+class PaymentWindowModelAdmin(admin.ModelAdmin):
+    model = PaymentWindow
+    list_display = ('event', 'price', 'active_until')
+    list_filter = ('event',)
+    ordering = ('-active_until',)
+    autocomplete_fields = ('event',)
+

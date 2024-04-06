@@ -235,3 +235,30 @@ class AgeGroup(models.Model):
     class Meta:
         verbose_name = 'Возрастная группа'
         verbose_name_plural = 'Возрастные группы'
+
+
+class PaymentWindow(models.Model):
+    event = models.ForeignKey(
+        to=Event,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Событие",
+    )
+    price = models.IntegerField(
+        null=False,
+        blank=False,
+        verbose_name="Цена",
+    )
+    active_until = models.DateField(
+        null=False,
+        blank=False,
+        verbose_name="Доступна до"
+    )
+    
+    class Meta:
+        verbose_name = 'Интервал оплаты'
+        verbose_name_plural = 'Интервалы оплаты'
+
+    def render_price(self):
+        return f"{self.price}\u20bd"
