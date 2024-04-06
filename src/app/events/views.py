@@ -125,4 +125,4 @@ class ApplicationCreate(FormView):
         application.user_profile = self.request.user.profile
         application.category = form.cleaned_data['category']
         application.save()
-        return HttpResponseRedirect(self.event.get_absolute_url())
+        return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
