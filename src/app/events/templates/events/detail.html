@@ -78,11 +78,11 @@
             <h1 class="display-5 fw-bold lh-1" id="pricing">
                 Стоимость участия
             </h1>
-            <p class="lead w-75 mx-auto m-4 mb-md-5">
+            <p class="lead mx-auto my-4 mb-md-5">
                 Оплачивая стартовый слот заранее, вы не только экономите, но и помогаете организаторам эффективно планировать мероприятие. 
             </p>
 
-            <ul class="list-unstyled">
+            <ul class="list-unstyled mx-0">
                 {% for payment_window in payment_windows_stale %}
                 <li class="text-decoration-line-through">
                     <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
@@ -178,7 +178,7 @@
                     <h1 class="display-5 fw-bold lh-1">
                         Наши спонсоры
                     </h1>
-                    <p class="lead w-75 mx-auto m-4 mb-md-5">
+                    <p class="lead mx-auto my-4 mb-md-5">
                         Выражаем искреннюю благодарность нашим спонсорам за помощь в подготовке стартов
                     </p>
                 </div>
