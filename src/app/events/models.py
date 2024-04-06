@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
 from common.enums import ResultStatus, Category, Gender
+from common.shortcuts import render_date
 
 class Series(BaseViewableModel):
     pass
@@ -259,6 +260,10 @@ class PaymentWindow(models.Model):
     class Meta:
         verbose_name = 'Интервал оплаты'
         verbose_name_plural = 'Интервалы оплаты'
+        ordering = ('active_until',)
 
     def render_price(self):
         return f"{self.price}\u20bd"
+    
+    def render_date(self):
+        return render_date(self.active_until)

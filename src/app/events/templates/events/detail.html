@@ -29,7 +29,7 @@
 {% endblock cover %}
 
 {% block body %}
-    <main class="container-md">  
+    <div class="container-md">  
     <p class="lead m-5 text-center">
         {{ event.description }}
     </p>
@@ -69,80 +69,135 @@
             {% include 'hero-left.html'%}
         {% endwith %}
 
+    </div>
 
-        <hr>
-        
 
-        <div class="row flex-lg-row align-items-center g-5 py-5">
-            <h1 class="display-5 fw-bold text-body-emphasis lh-1 text-center">
-                Участвуют
+    {% if payment_window_active %}
+    <div class="text-light bg-success shadow-lg">  
+        <div class="container-md row flex-lg-row align-items-center text-center py-5 mx-auto">
+            <h1 class="display-5 fw-bold lh-1" id="pricing">
+                Стоимость участия
             </h1>
-            {% if elites %}
-                <div class="col-lg-6">
-                    <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Элита"</h2>
-                    <ul>
-                        {% for application in elites %}
-                        <li>
-                            {% if application == my_application %}
-                            <strong>
-                                {{ application.user_profile }}
-                            </strong>
-                            {% else %}
-                                {{ application.user_profile }}
-                            {% endif %}
+            <p class="lead w-75 mx-auto m-4 mb-md-5">
+                Оплачивая стартовый слот заранее, вы не только экономите, но и помогаете организаторам эффективно планировать мероприятие. 
+            </p>
+
+            <ul class="list-unstyled">
+                {% for payment_window in payment_windows_stale %}
+                <li class="text-decoration-line-through">
+                    <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
+                </li>
+                {% endfor %}
+                <hr class="w-50 mx-auto">
+                <li class="fs-2">
+                    <strong>{{ payment_window_active.render_price }}</strong> при оплате до {{ payment_window_active.render_date }}
+                </li>
+                <hr class="w-50 mx-auto">
+                {% for payment_window in payment_windows_next %}
+                    {% if payment_window == payment_windows_next.0 %}
+                        <li class="fs-4">
+                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                         </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-            {% if amateurs %}
-                <div class="col-lg-6">
-                    <h2 class="fw-bold text-body-emphasis lh-1 mb-3 text-center">Категория "Любители"</h2>
-                    <ul>
-                        {% for application in amateurs %}
+                    {% else %}
                         <li>
-                            {% if application == my_application %}
-                            <strong>
-                                {{ application.user_profile }}
-                            </strong>
-                            {% else %}
-                                {{ application.user_profile }}
-                            {% endif %}
+                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                         </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
         </div>
+    </div>
+    {% endif %}
+
+    <div class="container-md">          
+        {% if elites or amateurs %}
+            <div class="row flex-lg-row align-items-center g-5 py-5">
+                <h1 class="display-5 fw-bold lh-1 text-center" id="participants">
+                    Участвуют
+                </h1>
+                {% if elites %}
+                    <div class="col-lg-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fs-3 fw-bolder">Категория "Элита"</li>
+                            {% for application in elites %}
+                            <li class="list-group-item fs-5">
+                                {% if application == my_application %}
+                                <strong>
+                                    {{ application.user_profile }}
+                                </strong>
+                                {% else %}
+                                    {{ application.user_profile }}
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if amateurs %}
+                    <div class="col-lg-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fs-3 fw-bolder">Категория "Любители"</li>
+                            {% for application in amateurs %}
+                            <li class="list-group-item fs-5">
+                                {% if application == my_application %}
+                                <strong>
+                                    {{ application.user_profile }}
+                                </strong>
+                                {% else %}
+                                    {{ application.user_profile }}
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            {% if my_application %}
+                {% if not my_application.payment_confirmed %}
+                    <div>
+                        <div 
+                            hx-get="{% url 'hx_event_payment_info' event.id %}"
+                            hx-swap="outerHTML"
+                            hx-trigger="revealed"
+                        ></div>
+                    </div>
+                {% else %}
+                <div class="alert alert-success mb-4 fs-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+                    </svg>
+                    Ваша заявка на участие успешно оплачена. До встречи на старте!           
+                </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
 
         {% if event.sponsors.all %}
-            <hr>
-            <section class="py-5 py-xl-6">
-                <div class="container mb-5 mb-md-6">
-                    <div class="row justify-content-md-center">
-                        <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 text-center">
-                            <h1 class="display-5 fw-bold text-body-emphasis lh-1 text-center">
-                                Наши спонсоры
-                            </h1>
-                    <p class="lead m-4 mb-md-5">Выражаем искреннюю благодарность нашим спонсорам за помощь в подготовке мероприятий</p>
-                    <hr class="w-50 mx-auto mb-0 text-secondary">
+            <section class="py-5">
+                <div class="text-center">
+                    <h1 class="display-5 fw-bold lh-1">
+                        Наши спонсоры
+                    </h1>
+                    <p class="lead w-75 mx-auto m-4 mb-md-5">
+                        Выражаем искреннюю благодарность нашим спонсорам за помощь в подготовке стартов
+                    </p>
                 </div>
-                </div>
-            </div>
+                    <hr class="w-50 mx-auto">
             
-            <div class="container overflow-hidden">
-                <div class="row gy-5 gy-md-6">
-                    {% for s in event.sponsors.all %}
-                    <div class="col-4 col-md-3 align-self-center text-center">
-                        <a href="{{ s.xref }}" target="_blank">
-                            <img class="m-4 rounded shadow" width="300" height="150" src="{{ s.image.url }}"/>
-                        </a>
+                <div class="container overflow-hidden">
+                    <div class="row gy-5 gy-md-6">
+                        {% for s in event.sponsors.all %}
+                        <div class="col-4 col-md-3 align-self-center text-center">
+                            <a href="{{ s.xref }}" target="_blank">
+                                <img class="m-4 rounded shadow" width="300" height="150" src="{{ s.image.url }}"/>
+                            </a>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
             </section>
+
         {% endif %}
-    </main>
+    </div>
     
 {% endblock body %}

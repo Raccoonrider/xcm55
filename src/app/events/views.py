@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.edit import FormView
@@ -6,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 
 from common.enums import ResultStatus, Category, Gender
-from events.models import Event, Application
+from events.models import Event, Application, PaymentWindow
 from events.forms import ApplicationForm
 
 class EventDetail(View):
@@ -15,48 +17,74 @@ class EventDetail(View):
 
     def get(self, *args, pk=None, **kwargs):
         if pk is not None:
-            instance = get_object_or_404(self.model, pk=pk)
+            event = get_object_or_404(self.model, pk=pk)
         else:
-            instance = (self.model.objects
+            event = (self.model.objects
                 .filter(active=True, finished=False)
                 .order_by('-date')
                 .first()
                 )
         if self.request.user.is_authenticated and self.request.user.profile:
             my_application = (Application.objects
-                .filter(event=instance, user_profile=self.request.user.profile)
+                .filter(event=event, user_profile=self.request.user.profile)
                 .first()
                 )
         else:
             my_application = None
 
         elites = (Application.objects
-            .filter(event=instance, category=Category.Elite)
+            .filter(event=event, category=Category.Elite)
             .order_by('created')
             )
         amateurs = (Application.objects
-            .filter(event=instance, category=Category.Default)
+            .filter(event=event, category=Category.Default)
             .order_by('created')
             )
-        routes = instance.routes.all().order_by('-distance')
+        routes = event.routes.all().order_by('-distance')
 
-        registration_disabled = bool(my_application)
+        registration_disabled = (
+            my_application is not None
+            and event.finished == False
+        )
+
+        payment_windows = PaymentWindow.objects.filter(event=event)
+        payment_windows_stale = payment_windows.filter(active_until__lt=date.today())
+        payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
+        payment_windows_next = payment_windows.filter(active_until__gte=date.today())[1:]
 
         context = {
-            'event': instance,
+            'event': event,
             'my_application': my_application,
             'registration_disabled': registration_disabled,
             'elites': elites,
             'amateurs': amateurs,
             'marathon': routes[0],
             'halfmarathon': routes[1],
+            'payment_windows_stale' : payment_windows_stale,
+            'payment_window_active' : payment_window_active,
+            'payment_windows_next' : payment_windows_next,
         }
         return render(request=self.request, template_name=self.template_name, context=context)
     
     @classmethod
-    def hx_get_payment_info(cls, *args, pk=None, **kwargs):
-        instance = get_object_or_404(cls.model, pk=pk)
-        return HttpResponse(instance.payment_info, content_type='text/plain')
+    def hx_get_payment_info(cls, request, pk):
+        if request.user.is_authenticated and request.user.profile:
+            event = get_object_or_404(cls.model, pk=pk)
+            my_application = (Application.objects
+                .filter(event=event, user_profile=request.user.profile)
+                .first()
+                )
+            payment_windows = PaymentWindow.objects.filter(event=event)
+            payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
+            
+            context = {
+                'event': event,
+                'my_application': my_application,
+                'payment_window_active' : payment_window_active,
+            }
+            return render(request=request, template_name='events\hx_payment_info.html', context=context)
+        else:
+            return HttpResponse("")
 
 class ApplicationCreate(FormView):
     template_name = "events/application.html"
