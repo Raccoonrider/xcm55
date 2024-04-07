@@ -72,7 +72,7 @@
     </div>
 
 
-    {% if payment_window_active %}
+    {% if marathon_payment_window_active or halfmarathon_payment_window_active %}
     <div class="text-light bg-success shadow-lg">  
         <div class="container-md row flex-lg-row align-items-center text-center py-5 mx-auto">
             <h1 class="display-5 fw-bold lh-1" id="pricing">
@@ -82,19 +82,70 @@
                 Оплачивая стартовый слот заранее, вы не только экономите, но и помогаете организаторам эффективно планировать мероприятие. 
             </p>
 
-            <ul class="list-unstyled mx-0">
-                {% for payment_window in payment_windows_stale %}
+            <div class="mx-auto mb-4">
+                <input type="radio" class="btn-check" name="options-pricing" id="pricing-marathon-check" autocomplete="off" checked>
+                <label class="btn btn-success" for="pricing-marathon-check">Марафон</label>
+            
+                <input type="radio" class="btn-check" name="options-pricing" id="pricing-halfmarathon-check" autocomplete="off">
+                <label class="btn btn-success" for="pricing-halfmarathon-check">Полумарафон</label>
+            
+                <script>
+                    let marathonInput = document.querySelector("#pricing-marathon-check")
+                    marathonInput.addEventListener('click', ()=>{
+                        document.querySelector('#pricing-marathon').style.display = 'block'
+                        document.querySelector('#pricing-halfmarathon').style.display = 'none'
+                    })
+                    let halfmarathonInput = document.querySelector("#pricing-halfmarathon-check")
+                    halfmarathonInput.addEventListener('click', ()=>{
+                        document.querySelector('#pricing-marathon').style.display = 'none'
+                        document.querySelector('#pricing-halfmarathon').style.display = 'block'
+                    })
+
+                </script>
+            </div>
+        
+
+            <ul class="list-unstyled mx-0" id="pricing-marathon">
+                {% for payment_window in marathon_payment_windows_stale %}
                 <li class="text-decoration-line-through">
                     <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                 </li>
                 {% endfor %}
-                <hr class="w-50 mx-auto">
-                <li class="fs-2">
-                    <strong>{{ payment_window_active.render_price }}</strong> при оплате до {{ payment_window_active.render_date }}
+                {% if marathon_payment_window_active %}
+                    <hr class="w-50 mx-auto">
+                    <li class="fs-2">
+                        <strong>{{ marathon_payment_window_active.render_price }}</strong> при оплате до {{ marathon_payment_window_active.render_date }}
+                    </li>
+                    <hr class="w-50 mx-auto">
+                {% endif %}
+                {% for payment_window in marathon_payment_windows_next %}
+                    {% if payment_window == marathon_payment_windows_next.0 %}
+                        <li class="fs-4">
+                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
+                        </li>
+                    {% else %}
+                        <li>
+                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            <ul class="list-unstyled mx-0" id="pricing-halfmarathon" style="display: none">
+                {% for payment_window in halfmarathon_payment_windows_stale %}
+                <li class="text-decoration-line-through">
+                    <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                 </li>
-                <hr class="w-50 mx-auto">
-                {% for payment_window in payment_windows_next %}
-                    {% if payment_window == payment_windows_next.0 %}
+                {% endfor %}
+                {% if halfmarathon_payment_window_active %}
+                    <hr class="w-50 mx-auto">
+                    <li class="fs-2">
+                        <strong>{{ halfmarathon_payment_window_active.render_price }}</strong> при оплате до {{ halfmarathon_payment_window_active.render_date }}
+                    </li>
+                    <hr class="w-50 mx-auto">
+                {% endif %}
+                {% for payment_window in halfmarathon_payment_windows_next %}
+                    {% if payment_window == halfmarathon_payment_windows_next.0 %}
                         <li class="fs-4">
                             <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                         </li>

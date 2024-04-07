@@ -47,10 +47,15 @@ class EventDetail(View):
             and event.finished == False
         )
 
-        payment_windows = PaymentWindow.objects.filter(event=event)
-        payment_windows_stale = payment_windows.filter(active_until__lt=date.today())
-        payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
-        payment_windows_next = payment_windows.filter(active_until__gte=date.today())[1:]
+        marathon_payment_windows = PaymentWindow.objects.filter(event=event, route=routes[0])
+        marathon_payment_windows_stale = marathon_payment_windows.filter(active_until__lt=date.today())
+        marathon_payment_window_active = marathon_payment_windows.filter(active_until__gte=date.today()).first()
+        marathon_payment_windows_next = marathon_payment_windows.filter(active_until__gte=date.today())[1:]
+
+        halfmarathon_payment_windows = PaymentWindow.objects.filter(event=event, route=routes[1])
+        halfmarathon_payment_windows_stale = halfmarathon_payment_windows.filter(active_until__lt=date.today())
+        halfmarathon_payment_window_active = halfmarathon_payment_windows.filter(active_until__gte=date.today()).first()
+        halfmarathon_payment_windows_next = halfmarathon_payment_windows.filter(active_until__gte=date.today())[1:]
 
         context = {
             'event': event,
@@ -60,9 +65,12 @@ class EventDetail(View):
             'amateurs': amateurs,
             'marathon': routes[0],
             'halfmarathon': routes[1],
-            'payment_windows_stale' : payment_windows_stale,
-            'payment_window_active' : payment_window_active,
-            'payment_windows_next' : payment_windows_next,
+            'marathon_payment_windows_stale' : marathon_payment_windows_stale,
+            'marathon_payment_window_active' : marathon_payment_window_active,
+            'marathon_payment_windows_next' : marathon_payment_windows_next,
+            'halfmarathon_payment_windows_stale' : halfmarathon_payment_windows_stale,
+            'halfmarathon_payment_window_active' : halfmarathon_payment_window_active,
+            'halfmarathon_payment_windows_next' : halfmarathon_payment_windows_next,
         }
         return render(request=self.request, template_name=self.template_name, context=context)
     
@@ -74,7 +82,7 @@ class EventDetail(View):
                 .filter(event=event, user_profile=request.user.profile)
                 .first()
                 )
-            payment_windows = PaymentWindow.objects.filter(event=event)
+            payment_windows = PaymentWindow.objects.filter(event=event, route=my_application.route)
             payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
             
             context = {

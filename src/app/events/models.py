@@ -246,6 +246,13 @@ class PaymentWindow(models.Model):
         blank=False,
         verbose_name="Событие",
     )
+    route = models.ForeignKey(
+        to=Route,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Маршрут"
+    )
     price = models.IntegerField(
         null=False,
         blank=False,
