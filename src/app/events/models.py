@@ -53,6 +53,11 @@ class Event(BaseViewableModel):
         null=True,
         verbose_name="Время старта",
     )
+    start_location = models.CharField(
+        null=True,
+        verbose_name="Место старта",
+        max_length=255,
+    )
     series = models.ForeignKey(
         to=Series,
         null=True,

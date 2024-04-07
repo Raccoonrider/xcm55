@@ -20,3 +20,8 @@
     opacity: 0;
     transition: opacity 0.2s ease-out;
 }
+
+.bi {
+    width: 1em;
+    height: 1em;
+}
