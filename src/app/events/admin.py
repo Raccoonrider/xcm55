@@ -16,7 +16,7 @@ class SeriesModelAdmin(BaseModelAdmin):
 @admin.register(Event)
 class EventModelAdmin(BaseModelAdmin):
     model = Event
-    search_fields = ('name', 'date', 'series')
+    search_fields = ('name',)
     list_display = ('__str__', 'date', 'time', 'series', 'finished', 'active')
     list_filter = ('active', 'series')
     ordering = ('-active', 'finished', '-date')
@@ -26,7 +26,7 @@ class EventModelAdmin(BaseModelAdmin):
 @admin.register(Route)
 class RouteModelAdmin(BaseModelAdmin):
     model = Route
-    search_fields = ('name', 'series')
+    search_fields = ('name', )
     list_display = ('__str__', 'series', 'active')
     list_filter = ('active',)
     ordering = ('-active', 'name')
@@ -35,7 +35,7 @@ class RouteModelAdmin(BaseModelAdmin):
 @admin.register(Result)
 class ResultModelAdmin(admin.ModelAdmin):
     model = Result
-    search_fields = ('user_profile',)
+    search_fields = ('user_profile__last_name', 'user_profile__first_name')
     list_display = ('event', 'route', 'user_profile', 'time', 'status')
     ordering = ('-event__date', 'status')
 
@@ -43,7 +43,7 @@ class ResultModelAdmin(admin.ModelAdmin):
 @admin.register(Application)
 class ApplicationModelAdmin(admin.ModelAdmin):
     model = Application
-    search_fields = ('user_profile', 'event')
+    search_fields = ('user_profile__last_name', 'user_profile__first_name')
     list_display = ('user_profile', 'event', 'route', 'created')
     autocomplete_fields = ('event', 'route', 'user_profile', 'result')
 
