@@ -264,12 +264,12 @@
                 </div>
                     <hr class="w-50 mx-auto">
             
-                <div class="container overflow-hidden">
-                    <div class="row gy-5 gy-md-6">
+                <div class="container-md">
+                    <div class="row flex-sm-row align-items-center gx-0 gy-5 g-sm-5 py-5">
                         {% for s in event.sponsors.all %}
-                        <div class="col-4 col-md-3 align-self-center text-center">
+                        <div class="col-sm-4">
                             <a href="{{ s.xref }}" target="_blank">
-                                <img class="m-4 rounded shadow" width="300" height="150" src="{{ s.image.url }}"/>
+                                <img class="d-block img-fluid rounded" width="300" height="150" src="{{ s.image.url }}"/>
                             </a>
                         </div>
                         {% endfor %}
