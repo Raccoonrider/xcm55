@@ -148,12 +148,12 @@
                     <hr class="w-50 mx-auto">
                 {% endif %}
                 {% for payment_window in marathon_payment_windows_next %}
-                    {% if payment_window == marathon_payment_windows_next.0 %}
-                        <li class="fs-4">
-                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
+                    {% if forloop.last %}
+                        <li {% if forloop.first %} class="fs-4" {% endif %}>
+                            <strong>{{ payment_window.render_price }}</strong> при оплате в день старта
                         </li>
                     {% else %}
-                        <li>
+                        <li  {% if forloop.first %} class="fs-4" {% endif %}>
                             <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                         </li>
                     {% endif %}
@@ -174,12 +174,12 @@
                     <hr class="w-50 mx-auto">
                 {% endif %}
                 {% for payment_window in halfmarathon_payment_windows_next %}
-                    {% if payment_window == halfmarathon_payment_windows_next.0 %}
-                        <li class="fs-4">
-                            <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
+                    {% if forloop.last %}
+                        <li {% if forloop.first %} class="fs-4" {% endif %}>
+                            <strong>{{ payment_window.render_price }}</strong> при оплате в день старта
                         </li>
                     {% else %}
-                        <li>
+                        <li  {% if forloop.first %} class="fs-4" {% endif %}>
                             <strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}
                         </li>
                     {% endif %}
