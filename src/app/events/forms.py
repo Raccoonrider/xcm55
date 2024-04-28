@@ -15,7 +15,7 @@ class ApplicationForm(forms.Form):
 
     category=forms.ChoiceField(
         choices=(
-            (Category.Default, 'Категория "Любители" (награждение по возрастным группам)'),
+            (Category.Default, 'Категория "Любители"'),
             (Category.Elite, 'Категория "Элита"')
         ),
         required=True,
