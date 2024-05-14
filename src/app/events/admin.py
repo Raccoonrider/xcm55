@@ -44,7 +44,7 @@ class ResultModelAdmin(admin.ModelAdmin):
 class ApplicationModelAdmin(admin.ModelAdmin):
     model = Application
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
-    list_display = ('user_profile', 'event', 'route', 'created')
+    list_display = ('user_profile', 'event', 'payment_confirmed', 'route', 'created')
     autocomplete_fields = ('event', 'route', 'user_profile', 'result')
 
 
