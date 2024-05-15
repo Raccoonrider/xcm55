@@ -14,3 +14,10 @@
     margin-bottom: 0;
     text-align: center;
   }
+
+
+.auth-cover{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}

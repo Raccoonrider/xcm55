@@ -18,9 +18,16 @@
         {% block css %}{% endblock %}
 
     </head>
-    <body>
-        
+    <body>       
         <header class="cover shadow-lg">
+            <div class="auth-cover">
+                {% if user.is_authenticated %}
+                    <div class="text-light">{{ user.get_display_name }}</div>
+                    <a class="btn btn-light" href="{% url 'account_logout' %}">Выйти</a>
+                {% else %}
+                    <a class="btn btn-light" href="{% url 'account_login' %}">Войти</a>
+                {% endif %}
+            </div>
             {% block cover %}
             {% endblock cover %}
         </header>
