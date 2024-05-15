@@ -107,6 +107,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
+    def get_display_name(self):
+        if self.profile:
+            return F"{self.profile.last_name} {self.profile.first_name}"
+        else:
+            return self.email
+            
+    
     class Meta(AbstractBaseUser.Meta):
         verbose_name = 'Аккаунт'
         verbose_name_plural = 'Аккаунты'
