@@ -8,7 +8,6 @@ django = "*"
 django-phonenumber-field = "*"
 django-debug-toolbar = "*"
 djangorestframework = "*"
-django-allauth = "*"
 requests = "*"
 requests-oauthlib = "*"
 python3-openid = "*"
@@ -22,6 +21,7 @@ django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
 pillow = "*"
 django-extensions = "*"
+django-allauth = "==0.61.1"
 
 [dev-packages]
 

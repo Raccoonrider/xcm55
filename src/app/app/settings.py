@@ -71,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 
     # Allauth
     'allauth.account.middleware.AccountMiddleware',
@@ -176,6 +177,7 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Omsk'
 
 USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
 
