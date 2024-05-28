@@ -36,23 +36,27 @@ class EventDetail(View):
             .filter(event=event, category=Category.Elite)
             .order_by('created')
             )
-        amateurs = (Application.objects
-            .filter(event=event, category=Category.Default)
+        route_marathon, route_halfmarathon = event.routes.all().order_by('-distance')
+        amateurs_marathon = (Application.objects
+            .filter(event=event, category=Category.Default, route=route_marathon)
             .order_by('created')
             )
-        routes = event.routes.all().order_by('-distance')
+        amateurs_halfmarathon = (Application.objects
+            .filter(event=event, category=Category.Default, route=route_halfmarathon)
+            .order_by('created')
+            )
 
         registration_disabled = (
             my_application is not None
             and event.finished == False
         )
 
-        marathon_payment_windows = PaymentWindow.objects.filter(event=event, route=routes[0])
+        marathon_payment_windows = PaymentWindow.objects.filter(event=event, route=route_marathon)
         marathon_payment_windows_stale = marathon_payment_windows.filter(active_until__lt=date.today())
         marathon_payment_window_active = marathon_payment_windows.filter(active_until__gte=date.today()).first()
         marathon_payment_windows_next = marathon_payment_windows.filter(active_until__gte=date.today())[1:]
 
-        halfmarathon_payment_windows = PaymentWindow.objects.filter(event=event, route=routes[1])
+        halfmarathon_payment_windows = PaymentWindow.objects.filter(event=event, route=route_halfmarathon)
         halfmarathon_payment_windows_stale = halfmarathon_payment_windows.filter(active_until__lt=date.today())
         halfmarathon_payment_window_active = halfmarathon_payment_windows.filter(active_until__gte=date.today()).first()
         halfmarathon_payment_windows_next = halfmarathon_payment_windows.filter(active_until__gte=date.today())[1:]
@@ -62,9 +66,10 @@ class EventDetail(View):
             'my_application': my_application,
             'registration_disabled': registration_disabled,
             'elites': elites,
-            'amateurs': amateurs,
-            'marathon': routes[0],
-            'halfmarathon': routes[1],
+            'amateurs_marathon': amateurs_marathon,
+            'amateurs_halfmarathon': amateurs_halfmarathon,
+            'marathon': route_marathon,
+            'halfmarathon': route_halfmarathon,
             'marathon_payment_windows_stale' : marathon_payment_windows_stale,
             'marathon_payment_window_active' : marathon_payment_window_active,
             'marathon_payment_windows_next' : marathon_payment_windows_next,

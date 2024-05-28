@@ -189,17 +189,35 @@
     </div>
     {% endif %}
 
-    <div class="container-md">          
-        {% if elites or amateurs %}
-            <div class="row flex-lg-row align-items-center gx-0 gy-5 g-md-5 py-5">
-                <h1 class="display-5 fw-bold lh-1 text-center" id="participants">
-                    Участвуют
+    <div class="container-md py-5">          
+        {% if elites or amateurs_marathon or amateurs_halfmarathon %}
+        <h1 class="display-5 fw-bold lh-1 text-center" id="participants">
+            Участвуют
                 </h1>
                 {% if elites %}
                     <div class="col-lg-6 mb-auto">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item fs-3 fw-bolder">Категория "Элита"</li>
+                            <li class="list-group-item fs-3 fw-bolder">Категория "Элита" {{marathon.distance}} км</li>
                             {% for application in elites %}
+                            <li class="list-group-item fs-5">
+                                {% if application == my_application %}
+                                <strong>
+                                    {{ application.user_profile }}
+                                </strong>
+                                {% else %}
+                                {{ application.user_profile }}
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+            <div class="row flex-lg-row align-items-center">
+                {% if amateurs_marathon %}
+                    <div class="col-lg-6 mb-auto">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
+                            {% for application in amateurs_marathon %}
                             <li class="list-group-item fs-5">
                                 {% if application == my_application %}
                                 <strong>
@@ -213,11 +231,11 @@
                         </ul>
                     </div>
                 {% endif %}
-                {% if amateurs %}
+                {% if amateurs_halfmarathon %}
                     <div class="col-lg-6 mb-auto">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item fs-3 fw-bolder">Категория "Любители"</li>
-                            {% for application in amateurs %}
+                            <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{halfmarathon.distance}} км</li>
+                            {% for application in amateurs_halfmarathon %}
                             <li class="list-group-item fs-5">
                                 {% if application == my_application %}
                                 <strong>
