@@ -10,6 +10,7 @@ from django.urls import reverse
 from common.enums import ResultStatus, Category, Gender
 from events.models import Event, Application, PaymentWindow
 from events.forms import ApplicationForm
+from sponsors.models import Referral
 
 class EventDetail(View):
     template_name = "events/detail.html"
@@ -31,6 +32,8 @@ class EventDetail(View):
                 )
         else:
             my_application = None
+
+        self.request.session['ref_uuid'] = self.request.GET.get('ref_uuid')
 
         elites = (Application.objects
             .filter(event=event, category=Category.Elite)
@@ -129,7 +132,7 @@ class ApplicationCreate(FormView):
         qs = self.event.routes.all().order_by('-distance')
         form.fields['route'].queryset = qs
         return form
-
+    
     def form_valid(self, form) -> HttpResponse:
         application = Application()
         application.event = self.event
@@ -137,5 +140,6 @@ class ApplicationCreate(FormView):
         application.helmet_not_needed = form.cleaned_data['helmet_not_needed']
         application.user_profile = self.request.user.profile
         application.category = form.cleaned_data['category']
+        application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
         application.save()
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")

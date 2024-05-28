@@ -1,11 +1,12 @@
 from django.contrib import admin
 
-from sponsors.models import Sponsor, EventSponsor
+from sponsors.models import *
+from events.models import Application
 
 @admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
-    model=Sponsor
+    model = Sponsor
     search_fields = ('name', )
     list_display = ('name', 'phone_number', 'active')
     list_filter = ('active',)
@@ -19,3 +20,12 @@ class EventSponsorModelAdmin(admin.ModelAdmin):
     ordering = ('-active', '-event__date')
     autocomplete_fields = ('sponsor',)
 
+
+@admin.register(Referral)
+class ReferralAdmin(admin.ModelAdmin):
+    model = Referral
+    search_fields = ('code', 'referral_uuid', 'sponsor__name')
+    readonly_fields = ('times_used', 'get_absolute_url')
+    list_display = ('sponsor', 'event', 'code', 'expires', 'active', 'get_absolute_url')
+    list_filter = ('active', 'event')
+    ordering = ('-active', )

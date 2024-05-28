@@ -169,6 +169,13 @@ class Application(BaseModel):
         blank=True,
         verbose_name="Результат"
     )
+    referral = models.ForeignKey(
+        to='sponsors.Referral',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Рефералка",
+    )
 
     class Meta:
         verbose_name = 'Заявка'
