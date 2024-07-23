@@ -273,9 +273,9 @@ class AgeGroup(models.Model):
                 gender = "Женщины"
 
         if self.age_max == 100:
-            return f"{gender} {self.age_min}+ лет"
+            return f"{gender} {self.age_min} лет и старше"
         
-        return f"{gender} {self.age_min} - {self.age_max} лет"
+        return f"{gender} от {self.age_min} до {self.age_max} лет"
     
     class Meta:
         verbose_name = 'Возрастная группа'
