@@ -1,3 +1,5 @@
+from datetime import date, time, timedelta
+
 from django.db import models
 from django.urls import reverse
 
@@ -244,6 +246,36 @@ class AgeGroup(models.Model):
         choices=Gender.choices()
     )
 
+    def birthday_min(self):
+        return self.event.date.replace(year = self.event.date.year - self.age_max - 1) - timedelta(days=1)
+
+    def birthday_max(self):
+        return self.event.date.replace(year = self.event.date.year - self.age_min)
+
+    def __str__(self):
+
+        if self.age_max <= 13:
+            if self.gender == Gender.M:
+                gender = "Мальчики"
+            else:
+                gender = "Девочки"
+
+        elif self.age_max <= 18:
+            if self.gender == Gender.M:
+                gender = "Юноши"
+            else:
+                gender = "Девушки"
+
+        else:
+            if self.gender == Gender.M:
+                gender = "Мужчины"
+            else:
+                gender = "Женщины"
+
+        if self.age_max == 100:
+            return f"{gender} {self.age_min}+ лет"
+        
+        return f"{gender} {self.age_min} - {self.age_max} лет"
     
     class Meta:
         verbose_name = 'Возрастная группа'

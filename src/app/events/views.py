@@ -8,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 
 from common.enums import ResultStatus, Category, Gender
-from events.models import Event, Application, PaymentWindow
+from events.models import Event, Application, PaymentWindow, AgeGroup
 from events.forms import ApplicationForm
 from sponsors.models import Referral
 
@@ -40,10 +40,22 @@ class EventDetail(View):
             .order_by('created')
             )
         route_marathon, route_halfmarathon = event.routes.all().order_by('-distance')
-        amateurs_marathon = (Application.objects
-            .filter(event=event, category=Category.Default, route=route_marathon)
-            .order_by('created')
+
+        agegroups = AgeGroup.objects.filter(event=event).order_by('gender', 'age_max')
+        if agegroups:
+            amateurs_marathon = zip(agegroups, [
+                (Application.objects
+                    .filter(event=event, category=Category.Default, route=route_marathon)
+                    .filter(user_profile__birthday__gte=ag.birthday_min())
+                    .filter(user_profile__birthday__lte=ag.birthday_max())
+                    .order_by('user_profile__last_name'))
+                for ag in agegroups]
             )
+        else:     
+            amateurs_marathon = (Application.objects
+                .filter(event=event, category=Category.Default, route=route_marathon)
+                .order_by('created')
+                )
         amateurs_halfmarathon = (Application.objects
             .filter(event=event, category=Category.Default, route=route_halfmarathon)
             .order_by('created')
@@ -69,6 +81,7 @@ class EventDetail(View):
             'my_application': my_application,
             'registration_disabled': registration_disabled,
             'elites': elites,
+            'agegroups': agegroups,
             'amateurs_marathon': amateurs_marathon,
             'amateurs_halfmarathon': amateurs_halfmarathon,
             'marathon': route_marathon,

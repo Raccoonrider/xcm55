@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
@@ -57,7 +58,16 @@ class UserProfile(BaseModel):
     
     def get_createa_url(self):
         return reverse("user_profile_create")
-    
+
+    def age(self, date_:date|None=None):
+        date_ = date_ or date.today()
+        age = date_.year - self.birthday.year
+
+        date_ = date_.replace(year=self.birthday.year)
+        if date_ < self.birthday:
+            age -= 1
+        return age
+
     class Meta:
         verbose_name = "Профиль пользователя"
         verbose_name_plural = "Профили пользователей"

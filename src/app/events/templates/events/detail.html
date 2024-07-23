@@ -214,22 +214,50 @@
                     {% endif %}
             <div class="row flex-lg-row align-items-center">
                 {% if amateurs_marathon %}
-                    <div class="col-lg-6 mb-auto">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
-                            {% for application in amateurs_marathon %}
-                            <li class="list-group-item fs-5">
-                                {% if application == my_application %}
-                                <strong>
-                                    {{ application.user_profile }}
-                                </strong>
-                                {% else %}
-                                    {{ application.user_profile }}
-                                {% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {% if agegroups %}
+                        <div class="col-lg-6 mb-auto">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
+                                {% for ag, applications in amateurs_marathon %}
+                                    <li class="list-group-item fs-4 fw-bolder text-muted">{{ ag }}</li>
+                                    {% if applications %}
+                                        {% for application in applications %}
+                                            <li class="list-group-item fs-5">
+                                                {% if application == my_application %}
+                                                <strong>
+                                                    {{ application.user_profile }}
+                                                </strong>
+                                                {% else %}
+                                                {{ application.user_profile }}
+                                                {% endif %}
+                                            </li>
+                                            {% endfor %}
+                                    {% else %}
+                                        <li class="list-group-item fs-5">
+                                            Пока никого!
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="col-lg-6 mb-auto">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
+                                {% for application in amateurs_marathon %}
+                                <li class="list-group-item fs-5">
+                                    {% if application == my_application %}
+                                    <strong>
+                                        {{ application.user_profile }}
+                                    </strong>
+                                    {% else %}
+                                        {{ application.user_profile }}
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                 {% endif %}
                 {% if amateurs_halfmarathon %}
                     <div class="col-lg-6 mb-auto">
