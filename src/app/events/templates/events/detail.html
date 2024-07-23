@@ -199,7 +199,7 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item fs-3 fw-bolder">Категория "Элита" {{marathon.distance}} км</li>
                             {% for application in elites %}
-                            <li class="list-group-item fs-5">
+                            <li class="list-group-item fs-5 ms-1">
                                 {% if application == my_application %}
                                 <strong>
                                     {{ application.user_profile }}
@@ -219,10 +219,10 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
                                 {% for ag, applications in amateurs_marathon %}
-                                    <li class="list-group-item fs-4 fw-bolder text-muted">{{ ag }}</li>
+                                    <li class="list-group-item fs-4 fw-bolder text-muted ms-1">{{ ag }}</li>
                                     {% if applications %}
                                         {% for application in applications %}
-                                            <li class="list-group-item fs-5">
+                                            <li class="list-group-item fs-5 ms-2">
                                                 {% if application == my_application %}
                                                 <strong>
                                                     {{ application.user_profile }}
@@ -245,7 +245,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{marathon.distance}} км</li>
                                 {% for application in amateurs_marathon %}
-                                <li class="list-group-item fs-5">
+                                <li class="list-group-item fs-5 ms-1">
                                     {% if application == my_application %}
                                     <strong>
                                         {{ application.user_profile }}
@@ -264,7 +264,7 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item fs-3 fw-bolder">Категория "Любители" {{halfmarathon.distance}} км</li>
                             {% for application in amateurs_halfmarathon %}
-                            <li class="list-group-item fs-5">
+                            <li class="list-group-item fs-5 ms-1">
                                 {% if application == my_application %}
                                 <strong>
                                     {{ application.user_profile }}
