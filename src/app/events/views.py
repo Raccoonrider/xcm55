@@ -48,6 +48,7 @@ class EventDetail(View):
                     .filter(event=event, category=Category.Default, route=route_marathon)
                     .filter(user_profile__birthday__gte=ag.birthday_min())
                     .filter(user_profile__birthday__lte=ag.birthday_max())
+                    .filter(user_profile__gender=ag.gender)
                     .order_by('user_profile__last_name'))
                 for ag in agegroups]
             )
