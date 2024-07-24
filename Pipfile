@@ -22,6 +22,7 @@ crispy-bootstrap5 = "*"
 pillow = "*"
 django-extensions = "*"
 django-allauth = "==0.61.1"
+pip = "*"
 
 [dev-packages]
 
