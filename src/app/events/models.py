@@ -183,6 +183,9 @@ class Application(BaseModel):
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
 
+    def distance(self):
+        return self.route.distance
+
 
 class Result(BaseModel):
     event = models.ForeignKey(

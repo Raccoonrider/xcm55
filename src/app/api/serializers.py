@@ -30,18 +30,18 @@ class RouteSerializer(serializers.ModelSerializer):
 
 class ApplicationSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer
+    distance = serializers.IntegerField()
 
     class Meta:
         model = Application
         depth = 1
-        fields = "__all__"
+        exclude = ("event", "route")
 
 class ResultSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer
 
     class Meta:
         model = Result
-        depth = 1
         fields = "__all__"
 
 class AgeGroupSerializer(serializers.ModelSerializer):
