@@ -178,6 +178,20 @@ class Application(BaseModel):
         blank=True,
         verbose_name="Рефералка",
     )
+    number = models.IntegerField(
+        null=True
+    )
+
+    def agegroup(self):
+        age = self.user_profile.age(self.event.date)
+
+        return AgeGroup.objects.filter(
+            event=self.event, 
+            gender=self.user_profile.gender,
+            age_min__lte = age,
+            age_max__gte = age,
+            ).first()
+
 
     class Meta:
         verbose_name = 'Заявка'
