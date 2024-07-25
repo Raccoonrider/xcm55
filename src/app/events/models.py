@@ -79,7 +79,14 @@ class Event(BaseViewableModel):
         verbose_name="Регламент",
         upload_to="event_rules"
     )
-    finished = models.BooleanField()
+    finished = models.BooleanField(
+        default=False,
+        verbose_name="Событие закончено",
+    )
+    registration_closed = models.BooleanField(
+        default=False,
+        verbose_name="Регистрация закрыта",
+    )
     payment_info = models.CharField(
         null=False,
         blank=False,

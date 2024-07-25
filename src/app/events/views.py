@@ -64,7 +64,8 @@ class EventDetail(View):
 
         registration_disabled = (
             my_application is not None
-            and event.finished == False
+            or event.finished == True
+            or event.registration_closed == True
         )
 
         marathon_payment_windows = PaymentWindow.objects.filter(event=event, route=route_marathon)
@@ -139,6 +140,8 @@ class ApplicationCreate(FormView):
     
     def post(self, *args, pk:int=None, **kwargs):
         self.event = Event.objects.get(pk=pk)
+        if self.event.finished or self.event.registration_closed:
+            return HttpResponseRedirect('/')
         return self.redirect_user() or super().post(*args, **kwargs)
 
     def get_form(self, form_class=ApplicationForm) -> ApplicationForm:
