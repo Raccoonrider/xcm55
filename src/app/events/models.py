@@ -259,6 +259,16 @@ class AgeGroup(models.Model):
         blank=False,
         verbose_name="Возраст, до"
     )
+    number_max = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Номер участника, от"
+    )
+    number_min = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Номер участника, до"
+    )
     gender = models.IntegerField(
         null=False,
         default=Gender.M,
