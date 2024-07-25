@@ -216,8 +216,9 @@ class Application(BaseModel):
         
         elif self.route.halfmarathon == False:
             agegroup = self.agegroup()
-            number_min = agegroup.number_min
-            number_max = agegroup.number_max
+            if agegroup is not None:
+                number_min = agegroup.number_min
+                number_max = agegroup.number_max
                     
         elif self.route.halfmarathon:
             number_min = 100
