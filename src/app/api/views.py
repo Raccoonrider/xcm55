@@ -9,7 +9,7 @@ class EventDetailAPIView(RetrieveAPIView):
 
 
 class EventListAPIView(ListAPIView, EventDetailAPIView):
-    pass
+    queryset = Event.objects.filter(active=True, finished=False).order_by('date')
 
 
 class AgeGroupListAPIView(ListAPIView):
