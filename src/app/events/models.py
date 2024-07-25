@@ -179,7 +179,9 @@ class Application(BaseModel):
         verbose_name="Рефералка",
     )
     number = models.IntegerField(
-        null=True
+        null=True,
+        blank=True,
+        verbose_name="Номер участника",
     )
 
     def agegroup(self):
