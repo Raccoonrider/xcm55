@@ -36,6 +36,10 @@ class Route(BaseViewableModel):
         on_delete=models.SET_NULL,
         verbose_name="Серия соревнований"
     )    
+    halfmarathon = models.BooleanField(
+        default=False,
+        verbose_name="Полумарафон"
+    )
 
     class Meta:
         verbose_name = "Маршрут"
@@ -181,7 +185,7 @@ class Application(BaseModel):
     number = models.IntegerField(
         null=True,
         blank=True,
-        verbose_name="Номер участника",
+        verbose_name="Номер",
     )
 
     def agegroup(self):
@@ -193,6 +197,32 @@ class Application(BaseModel):
             age_min__lte = age,
             age_max__gte = age,
             ).first()
+        
+    def autonumber(self):
+        if self.number is not None:
+            self.number = None
+            self.save()
+
+        if self.category == Category.Elite:
+            number_min = 1
+            number_max = 50
+        
+        elif self.route.halfmarathon == False:
+            agegroup = self.agegroup()
+            number_min = agegroup.number_min
+            number_max = agegroup.number_max
+                    
+        elif self.route.halfmarathon:
+            number_min = 100
+            number_max = 199
+            
+        used_numbers = {x.number for x in Application.objects.filter(event=self.event, active=True)}
+
+        for n in range(number_min, number_max + 1):
+            if n not in used_numbers:
+                self.number = n
+                self.save()
+                return n
 
 
     class Meta:
@@ -259,12 +289,12 @@ class AgeGroup(models.Model):
         blank=False,
         verbose_name="Возраст, до"
     )
-    number_max = models.IntegerField(
+    number_min = models.IntegerField(
         null=True,
         blank=True,
         verbose_name="Номер участника, от"
     )
-    number_min = models.IntegerField(
+    number_max = models.IntegerField(
         null=True,
         blank=True,
         verbose_name="Номер участника, до"
