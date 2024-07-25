@@ -37,3 +37,4 @@ class ResultStatus(BaseEnum):
 class Category(BaseEnum):
     Default = 0
     Elite = 1
+    Junior = 2
