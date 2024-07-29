@@ -65,10 +65,8 @@ class ResultListCreateUpdateAPIView(ListCreateAPIView):
             
             if instance:
                 serializer.update(instance, serializer.validated_data)
-                headers = self.get_success_headers(serializer.data)
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED, headers=headers)
             else:
                 serializer.save()
-                headers = self.get_success_headers(serializer.data)
-                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(status=status.HTTP_202_ACCEPTED)
 
