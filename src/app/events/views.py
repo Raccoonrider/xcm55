@@ -23,8 +23,12 @@ class EventDetail(View):
         else:
             event = (self.model.objects
                 .filter(active=True, finished=False)
-                .order_by('-date')
+                .order_by('date')
                 .first()
+                ) or (Event.objects
+                    .filter(active=True, finished=True)
+                    .order_by('-date')
+                    .first()
                 )
         if self.request.user.is_authenticated and self.request.user.profile:
             my_application = (Application.objects
@@ -165,20 +169,8 @@ class ApplicationCreate(FormView):
 class EventResults(View):
     template_name = "events/results.html"
 
-    def get(self, *args, pk=None, **kwargs):
-        if pk is not None:
-            event = get_object_or_404(Event, pk=pk)
-        else:
-            event = (Event.objects
-                .filter(active=True, finished=False)
-                .order_by('date')
-                .first()
-            ) or (Event.objects
-                .filter(active=True, finished=True)
-                .order_by('-date')
-                .first()
-            )
-
+    def get(self, *args, pk, **kwargs):
+        event = get_object_or_404(Event, pk=pk, active=True)
 
         results = {}
         for result in Result.objects.filter(event=event, active=True).order_by('status', F('time').asc(nulls_last=True),):
