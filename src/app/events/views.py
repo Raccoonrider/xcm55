@@ -174,15 +174,6 @@ class EventResults(View):
                 .order_by('-date')
                 .first()
                 )
-        
-        if self.request.user.is_authenticated and self.request.user.profile:
-            my_application = (Application.objects
-                .filter(event=event, user_profile=self.request.user.profile)
-                .first()
-                )
-            my_result = my_application.result
-        else:
-            my_result = None
 
         results = {}
         for result in Result.objects.filter(event=event, active=True).order_by('status', F('time').asc(nulls_last=True),):
@@ -194,7 +185,6 @@ class EventResults(View):
                
         context = {
             'event': event,
-            'my_result': my_result,
             'results': results,
         }
         return render(request=self.request, template_name=self.template_name, context=context)
