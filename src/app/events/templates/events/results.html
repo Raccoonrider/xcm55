@@ -43,6 +43,7 @@
                             <th>№</th>
                             <th>Участник</th>
                             <th>Время</th>
+                            <th>Место</th>
                             <th class="d-none d-md-block">Средняя<br>скорость</th>
                         </tr>
                     </thead>
@@ -56,6 +57,7 @@
                                 <td>{{result.user_profile}}</td>
                             {% endif %}
                             <td>{{result.render_time}}</td>
+                            <td>{{ forloop.counter }}</td>
                             <td class="d-none d-md-block">{{result.avg_speed}}</td>
                         </tr>
                         {% endfor %}
