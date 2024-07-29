@@ -322,12 +322,12 @@ class Result(BaseModel):
         if self.route.halfmarathon == True:
             return "Полумарафон"
         if self.category == Category.Default:
-            return self.age_group
+            return str(self.age_group)
 
     def avg_speed(self):
         if self.time:
             return "{:.02f} км/ч".format(self.route.distance / self.time.total_seconds() * 3600)
-        return ""
+        return "-"
 
     def __str__(self):
         return F"{self.number} | {self.render_time()}"

@@ -190,7 +190,7 @@ class EventResults(View):
             results[key] = results.get(key) or []
             results[key].append(result)
 
-        results = sorted(results.items(), key=lambda x: (x[0] != "Элита", x[0] == "Полумарафон", x[0] == "Юниоры"))
+        results = sorted(results.items(), key=lambda x: (x[0] != "Элита", x[0] == "Полумарафон", x[0] == "Юниоры", x[0]))
                
         context = {
             'event': event,
