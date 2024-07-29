@@ -181,7 +181,13 @@ class EventResults(View):
             results[key] = results.get(key) or []
             results[key].append(result)
 
-        results = sorted(results.items(), key=lambda x: (x[0] != "Элита", x[0] == "Полумарафон", x[0] == "Юниоры", x[0]))
+        results = sorted(list(results.items()), key=lambda x: (x[0] != "Элита", x[0] == "Полумарафон", x[0] == "Юниоры", x[0]))
+        for category, items in results:
+            for i, result in enumerate(items, start=1):
+                if result.status == ResultStatus.OK:
+                    result.place = i
+                else:
+                    result.place = ""
                
         context = {
             'event': event,
