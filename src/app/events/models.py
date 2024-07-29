@@ -259,6 +259,24 @@ class Result(BaseModel):
         blank=False,
         verbose_name="Маршрут"
     )
+    number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Номер"
+    )
+    category = models.IntegerField(
+        null=True,
+        blank=True,
+        choices=Category.choices(),
+        verbose_name="Категория"
+    )
+    age_group = models.ForeignKey(
+        to='events.AgeGroup',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Возрастная группа"
+    )
     user_profile = models.ForeignKey(
         to='users.UserProfile',
         on_delete=models.SET_NULL,
@@ -280,6 +298,30 @@ class Result(BaseModel):
     class Meta:
         verbose_name = 'Результат'
         verbose_name_plural = 'Результаты'
+
+    def render_time(self):
+        if self.time:
+            t = round(self.time.total_seconds())
+            h, t = divmod(t, 3600)
+            m, s = divmod(t, 60)
+
+            return F"{h:02d}:{m:02d}:{s:02d}" 
+        return "--:--:--"
+    
+    def render_status(self):
+        return ResultStatus(self.status).name_int()
+    
+    def render_category(self):
+        if self.category == Category.Elite:
+            return "Элита"
+        if self.category == Category.Junior:
+            return "Юниоры"
+        if self.category == Category.Default:
+            return self.age_group
+    
+    def __str__(self):
+        return F"{self.number} | {self.render_time()}"
+
 
 
 class AgeGroup(models.Model):

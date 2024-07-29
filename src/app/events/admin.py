@@ -36,7 +36,9 @@ class RouteModelAdmin(BaseModelAdmin):
 class ResultModelAdmin(admin.ModelAdmin):
     model = Result
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
-    list_display = ('event', 'route', 'user_profile', 'time', 'status')
+    list_display = ('user_profile', 'number', 'render_category', 'time', 'status')
+    list_filter = ('event', 'route', 'status')
+    autocomplete_fields = ('event', 'route', 'user_profile')
     ordering = ('-event__date', 'status')
 
 
