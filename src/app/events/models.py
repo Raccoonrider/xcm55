@@ -306,10 +306,12 @@ class Result(BaseModel):
             h, t = divmod(t, 3600)
             m, s = divmod(t, 60)
 
-            return F"{h:02d}:{m:02d}:{s:02d}" 
-        return "--:--:--"
+            return F"{h:02d}:{m:02d}:{s:02d} {self.render_status()}" 
+        return f"--:--:-- {self.render_status()}"
     
     def render_status(self):
+        if self.status == ResultStatus.OK:
+            return ""
         return ResultStatus.name_int(self.status)
     
     def render_category(self):
@@ -325,7 +327,8 @@ class Result(BaseModel):
     def avg_speed(self):
         if self.time:
             return "{:.02f} км/ч".format(self.route.distance / self.time.total_seconds() * 3600)
-    
+        return ""
+
     def __str__(self):
         return F"{self.number} | {self.render_time()}"
 

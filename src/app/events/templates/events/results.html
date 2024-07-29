@@ -43,7 +43,6 @@
                             <th>№</th>
                             <th>Участник</th>
                             <th>Время</th>
-                            <th>Статус</th>
                             <th>Средняя<br>скорость</th>
                         </tr>
                     </thead>
@@ -51,9 +50,12 @@
                         {% for result in items %}
                         <tr>
                             <td>{{result.number}}</td>
-                            <td>{{result.user_profile}}</td>
+                            {% if request.user.profile == result.user_profile %}
+                                <td class="fw-bold">{{result.user_profile}}</td>
+                            {% else %}
+                                <td>{{result.user_profile}}</td>
+                            {% endif %}
                             <td>{{result.render_time}}</td>
-                            <td>{{result.render_status}}</td>
                             <td>{{result.avg_speed}}</td>
                         </tr>
                         {% endfor %}
@@ -61,6 +63,23 @@
                 </table>
             {% endfor %}
         {% endif %}
+        <div class="m-3">
+            <h5>Глоссарий</h5>
+            <ul>
+                <li>
+                    <b>OTL</b> - Over Time Limit - участник не уложился во временной лимит
+                </li>
+                <li>
+                    <b>DNF</b> - Did Not Finish - участник не прибыл на финиш
+                </li>
+                <li>
+                    <b>DNS</b> - Did Not Start - участник не вышел на старт
+                </li>
+                <li>
+                    <b>DSQ</b> - DiSQualified - участник дисквалифицирован
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="text-light bg-success shadow-lg">  
         <div class="container-md text-center py-5 mx-auto">
