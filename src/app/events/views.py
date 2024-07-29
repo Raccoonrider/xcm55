@@ -6,9 +6,10 @@ from django.views.generic.edit import FormView
 from django.views import View
 from django.conf import settings
 from django.urls import reverse
+from django.db.models import F
 
 from common.enums import ResultStatus, Category, Gender
-from events.models import Event, Application, PaymentWindow, AgeGroup
+from events.models import Event, Application, PaymentWindow, AgeGroup, Result
 from events.forms import ApplicationForm
 from sponsors.models import Referral
 
@@ -160,3 +161,40 @@ class ApplicationCreate(FormView):
         application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
         application.save()
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
+
+class EventResults(View):
+    template_name = "events/results.html"
+
+    def get(self, *args, pk=None, **kwargs):
+        if pk is not None:
+            event = get_object_or_404(Event, pk=pk)
+        else:
+            event = (Event.objects
+                .filter(active=True, finished=False)
+                .order_by('-date')
+                .first()
+                )
+        
+        if self.request.user.is_authenticated and self.request.user.profile:
+            my_application = (Application.objects
+                .filter(event=event, user_profile=self.request.user.profile)
+                .first()
+                )
+            my_result = my_application.result
+        else:
+            my_result = None
+
+        results = {}
+        for result in Result.objects.filter(event=event, active=True).order_by('status', F('time').asc(nulls_last=True),):
+            key = result.render_category()
+            results[key] = results.get(key) or []
+            results[key].append(result)
+
+        results = sorted(results.items(), key=lambda x: (x[0] != "Элита", x[0] == "Полумарафон", x[0] == "Юниоры"))
+               
+        context = {
+            'event': event,
+            'my_result': my_result,
+            'results': results,
+        }
+        return render(request=self.request, template_name=self.template_name, context=context)

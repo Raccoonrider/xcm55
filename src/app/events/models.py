@@ -268,7 +268,8 @@ class Result(BaseModel):
         null=True,
         blank=True,
         choices=Category.choices(),
-        verbose_name="Категория"
+        verbose_name="Категория",
+        default=Category.Default,
     )
     age_group = models.ForeignKey(
         to='events.AgeGroup',
@@ -309,7 +310,7 @@ class Result(BaseModel):
         return "--:--:--"
     
     def render_status(self):
-        return ResultStatus(self.status).name_int()
+        return ResultStatus.name_int(self.status)
     
     def render_category(self):
         if self.category == Category.Elite:
@@ -320,6 +321,10 @@ class Result(BaseModel):
             return "Полумарафон"
         if self.category == Category.Default:
             return self.age_group
+
+    def avg_speed(self):
+        if self.time:
+            return "{:.02f} км/ч".format(self.route.distance / self.time.total_seconds() * 3600)
     
     def __str__(self):
         return F"{self.number} | {self.render_time()}"
