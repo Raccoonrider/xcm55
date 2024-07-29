@@ -316,6 +316,8 @@ class Result(BaseModel):
             return "Элита"
         if self.category == Category.Junior:
             return "Юниоры"
+        if self.route.halfmarathon == True:
+            return "Полумарафон"
         if self.category == Category.Default:
             return self.age_group
     
