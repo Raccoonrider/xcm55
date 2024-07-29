@@ -60,7 +60,13 @@
         </p>
         {% endif %}        
     </div>
-
+    
+    {% if event.finished %}
+    <hr>
+        {% with image='app/img/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке не смотря на погоду! О своих результатах можно узнать из официального протокола."%}
+            {% include 'hero-left.html'%}
+        {% endwith %}
+    {% endif %}
 
     <hr>
 
@@ -100,6 +106,10 @@
 
     </div>
 
+
+
+
+    {% if not  event.finished %}
 
     {% if marathon_payment_window_active or halfmarathon_payment_window_active %}
     <div class="text-light bg-success shadow-lg">  
@@ -296,6 +306,7 @@
                 {% endif %}
             {% endif %}
         {% endif %}
+    {% endif %}
 
         {% if event.sponsors.all %}
         <hr>

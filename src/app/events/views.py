@@ -171,9 +171,14 @@ class EventResults(View):
         else:
             event = (Event.objects
                 .filter(active=True, finished=False)
+                .order_by('date')
+                .first()
+            ) or (Event.objects
+                .filter(active=True, finished=True)
                 .order_by('-date')
                 .first()
-                )
+            )
+
 
         results = {}
         for result in Result.objects.filter(event=event, active=True).order_by('status', F('time').asc(nulls_last=True),):
