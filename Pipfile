@@ -23,6 +23,8 @@ pillow = "*"
 django-extensions = "*"
 django-allauth = "==0.61.1"
 pip = "*"
+pdfkit = "*"
+segno = "*"
 
 [dev-packages]
 

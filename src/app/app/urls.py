@@ -20,7 +20,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 from events.views import EventDetail
-import api.urls
 
 urlpatterns = [
     path('', EventDetail.as_view()),
@@ -28,7 +27,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('users.urls')),
     path('events/', include('events.urls')),
-    path('api/', include(api.urls)),
+    path('api/', include('api.urls')),
+    path('pdf/', include('pdf_generator.urls')),
 ]
 
 if settings.DEBUG:

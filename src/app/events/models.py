@@ -1,7 +1,12 @@
 from datetime import date, time, timedelta
+from secrets import token_hex
+from pathlib import Path
 
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
+from phonenumber_field.modelfields import PhoneNumberField
+from segno import make_qr
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
 from common.enums import ResultStatus, Category, Gender
@@ -101,6 +106,19 @@ class Event(BaseViewableModel):
         to='sponsors.Sponsor',
         through='sponsors.EventSponsor'
     )
+    emegrency_phone_number = PhoneNumberField(
+        null=True,
+        blank=True,
+        verbose_name="Номер телефона для экстренной связи",
+        help_text="Для печати на номерах",
+    )
+    result_qr = models.ImageField(
+        null=True,
+        blank=True,
+        verbose_name="QR протокола",
+        help_text="Для печати на номерах",
+        upload_to='events/results_qr'
+    )
 
     class Meta:
         verbose_name = "Событие"
@@ -114,11 +132,24 @@ class Event(BaseViewableModel):
     
     def get_results_url(self):
         return reverse('event_results', kwargs={'pk':self.pk})
-
     
     def application_url(self):
         return reverse('application_create', kwargs={'pk':self.pk})
-        
+    
+    def generate_result_qr(self):
+        qr = make_qr(f"https://xcm55.ru{self.get_results_url()}")
+        path = Path(settings.MEDIA_ROOT) / 'events' / 'results_qr'
+        path.mkdir(parents=True, exist_ok=True)
+        path = path / f'{token_hex(4)}.png'
+
+        qr.save(str(path), scale=5)
+
+        self.result_qr = str(path.relative_to(settings.MEDIA_ROOT))
+
+    def save(self, *args, **kwargs):
+        if self.result_qr is None:
+            self.generate_result_qr()
+        super().save(*args, **kwargs)
 
 class EventRoute(BaseRelation):
     event = models.ForeignKey(
@@ -237,6 +268,16 @@ class Application(BaseModel):
                 self.number = n
                 self.save()
                 return n
+
+    def render_category(self):
+        if self.category == Category.Elite:
+            return "Элита"
+        if self.category == Category.Junior:
+            return "Юниоры"
+        if self.route.halfmarathon == True:
+            return "Полумарафон"
+        if self.category == Category.Default:
+            return str(self.agegroup())
 
 
     class Meta:

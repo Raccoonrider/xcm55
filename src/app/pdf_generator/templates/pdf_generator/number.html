@@ -1,0 +1,113 @@
+{% extends 'pdf_generator/base.html'%}
+
+{% block style %}
+<style>
+    @font-face{
+        font-family: Gost;
+        font-weight: 400;
+        src: url({{ host }}/static/app/fonts/GOST-R-50577-93.ttf) format('truetype');
+    }
+    *{
+        font-family: sans-serif;
+        font-size: 30px;
+    }
+    p{
+        margin: 0;
+    }
+    p.event-name{
+        font-size: 40px;
+    }
+    p.number{
+        margin-top: 70px;
+        margin-bottom: 40px;
+        font-size: 500px;
+        font-family: Gost;
+        font-weight: 700;
+    }
+    td{
+        font-size: 30px;
+        font-weight: 700;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sponsor-logo{
+        display: block;
+        max-width: 100%;
+        margin-bottom: 0.5em;
+        margin-top: 0.5em;
+        height: auto;
+    }
+    .sponsor-logo-left{
+        margin-right: auto;
+    }
+    .sponsor-logo-right{
+        margin-left: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    {% for application in applications %}
+        <div class="break-after">
+            <table width="100%">
+                <tr>
+                    <td width="30%" style="text-align: left;">
+                        <p>{{ application.user_profile}}</p>
+                        <p>{{ application.render_category }}</p>
+                    </td>
+                    <td width="40%" >
+                        <p class="event-name">{{ application.event.name.upper }} {{event.date.year}}</p>
+                    </td>
+                    <td width="30%" style="text-align: right;">
+                        <p>{{ application.route.distance }} км</p>
+                        <p>{{ application.event.date }}</p>
+                    </td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td width="25%">
+                        {% for sponsor in sponsors|slice:"0:5" %}
+                            <img 
+                                class="sponsor-logo sponsor-logo-left" 
+                                src="{{ host }}{{ sponsor.sponsor.image.url }}"
+                                width="240"
+                                height="120"
+                                >
+                        {% endfor %}
+                    </td>
+                    <td width="50%" >
+                        <p class="number">{{ application.number }}</p>
+                    </td>
+                    <td width="25%" style="text-align: right;">
+                        {% for sponsor in sponsors|slice:"5:10" %}
+                            <img 
+                                class="sponsor-logo sponsor-logo-right" 
+                                src="{{ host }}{{ sponsor.sponsor.image.url }}"
+                                width="240"
+                                height="120"
+                                >
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td width="40%" style="text-align: left;">
+                        <p>Телефон для экстренной связи:</p>
+                        <p>{{ application.event.emegrency_phone_number }}</p>
+                    </td>
+                    <td width="20%" >
+                        XCM55.RU
+                    </td>
+                    <td width="40%" style="text-align: right;">
+                        <div>
+                            <p>Протокол:</p>
+                            <img width="150px" height="150px" src="{{ host }}{{ event.result_qr.url }}"> 
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

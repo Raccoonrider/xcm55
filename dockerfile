@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM surnet/alpine-python-wkhtmltopdf:3.11.4-0.12.6-small
 
 WORKDIR /home
 
