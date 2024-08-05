@@ -147,7 +147,7 @@ class Event(BaseViewableModel):
         self.result_qr = str(path.relative_to(settings.MEDIA_ROOT))
 
     def save(self, *args, **kwargs):
-        if self.result_qr is None:
+        if not self.result_qr:
             self.generate_result_qr()
         super().save(*args, **kwargs)
 
