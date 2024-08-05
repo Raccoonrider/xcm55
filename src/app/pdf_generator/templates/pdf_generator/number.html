@@ -32,7 +32,7 @@
     }
     .sponsor-logo{
         display: block;
-        max-width: 100%;
+        width: 100%;
         margin-bottom: 0.5em;
         margin-top: 0.5em;
         height: auto;
@@ -67,7 +67,7 @@
             <table width="100%">
                 <tr>
                     <td width="25%">
-                        {% for sponsor in sponsors|slice:"0:5" %}
+                        {% for sponsor in sponsors|slice:"0:4" %}
                             <img 
                                 class="sponsor-logo sponsor-logo-left" 
                                 src="{{ host }}{{ sponsor.sponsor.image.url }}"
@@ -80,7 +80,7 @@
                         <p class="number">{{ application.number }}</p>
                     </td>
                     <td width="25%" style="text-align: right;">
-                        {% for sponsor in sponsors|slice:"5:10" %}
+                        {% for sponsor in sponsors|slice:"4:8" %}
                             <img 
                                 class="sponsor-logo sponsor-logo-right" 
                                 src="{{ host }}{{ sponsor.sponsor.image.url }}"
