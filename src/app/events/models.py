@@ -278,6 +278,9 @@ class Application(BaseModel):
             return "Полумарафон"
         if self.category == Category.Default:
             return str(self.agegroup())
+        
+    def render_number(self):
+        return str(self.number)
 
 
     class Meta:

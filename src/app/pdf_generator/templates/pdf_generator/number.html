@@ -2,11 +2,6 @@
 
 {% block style %}
 <style>
-    @font-face{
-        font-family: Gost;
-        font-weight: 400;
-        src: url({{ host }}/static/app/fonts/GOST-R-50577-93.ttf) format('truetype');
-    }
     *{
         font-family: sans-serif;
         font-size: 30px;
@@ -14,22 +9,25 @@
     p{
         margin: 0;
     }
-    p.event-name{
-        font-size: 40px;
-    }
-    .number{
-        margin-top: 50px;
-        font-size: 400px;
-        font-family: Gost;
-        font-weight: 700;
-        text-align: center;
-        vertical-align: middle;
-    }
     td{
         font-size: 30px;
         font-weight: 700;
         vertical-align: middle;
         text-align: center;
+    }
+    .number-container{
+        margin: auto;
+    }
+    .number{
+        height: 360px;
+        width: auto;
+        margin-left: 6px;
+        margin-right: 6px;
+        margin-top: 130px;
+        margin-bottom: 120px;
+    }
+    .event-name{
+        font-size: 40px;
     }
     .sponsor-logo{
         display: block;
@@ -49,7 +47,7 @@
 
 {% block content %}
     {% for application in applications %}
-        <div class="break-after">
+        <div class="break-after number-container">
             <table width="100%">
                 <tr>
                     <td width="30%" style="text-align: left;">
@@ -78,7 +76,16 @@
                         {% endfor %}
                     </td>
                     <td width="60%" >
-                        <p class="number">{{ application.number }}</p>
+                        <div class="number-container">
+                            {% for char in application.render_number %}
+                                <img 
+                                    class="number" 
+                                    src="{{ host }}/static/app/svg/pdf/numbers/{{ char }}.svg"
+                                    width="90"
+                                    height="180"
+                                    >
+                            {% endfor %}
+                        </div>
                     </td>
                     <td width="20%" style="text-align: right;">
                         {% for sponsor in sponsors|slice:"4:8" %}
