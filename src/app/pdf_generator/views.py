@@ -38,7 +38,7 @@ def event_numbers(request, event_pk:int, format='pdf'):
     
     
     event = get_object_or_404(Event, pk=event_pk)
-    applications = Application.objects.filter(event=event, payment_confirmed=True)
+    applications = Application.objects.filter(event=event, payment_confirmed=True).order_by('number')
     sponsors = EventSponsor.objects.filter(event=event).order_by('priority')
 
 
