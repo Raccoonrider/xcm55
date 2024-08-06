@@ -9,7 +9,7 @@
     p{
         margin: 0;
     }
-    table{
+    table, body{
         padding: 0;
         margin: 0;
     }
@@ -19,6 +19,12 @@
         vertical-align: middle;
         text-align: center;
         padding: 0;
+    }
+    .container{
+        padding: 20px;
+        margin: 0;
+        min-height: 950px;
+        max-height: 950px;
     }
     .number-container{
         margin: auto;
@@ -52,7 +58,7 @@
 
 {% block content %}
     {% for application in applications %}
-        <div class="break-after number-container">
+        <div class="break-after container" style="background-color: {{ application.render_background }};">
             <table width="100%">
                 <tr>
                     <td width="30%" style="text-align: left;">

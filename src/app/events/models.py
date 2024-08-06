@@ -6,6 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
+from colorfield.fields import ColorField
 from segno import make_qr
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
@@ -281,6 +282,13 @@ class Application(BaseModel):
         
     def render_number(self):
         return str(self.number)
+    
+    def render_background(self):
+        age_group = self.agegroup()
+        if age_group:
+            return age_group.color
+        else:
+            return "#FFF"
 
 
     class Meta:
@@ -412,8 +420,13 @@ class AgeGroup(models.Model):
     gender = models.IntegerField(
         null=False,
         default=Gender.M,
-        choices=Gender.choices()
+        choices=Gender.choices(),
+        verbose_name="Пол",
     )
+    color = ColorField(
+        default="#FFFFFF", 
+        verbose_name="Цвет фона номера",
+        )
 
     def birthday_min(self):
         return self.event.date.replace(year = self.event.date.year - self.age_max - 1) - timedelta(days=1)

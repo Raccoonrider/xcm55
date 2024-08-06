@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
 
+    'colorfield',
+    'phonenumber_field',
+
     'django_extensions',
 
     'rest_framework',

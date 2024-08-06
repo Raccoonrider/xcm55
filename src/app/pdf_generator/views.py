@@ -21,10 +21,10 @@ from sponsors.models import Sponsor
 pdfkit_options = {
     'encoding': 'utf-8',
     'page-size': 'A4', 
-    'margin-top': '5mm',
-    'margin-right': '5mm',
-    'margin-bottom': '5mm',
-    'margin-left': '5mm',
+    'margin-top': '0mm',
+    'margin-right': '0mm',
+    'margin-bottom': '0mm',
+    'margin-left': '0mm',
 }
 
 if os.name != "posix":
