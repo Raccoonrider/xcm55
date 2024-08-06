@@ -14,7 +14,6 @@ from events.forms import ApplicationForm
 from sponsors.models import Referral
 
 class EventDetail(View):
-    template_name = "events/detail.html"
     model = Event
 
     def get(self, *args, pk=None, **kwargs):
@@ -100,7 +99,7 @@ class EventDetail(View):
             'halfmarathon_payment_window_active' : halfmarathon_payment_window_active,
             'halfmarathon_payment_windows_next' : halfmarathon_payment_windows_next,
         }
-        return render(request=self.request, template_name=self.template_name, context=context)
+        return render(request=self.request, template_name=event.detail_template, context=context)
     
     @classmethod
     def hx_get_payment_info(cls, request, pk):
@@ -118,7 +117,7 @@ class EventDetail(View):
                 'my_application': my_application,
                 'payment_window_active' : payment_window_active,
             }
-            return render(request=request, template_name='events/hx_payment_info.html', context=context)
+            return render(request=request, template_name=event.hx_payment_template, context=context)
         else:
             return HttpResponse("")
 
@@ -167,8 +166,6 @@ class ApplicationCreate(FormView):
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
 
 class EventResults(View):
-    template_name = "events/results.html"
-
     def get(self, *args, pk, **kwargs):
         event = get_object_or_404(Event, pk=pk, active=True)
         distances = [x.distance for x in event.routes.all()]
@@ -247,4 +244,4 @@ class EventResults(View):
             'marathon_distance': max(distances),
             'halfmarathon_distance': min(distances),
         }
-        return render(request=self.request, template_name=self.template_name, context=context)
+        return render(request=self.request, template_name=event.results_template, context=context)

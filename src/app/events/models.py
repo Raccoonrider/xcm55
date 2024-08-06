@@ -120,6 +120,27 @@ class Event(BaseViewableModel):
         help_text="Для печати на номерах",
         upload_to='events/results_qr'
     )
+    detail_template = models.CharField(
+        null=False,
+        blank=False,
+        default='events/detail.html',
+        max_length=127,
+        verbose_name="Шаблон лэндинга",
+    )
+    results_template = models.CharField(
+        null=False,
+        blank=False,
+        default='events/results.html',
+        max_length=127,
+        verbose_name="Шаблон протокола",
+    )
+    hx_payment_template = models.CharField(
+        null=False,
+        blank=False,
+        default='events/hx_payment_info.html',
+        max_length=127,
+        verbose_name="Шаблон платежа",
+    )
 
     class Meta:
         verbose_name = "Событие"
@@ -275,7 +296,7 @@ class Application(BaseModel):
             return "Элита"
         if self.category == Category.Junior:
             return "Юниоры"
-        if self.route.halfmarathon == True:
+        if self.route.halfmarathon:
             return "Полумарафон"
         if self.category == Category.Default:
             return str(self.agegroup())
@@ -284,11 +305,14 @@ class Application(BaseModel):
         return str(self.number)
     
     def render_background(self):
-        age_group = self.agegroup()
-        if age_group:
-            return age_group.color
-        else:
+        if self.category == Category.Elite:
+            return "#FFB5B5"
+        
+        if self.route.halfmarathon:
             return "#FFF"
+
+        age_group = self.agegroup() or AgeGroup()
+        return age_group.color
 
 
     class Meta:
