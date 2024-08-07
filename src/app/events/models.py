@@ -94,10 +94,21 @@ class Event(BaseViewableModel):
         verbose_name="Регистрация закрыта",
     )
     payment_info = models.CharField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         max_length=255,
         verbose_name="Номер карты",
+    )
+    payment_url = models.URLField(
+        null=True,
+        blank=True,
+        verbose_name="URL для оплаты",
+    )
+    payment_qr = models.ImageField(
+        null=True,
+        blank=True,
+        verbose_name="QR для оплаты",
+        upload_to='events/payment_qr',
     )
     routes = models.ManyToManyField(
         to=Route,
