@@ -208,13 +208,19 @@
                 {% endfor %}
                 {% if marathon_payment_window_active %}
                     <hr class="w-50 mx-auto">
-                    <li class="fs-2">
-                        <strong>{{ marathon_payment_window_active.render_price }}</strong> при оплате до {{ marathon_payment_window_active.render_date }}
-                    </li>
+                    {% if marathon_payment_window_active.is_final %}
+                        <li class="fs-2">
+                            <strong>{{ marathon_payment_window_active.render_price }}</strong> при оплате в день старта
+                        </li>
+                    {% else %}
+                        <li class="fs-2">
+                            <strong>{{ marathon_payment_window_active.render_price }}</strong> при оплате до {{ marathon_payment_window_active.render_date }}
+                        </li>
+                    {% endif %}
                     <hr class="w-50 mx-auto">
                 {% endif %}
                 {% for payment_window in marathon_payment_windows_next %}
-                    {% if forloop.last %}
+                    {% if payment_window.is_final %}
                         <li {% if forloop.first %} class="fs-4" {% endif %}>
                             <strong>{{ payment_window.render_price }}</strong> при оплате в день старта
                         </li>
@@ -234,13 +240,19 @@
                 {% endfor %}
                 {% if halfmarathon_payment_window_active %}
                     <hr class="w-50 mx-auto">
-                    <li class="fs-2">
-                        <strong>{{ halfmarathon_payment_window_active.render_price }}</strong> при оплате до {{ halfmarathon_payment_window_active.render_date }}
-                    </li>
+                    {% if  halfmarathon_payment_window_active.is_final %}
+                        <li class="fs-2">
+                            <strong>{{ halfmarathon_payment_window_active.render_price }}</strong> при оплате в день старта
+                        </li>
+                    {% else %}
+                        <li class="fs-2">
+                            <strong>{{ halfmarathon_payment_window_active.render_price }}</strong> при оплате до {{ halfmarathon_payment_window_active.render_date }}
+                        </li>
+                    {% endif %}
                     <hr class="w-50 mx-auto">
                 {% endif %}
                 {% for payment_window in halfmarathon_payment_windows_next %}
-                    {% if forloop.last %}
+                    {% if payment_window.is_final %}
                         <li {% if forloop.first %} class="fs-4" {% endif %}>
                             <strong>{{ payment_window.render_price }}</strong> при оплате в день старта
                         </li>

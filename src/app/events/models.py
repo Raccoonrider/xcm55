@@ -542,6 +542,10 @@ class PaymentWindow(models.Model):
         verbose_name_plural = 'Интервалы оплаты'
         ordering = ('active_until',)
 
+    def is_final(self):
+        print(self.active_until, self.event.date)
+        return self.active_until == self.event.date
+
     def render_price(self):
         return f"{self.price}\u20bd"
     
