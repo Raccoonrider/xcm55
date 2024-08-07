@@ -3,14 +3,17 @@
 let routeDropdown = document.querySelector("#id_route")
 let categoryDropdown = document.querySelector("#id_category")
 
+let marathonId = routeDropdown.querySelectorAll("option")[0]
+let eliteId = categoryDropdown.querySelectorAll("option")[1]
+
 categoryDropdown.onchange = () => {
-    if (categoryDropdown.value == 1){
-        routeDropdown.value = 1
+    if (categoryDropdown.value == eliteId){
+        routeDropdown.value = marathonId
     }
 }
 
 routeDropdown.onchange = () => {
-    if (routeDropdown.value == 2){
+    if (routeDropdown.value != marathonId){
         categoryDropdown.value = 0
     }
 }

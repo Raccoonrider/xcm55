@@ -193,6 +193,19 @@ class ApplicationCreate(FormView):
         form = super().get_form(form_class)
         qs = self.event.routes.all().order_by('-distance')
         form.fields['route'].queryset = qs
+
+        match(self.request.GET.get('category')):
+            case 'elite':
+                form.initial['route'] = qs[0]
+                form.initial['category'] = Category.Elite
+            case 'marathon':
+                form.initial['route'] = qs[0]
+                form.initial['category'] = Category.Default
+            case 'halfmarathon':
+                form.initial['route'] = qs[1]
+                form.initial['category'] = Category.Default
+
+                
         return form
     
     def form_valid(self, form) -> HttpResponse:

@@ -169,6 +169,18 @@ class Event(BaseViewableModel):
     def application_url(self):
         return reverse('application_create', kwargs={'pk':self.pk})
     
+    def application_elite_url(self):
+        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=elite"
+    
+    def application_halfmarathon_url(self):
+        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=halfmarathon"
+    
+    def application_marathon_url(self):
+        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=marathon"
+    
+    def application_url(self):
+        return reverse('application_create', kwargs={'pk':self.pk})
+    
     def generate_result_qr(self):
         qr = make_qr(f"https://xcm55.ru{self.get_results_url()}")
         path = Path(settings.MEDIA_ROOT) / 'events' / 'results_qr'
