@@ -6,9 +6,49 @@
     {{ event.get_display_name }}
 {% endblock head_title %}
 
-{% block cover %}
-    {% include 'events/crab/cover.html' %}
+{% block css %}
+<style>
+    .btn-success{
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #c95400;
+    --bs-btn-border-color: #c95400;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #D85A00;
+    --bs-btn-hover-border-color: #B63D00;
+    --bs-btn-focus-shadow-rgb: 60, 153, 110;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #B63D00;
+    --bs-btn-active-border-color: #a83800;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #FF6A00;
+    --bs-btn-disabled-border-color: #FF6A00;
+    }
+    .btn-outline-success {
+        --bs-btn-color:  #c95400;
+        --bs-btn-border-color:  #c95400;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg:  #c95400;
+        --bs-btn-hover-border-color:  #c95400;
+        --bs-btn-focus-shadow-rgb: 25, 135, 84;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg:  #c95400;
+        --bs-btn-active-border-color:  #c95400;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color:  #c95400;
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color:  #c95400;
+        --bs-gradient: none;
+    }
+    :root{
+        --bs-success-rgb: 201, 84, 0;
+    }
+</style>
 {% endblock %}
+
+{% block cover %}
+    {% include 'events/osenniy/cover.html' %}
+{% endblock cover %}
 
 {% block body %}
     <div class="container-md">  
@@ -20,14 +60,14 @@
     
     <div class="mx-auto my-4">
         <p class="fs-2 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF6A00" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
               </svg>
             {{ event.date }}
         </p>
         {% if event.time %}
         <p class="fs-2 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-clock-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF6A00" class="bi bi-clock-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
             </svg>
                 {{ event.time }}
@@ -35,7 +75,7 @@
         {% endif %}
         {% if event.start_location %}
         <p class="fs-4 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-geo-alt-fill fs-2" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF6A00" class="bi bi-geo-alt-fill fs-2" viewBox="0 0 16 16">
                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
             </svg>
             {{ event.start_location }}
@@ -43,46 +83,80 @@
         {% endif %}        
     </div>
     
+    <hr>
+
+    <div class="row flex-md-row align-items-center gx-0 gy-5 g-md-5 py-5">
+        <div class="col-md-3">
+            <img src="{% static 'app/img/osenniy/forester.webp' %}" class="d-block mx-lg-auto img-fluid" width="200" height="500" loading="lazy">
+        </div>
+        <div class="col-md-9">
+            <h1 class="display-6 text-body-emphasis lh-1">
+                Посвящается памяти
+            </h1>
+            <h1 class="display-3 text-body-emphasis lh-1 mb-3">
+                Владимира Кабанова
+            </h1>
+            <p class="lead">
+                Владимир Кабанов был председателем и вдохновителем велоклуба "Цепная реакция", 
+                админом и модератором велофорума omskvelo.ru, организатором множества покатушек, 
+                тренировок, туристических поездок и кросс-кантри соревнований, человеком, 
+                оказавшим колоссальное влияние на развитие велодвижения в Омске и судьбы множества людей.
+                Владимир - один из авторов и главных организаторов первого Осеннего Кросс-кантри марафона, 
+                состоявшегося в 2011 году.
+            </p>
+                
+            <p class="lead">
+                10 лет назад, 2 мая 2014 года Владимира, ехавшего на тренировку по ул. Сухой пролёт, сбил нетрезвый водитель.
+            </p>
+
+            <p class="lead">
+                Каждый год мы проводим Осенний Кросс-кантри марафон в честь Владимира. Ведь человек жив, пока жива память о нём, пока живо его дело.
+            </p>
+        </div>
+    </div>
+
+
+    
     {% if event.finished %}
     <hr>
-        {% with image='app/img/crab/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке, несмотря на сложные условия! О своих результатах можно узнать из официального протокола."%}
+        {% with image='app/img/osenniy/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! О своих результатах можно узнать из официального протокола."%}
             {% include 'hero-left.html'%}
         {% endwith %}
     {% endif %}
 
     <hr>
 
-    {% with image='app/img/crab/marathon.webp' header='Марафон' text=marathon.description button_text='Скачать трек' button_href=marathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=marathon.map_embed_src %}
+    {% with image='app/img/osenniy/marathon.webp' header='Марафон' text=marathon.description button_text='Скачать трек' button_href=marathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=marathon.map_embed_src %}
         {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
 
-    {% with image='app/img/crab/half-marathon.webp' header='Полумарафон' text=halfmarathon.description button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
+    {% with image='app/img/osenniy/half-marathon.webp' header='Полумарафон' text=halfmarathon.description button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
     <hr>
 
-    {% with image='app/img/crab/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
+    {% with image='app/img/osenniy/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
         {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
     
-    {% with image='app/img/crab/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
+    {% with image='app/img/osenniy/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
     <hr>
     
-    {% with image='app/img/crab/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церемонии награждения медалями и ценными призами от наших спонсоров.' %}
+    {% with image='app/img/osenniy/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церемонии награждения медалями и ценными призами от наших спонсоров.' %}
     {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
 
-    {% with image='app/img/crab/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+    {% with image='app/img/osenniy/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-left.html'%}
     {% endwith %}
 
@@ -328,7 +402,7 @@
                     <a href="{{ event.vk_xref }}" target="_blank">        
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 192 192">
                             <path fill="#FFF" d="M66.56 0h58.88C179.2 0 192 12.8 192 66.56v58.88c0 53.76-12.8 66.56-66.56 66.56H66.56C12.8 192 0 179.2 0 125.44V66.56C0 12.8 12.8 0 66.56 0z"/>
-                            <path fill="#198754" d="M157.234 66.14622c.88956-2.96645 0-5.14622-4.23376-5.14622h-14c-3.55973 0-5.20082 1.883-6.09088 3.9594 0 0-7.11948 17.35354-17.20516 28.6258-3.26297 3.26297-4.74632 4.30116-6.5262 4.30116-.8898 0-2.178-1.0382-2.178-4.0044V66.14623C107 62.58648 105.96694 61 103.00024 61h-22c-2.22452 0-3.56237 1.65216-3.56237 3.21797 0 3.37456 5.04259 4.15278 5.56237 13.64542V98.4799c0 4.5201-.8163 5.3396-2.59617 5.3396-4.74607 0-16.2909-17.43106-23.13806-37.37676C55.92414 62.566 54.57825 61 51.00024 61h-14c-4 0-4.80004 1.883-4.80004 3.9594 0 3.70812 4.74631 22.09986 22.09961 46.42425C65.86859 127.99527 82.16824 137 97.00024 137c8.8991 0 10-2 10-5.445V119c0-4 .84305-4.79829 3.66112-4.79829 2.07639 0 5.63613 1.0382 13.94218 9.04749 9.4924 9.49239 11.05734 13.7508 16.3967 13.7508h14c4 0 6-2 4.84624-5.94689-1.26257-3.9337-5.79468-9.64097-11.80836-16.4065-3.26321-3.85625-8.15767-8.00904-9.64102-10.08592-2.07639-2.66943-1.4831-3.85626 0-6.22917 0 0 17.05702-24.02787 18.8369-32.1853z"/>
+                            <path fill="#c95400" d="M157.234 66.14622c.88956-2.96645 0-5.14622-4.23376-5.14622h-14c-3.55973 0-5.20082 1.883-6.09088 3.9594 0 0-7.11948 17.35354-17.20516 28.6258-3.26297 3.26297-4.74632 4.30116-6.5262 4.30116-.8898 0-2.178-1.0382-2.178-4.0044V66.14623C107 62.58648 105.96694 61 103.00024 61h-22c-2.22452 0-3.56237 1.65216-3.56237 3.21797 0 3.37456 5.04259 4.15278 5.56237 13.64542V98.4799c0 4.5201-.8163 5.3396-2.59617 5.3396-4.74607 0-16.2909-17.43106-23.13806-37.37676C55.92414 62.566 54.57825 61 51.00024 61h-14c-4 0-4.80004 1.883-4.80004 3.9594 0 3.70812 4.74631 22.09986 22.09961 46.42425C65.86859 127.99527 82.16824 137 97.00024 137c8.8991 0 10-2 10-5.445V119c0-4 .84305-4.79829 3.66112-4.79829 2.07639 0 5.63613 1.0382 13.94218 9.04749 9.4924 9.49239 11.05734 13.7508 16.3967 13.7508h14c4 0 6-2 4.84624-5.94689-1.26257-3.9337-5.79468-9.64097-11.80836-16.4065-3.26321-3.85625-8.15767-8.00904-9.64102-10.08592-2.07639-2.66943-1.4831-3.85626 0-6.22917 0 0 17.05702-24.02787 18.8369-32.1853z"/>
                         </svg>
                     </a>
                 </div>

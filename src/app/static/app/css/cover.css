@@ -15,12 +15,25 @@
     text-align: center;
   }
 
+.navbar-toggler {
+  background-color: #FFF !important; 
+  color:#00000062;
+}
 
-.auth-cover{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.brand-logo {
+  width: 1.5em;
+  height: auto;
+  margin: 0.5em;
+}
+
+.brand-header {
+  display: flex;
+  text-decoration: none; 
+  align-items: center;
+  color: inherit;
+}
+
+.offcanvas-body{
+  display: flex;
+  flex-direction: column;
 }

@@ -6,9 +6,28 @@
     Протокол | {{ event.get_display_name }} 
 {% endblock head_title %}
 
+{% block css %}
+    <link href="{% static 'app/css/hero.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/cover.css' %}" rel="stylesheet">
+
+    <style>       
+        .cover {
+          background-image: 
+            linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)),
+            url("{% static 'app/img/cover.webp' %}");
+          background-position: 50% 38%;
+          background-size:cover;
+
+        }
+    </style>
+{% endblock css %}
+
 {% block cover %}
-    {% include 'events/crab/cover.html' %}
-{% endblock %}
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    Кросс-кантри Краб марафон
+</h1>
+{% endblock cover %}
+
 
 {% block body %}
     <div class="container-md">  

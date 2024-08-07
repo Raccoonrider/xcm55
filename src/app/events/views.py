@@ -120,6 +120,47 @@ class EventDetail(View):
             return render(request=request, template_name=event.hx_payment_template, context=context)
         else:
             return HttpResponse("")
+        
+    @classmethod
+    def hx_calendar(cls, request):
+        events = Event.objects.filter(active=True, finished=False)
+        for event in events:
+            event.checkmark = (
+                request.user.is_authenticated 
+                and request.user.profile 
+                and Application.objects.filter(
+                    event__in=events, 
+                    user_profile=request.user.profile,
+                    payment_confirmed=True,
+                    )
+            )
+
+        context = {
+            'events': events
+        }
+        return render(request=request, template_name='hx-calendar.html', context=context)
+       
+    @classmethod
+    def hx_results(cls, request):
+        events = Event.objects.filter(active=True, finished=True)
+        for event in events:
+            event.checkmark = (
+                request.user.is_authenticated 
+                and request.user.profile 
+                and Application.objects.filter(
+                    event__in=events, 
+                    user_profile=request.user.profile,
+                    payment_confirmed=True,
+                    )
+            )
+
+        context = {
+            'events': events
+        }
+        return render(request=request, template_name='hx-results.html', context=context)
+
+                
+
 
 class ApplicationCreate(FormView):
     template_name = "events/application.html"
