@@ -40,7 +40,11 @@ class EventDetail(View):
         self.request.session['ref_uuid'] = self.request.GET.get('ref_uuid')
 
         elites = (Application.objects
-            .filter(event=event, category=Category.Elite)
+            .filter(
+                event=event, 
+                category=Category.Elite,
+                payment_confirmed=True,
+                )
             .order_by('created')
             )
         route_marathon, route_halfmarathon = event.routes.all().order_by('-distance')
@@ -49,20 +53,35 @@ class EventDetail(View):
         if agegroups:
             amateurs_marathon = zip(agegroups, [
                 (Application.objects
-                    .filter(event=event, category=Category.Default, route=route_marathon)
-                    .filter(user_profile__birthday__gte=ag.birthday_min())
-                    .filter(user_profile__birthday__lte=ag.birthday_max())
-                    .filter(user_profile__gender=ag.gender)
+                    .filter(
+                        event=event, 
+                        category=Category.Default, 
+                        route=route_marathon,
+                        payment_confirmed=True,
+                        user_profile__birthday__gte=ag.birthday_min(),
+                        user_profile__birthday__lte=ag.birthday_max(),
+                        user_profile__gender=ag.gender,
+                    )
                     .order_by('user_profile__last_name'))
                 for ag in agegroups]
             )
         else:     
             amateurs_marathon = (Application.objects
-                .filter(event=event, category=Category.Default, route=route_marathon)
+                .filter(
+                    event=event, 
+                    category=Category.Default, 
+                    route=route_marathon,
+                    payment_confirmed=True,
+                )
                 .order_by('created')
                 )
         amateurs_halfmarathon = (Application.objects
-            .filter(event=event, category=Category.Default, route=route_halfmarathon)
+            .filter(
+                event=event, 
+                category=Category.Default, 
+                route=route_halfmarathon,
+                payment_confirmed=True,
+            )
             .order_by('created')
             )
 
