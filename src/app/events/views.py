@@ -45,7 +45,7 @@ class EventDetail(View):
                 category=Category.Elite,
                 payment_confirmed=True,
                 )
-            .order_by('created')
+            .order_by('user_profile__last_name')
             )
         route_marathon, route_halfmarathon = event.routes.all().order_by('-distance')
 
@@ -73,7 +73,7 @@ class EventDetail(View):
                     route=route_marathon,
                     payment_confirmed=True,
                 )
-                .order_by('created')
+                .order_by('user_profile__last_name')
                 )
         amateurs_halfmarathon = (Application.objects
             .filter(
@@ -82,7 +82,7 @@ class EventDetail(View):
                 route=route_halfmarathon,
                 payment_confirmed=True,
             )
-            .order_by('created')
+            .order_by('user_profile__last_name')
             )
 
         registration_disabled = (
