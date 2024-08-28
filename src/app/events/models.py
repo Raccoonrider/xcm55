@@ -554,7 +554,6 @@ class PaymentWindow(models.Model):
         ordering = ('active_until',)
 
     def is_final(self):
-        print(self.active_until, self.event.date)
         return self.active_until == self.event.date
 
     def render_price(self):
