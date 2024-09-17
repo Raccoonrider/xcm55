@@ -310,12 +310,12 @@ class Application(BaseModel):
                 number_min = agegroup.number_min
                 number_max = agegroup.number_max
             else:
-                number_min = 100
+                number_min = 51
                 number_max = 199
                     
         elif self.route.halfmarathon:
-            number_min = 100
-            number_max = 199
+            number_min = 200
+            number_max = 299
             
         used_numbers = {x.number for x in Application.objects.filter(event=self.event, active=True)}
 

@@ -48,6 +48,7 @@ def event_numbers(request, event_pk:int, format='pdf'):
         'host': request.build_absolute_uri().split('/pdf/')[0],
         'event': event,
         'applications': applications,
+        'extra_numbers': [str(x) for x in range(300, 320)],
         'sponsors': sponsors,
         'pdfkit_page_size': 'А5',
         'pdfkit_orientation': 'Landscape',
