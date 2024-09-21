@@ -238,6 +238,7 @@ class ApplicationCreate(FormView):
         application.save()
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
 
+
 class EventResults(View):
     def get(self, *args, pk, **kwargs):
         event = get_object_or_404(Event, pk=pk, active=True)
@@ -318,3 +319,15 @@ class EventResults(View):
             'halfmarathon_distance': min(distances),
         }
         return render(request=self.request, template_name=event.results_template, context=context)
+
+
+def organizer_list(request, pk:int, order='user_profile__last_name'):
+    event = get_object_or_404(Event, pk=pk)
+    applications = Application.objects.filter(event=event).order_by(order)
+    
+    context = {
+        "title" : "Протокол" if order == 'number' else "Явка",
+        "event" : event,
+        "applications": applications,
+    }
+    return render(request, "events/list_all.html", context)
