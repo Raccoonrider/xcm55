@@ -15,7 +15,7 @@ from events.models import (
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        exclude = ('phone_number',)
+        fields = "__all__"
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
