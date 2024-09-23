@@ -60,13 +60,28 @@ class ResultListCreateUpdateAPIView(ListCreateAPIView):
             instance = self.model.objects.filter(
                 event_id = item.get('event'),
                 route_id = item.get('route'),
-                user_profile = item.get('user_profile')
+                user_profile_id = item.get('user_profile')
                 ).first()
             
             if instance:
                 serializer.update(instance, serializer.validated_data)
             else:
-                serializer.save()
+                instance = serializer.save()
+                instance:Result
+                
+                application = Application.objects.filter(
+                    event = instance.event,
+                    route = instance.route,
+                    user_profile = instance.user_profile,
+                ).first()
+
+                if application:
+                    application.result = instance
+                    application.save()
+
+                    instance.age_group = application.agegroup()
+                    instance.save()
+
 
         return Response(status=status.HTTP_202_ACCEPTED)
 

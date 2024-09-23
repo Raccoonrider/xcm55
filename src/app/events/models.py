@@ -46,6 +46,9 @@ class Route(BaseViewableModel):
         default=False,
         verbose_name="Полумарафон"
     )
+    @property
+    def marathon(self):
+        return not self.halfmarathon
 
     class Meta:
         verbose_name = "Маршрут"

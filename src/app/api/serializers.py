@@ -42,7 +42,7 @@ class ResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Result
-        fields = "__all__"
+        exclude = ("age_group")
 
 class AgeGroupSerializer(serializers.ModelSerializer):
     birthday_min = serializers.DateField()
