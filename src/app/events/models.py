@@ -331,6 +331,8 @@ class Application(BaseModel):
     def render_category(self):
         if self.category == Category.Elite:
             return "Элита"
+        if self.category == Category.EliteW:
+            return "Элита - Женщины"
         if self.category == Category.Junior:
             return "Юниоры"
         if self.route.halfmarathon:
@@ -433,6 +435,8 @@ class Result(BaseModel):
     def render_category(self):
         if self.category == Category.Elite:
             return "Элита"
+        if self.category == Category.EliteW:
+            return "Элита - Женщины"
         if self.category == Category.Junior:
             return "Юниоры"
         if self.route.halfmarathon == True:
