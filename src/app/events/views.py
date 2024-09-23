@@ -269,7 +269,7 @@ class EventResults(View):
             results_marathon[key] = results_marathon.get(key) or []
             results_marathon[key].append(result)
 
-        results_marathon = sorted(list(results_marathon.items()), key=lambda x: (x[0] != "Элита",  x[0] == "Марафон - абсолют", x[0]))
+        results_marathon = sorted(list(results_marathon.items()), key=lambda x: (x[0] != "Элита", x[0] != "Элита - Женщины",  x[0] == "Марафон - абсолют", x[0]))
         for category, items in results_marathon:
             for i, result in enumerate(items, start=1):
                 if result.status == ResultStatus.OK:
