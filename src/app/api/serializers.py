@@ -38,11 +38,9 @@ class ApplicationSerializer(serializers.ModelSerializer):
         exclude = ("event", "route")
 
 class ResultSerializer(serializers.ModelSerializer):
-    user_profile = UserProfileSerializer
-
     class Meta:
         model = Result
-        exclude = ("age_group")
+        exclude = ("age_group",)
 
 class AgeGroupSerializer(serializers.ModelSerializer):
     birthday_min = serializers.DateField()
