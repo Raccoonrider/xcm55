@@ -252,6 +252,7 @@ class EventResults(View):
             ).order_by(
                 'status', 
                 F('time').asc(nulls_last=True),
+                'user_profile__last_name',
         ):
             key = result.render_category()
             results_marathon[key] = results_marathon.get(key) or []
