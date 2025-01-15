@@ -31,10 +31,12 @@ def rating(request, year:int):
                 rating_items.get(result.user_profile.id)
                 or {
                     'user_profile': result.user_profile,
-                    'score': 0
+                    'score': 0,
+                    'places': [],
                 }
             )
             rating_item['score'] += SCORES[place]
+            rating_item['places'].append(place + 1)
             rating_items[result.user_profile.id] = rating_item
 
     rating = sorted(rating_items.values(), key=lambda x: x['score'], reverse=True)
@@ -46,6 +48,7 @@ def rating(request, year:int):
             place += 1
         prev_score = item['score']
         item['place'] = place
+        item['places'] = ', '.join(str(x) for x in item['places'])
 
     context = {
         'request': request,

@@ -15,9 +15,10 @@
         <table class="table table-striped table-hover mt-5">
             <thead>
                 <tr>
-                    <th>Место</th>
+                    <th>Позиция</th>
                     <th>Участник</th>
                     <th><a href="#about">Баллы</a></th>
+                    <th>Места</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +38,9 @@
                     {% endif %}
                     <td>
                         {{ item.score }}
+                    </td>
+                    <td>
+                        {{ item.places }}
                     </td>
                 </tr>
                 {% endfor %}
