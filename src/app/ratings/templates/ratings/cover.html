@@ -1,0 +1,15 @@
+{% load static %}
+
+<style>       
+    .cover {
+        background-image: 
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.25)),
+        url("{% static 'app/img/ratings/cover.webp' %}");
+        background-position: 50% 50%;
+        background-size:cover;
+
+    }
+</style>
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    Рейтинг-{{ year }}
+</h1>

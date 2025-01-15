@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'users',
     'sponsors',
     'events',
+    'ratings',
     'pdf_generator',
 ]
 

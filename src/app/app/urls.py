@@ -27,6 +27,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('users.urls')),
     path('events/', include('events.urls')),
+    path('rating/', include('ratings.urls')),
     path('api/', include('api.urls')),
     path('pdf/', include('pdf_generator.urls')),
 ]
