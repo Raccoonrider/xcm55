@@ -43,9 +43,9 @@ def rating(request, year:int):
     
     place = 0
     prev_score = 0
-    for item in rating:
+    for i, item in enumerate(rating, start=1):
         if item['score'] != prev_score:
-            place += 1
+            place = i
         prev_score = item['score']
         item['place'] = place
         item['places'] = ', '.join(str(x) for x in item['places'])
@@ -54,6 +54,7 @@ def rating(request, year:int):
         'request': request,
         'rating': rating,
         'year': year,
+        'scores': SCORES,
     }
     return render(
         request=request, 
