@@ -39,7 +39,7 @@ def rating(request, year:int):
             rating_item['places'].append(place + 1)
             rating_items[result.user_profile.id] = rating_item
 
-    rating = sorted(rating_items.values(), key=lambda x: (x['score'], x['user_profile'].last_name), reverse=True)
+    rating = sorted(rating_items.values(), key=lambda x: (-x['score'], x['user_profile'].last_name))
     
     place = 0
     prev_score = 0
