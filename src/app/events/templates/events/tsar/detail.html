@@ -100,7 +100,7 @@
 
     <hr>
 
-    {% with image='app/img/tsar/categories.jpg' header='Категории' text='Соревнуйтесь в своей возрастной категории за место в финале, где лучшие из лучших будут бороться за кубок Крутогана и звание <strong>Царя Горы</strong>!' button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
+    {% with image='app/img/tsar/categories.jpg' header='Категории' text='Соревнуйтесь в своей возрастной категории за место в финале, где лучшие из лучших будут бороться за кубок Крутогана и звание <strong>Царя Горы</strong>!'  button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
