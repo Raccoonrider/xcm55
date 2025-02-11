@@ -196,14 +196,15 @@ class Event(BaseViewableModel):
         return reverse('application_create', kwargs={'pk':self.pk})
     
     def generate_result_qr(self):
-        qr = make_qr(f"https://xcm55.ru{self.get_results_url()}")
-        path = Path(settings.MEDIA_ROOT) / 'events' / 'results_qr'
-        path.mkdir(parents=True, exist_ok=True)
-        path = path / f'{token_hex(4)}.png'
+        if self.id:
+            qr = make_qr(f"https://xcm55.ru{self.get_results_url()}")
+            path = Path(settings.MEDIA_ROOT) / 'events' / 'results_qr'
+            path.mkdir(parents=True, exist_ok=True)
+            path = path / f'{token_hex(4)}.png'
 
-        qr.save(str(path), scale=5)
+            qr.save(str(path), scale=5)
 
-        self.result_qr = str(path.relative_to(settings.MEDIA_ROOT))
+            self.result_qr = str(path.relative_to(settings.MEDIA_ROOT))
 
     def save(self, *args, **kwargs):
         if not self.result_qr:
