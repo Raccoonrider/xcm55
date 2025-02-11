@@ -48,8 +48,7 @@ class ApplicationModelAdmin(admin.ModelAdmin):
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
     list_display = ('user_profile', 'number', 'event', 'payment_confirmed', 'helmet_not_needed', 'route', 'category', 'created')
     autocomplete_fields = ('event', 'route', 'user_profile', 'result')
-    list_filter = ('event', 'payment_confirmed', 'helmet_not_needed', 'route', 'category', 'referral')
-
+    list_filter = ('event', 'payment_confirmed', 'helmet_not_needed', 'rented_bike_needed', 'self_transfer_needed', 'bike_transfer_needed', 'route', 'category', 'referral')
 
 @admin.register(EventRoute)
 class EventRouteModelAdmin(admin.ModelAdmin):

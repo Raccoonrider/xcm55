@@ -29,7 +29,24 @@ class ApplicationForm(forms.Form):
         label="Буду в своём шлеме",
         help_text="Если у Вас нет своего шлема, его можно будет взять напрокат на старте. Снимите эту галочку, чтобы мы знали, что он Вам понадобится."
     )
-
+    rented_bike_needed = forms.BooleanField(
+        initial=False,
+        required=False,
+        label="Мне потребуется велосипед в прокат",
+        help_text="Отметьте эту галочку, если хотели бы участвовать на прокатном велосипеде."
+    )
+    self_transfer_needed = forms.BooleanField(
+        initial=False,
+        required=False,
+        label="Мне потребуется трансфер",
+        help_text="Отметьте эту галочку, если Вас нужно довезти от города до места старта"
+    )
+    bike_transfer_needed = forms.BooleanField(
+        initial=False,
+        required=False,
+        label="Мне потребуется трансфер с велосипедом",
+        help_text="Отметьте эту галочку, если Вас нужно довезти от города до места старта вместе с велосипедом"
+    )
     confirm_rules=forms.BooleanField(
         initial=False,
         required=True,

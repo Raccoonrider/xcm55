@@ -176,7 +176,6 @@ class EventDetail(View):
                 'payment_windows_next'  : payment_windows_next,
             }
 
-            print(context)
             return render(request=self.request, template_name=event.detail_template, context=context)
     
     @classmethod
