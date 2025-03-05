@@ -290,6 +290,9 @@ class ApplicationCreate(FormView):
         application.event = self.event
         application.route = form.cleaned_data['route']
         application.helmet_not_needed = form.cleaned_data['helmet_not_needed']
+        application.rented_bike_needed = form.cleaned_data['rented_bike_needed']
+        application.self_transfer_needed = form.cleaned_data['self_transfer_needed']
+        application.bike_transfer_needed = form.cleaned_data['bike_transfer_needed']
         application.user_profile = self.request.user.profile
         application.category = form.cleaned_data['category']
         application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
