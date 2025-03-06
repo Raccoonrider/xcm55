@@ -38,17 +38,15 @@ def event_numbers(request, event_pk:int, format='pdf'):
     
     
     event = get_object_or_404(Event, pk=event_pk)
-    applications = Application.objects.filter(event=event, payment_confirmed=True).order_by('number')
+    applications = Application.objects.filter(event=event, payment_confirmed=True, number__isnull=False).order_by('number')
     sponsors = EventSponsor.objects.filter(event=event).order_by('priority')
 
-
-    
 
     context = {
         'host': request.build_absolute_uri().split('/pdf/')[0],
         'event': event,
         'applications': applications,
-        'extra_numbers': [str(x) for x in range(300, 320)],
+        'extra_numbers': [str(x) for x in range(200, 210)],
         'sponsors': sponsors,
         'pdfkit_page_size': 'А5',
         'pdfkit_orientation': 'Landscape',
