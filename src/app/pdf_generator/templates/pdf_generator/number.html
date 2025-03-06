@@ -115,8 +115,10 @@
             <table width="100%">
                 <tr>
                     <td width="40%" style="text-align: left;">
-                        <p>Телефон для экстренной связи:</p>
-                        <p>{{ application.event.emegrency_phone_number }}</p>
+                        {% if event.emegrency_phone_number %}
+                            <p>Телефон для экстренной связи:</p>
+                            <p>{{ event.emegrency_phone_number }}</p>
+                        {% endif %}
                     </td>
                     <td width="20%" >
                         XCM55.RU
