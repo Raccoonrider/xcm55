@@ -69,7 +69,9 @@
                         <p class="event-name">{{ application.event.name.upper }} {{event.date.year}}</p>
                     </td>
                     <td width="30%" style="text-align: right;">
-                        <p>{{ application.route.distance }} км</p>
+                        {% if application.route.distance %}
+                            <p>{{ application.route.distance }} км</p>
+                        {% endif %}
                         <p>{{ application.event.date }}</p>
                     </td>
                 </tr>
@@ -185,8 +187,10 @@
             <table width="100%">
                 <tr>
                     <td width="40%" style="text-align: left;">
-                        <p>Телефон для экстренной связи:</p>
-                        <p>{{ event.emegrency_phone_number }}</p>
+                        {% if event.emegrency_phone_number %}
+                            <p>Телефон для экстренной связи:</p>
+                            <p>{{ event.emegrency_phone_number }}</p>
+                        {% endif %}
                     </td>
                     <td width="20%" >
                         XCM55.RU
