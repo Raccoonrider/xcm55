@@ -127,7 +127,7 @@ class EventDetail(View):
 
             agegroups = AgeGroup.objects.filter(event=event).order_by('gender', 'age_max')
             if agegroups:
-                amateurs = zip(agegroups, [
+                amateurs = list(zip(agegroups, [
                     (Application.objects
                         .filter(
                             event=event, 
@@ -140,7 +140,7 @@ class EventDetail(View):
                         )
                         .order_by('user_profile__last_name'))
                     for ag in agegroups]
-                )
+                ))
             else:     
                 amateurs = (Application.objects
                     .filter(
