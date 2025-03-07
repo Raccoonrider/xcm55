@@ -305,82 +305,125 @@ class EventResults(View):
         event = get_object_or_404(Event, pk=pk, active=True)
         distances = [x.distance for x in event.routes.all()]
 
-        results_marathon = {}
-        for result in Result.objects.filter(
-                event=event, 
-                active=True, 
-                route__halfmarathon=False,
-            ).order_by(
-                'status', 
-                F('time').asc(nulls_last=True),
-                'user_profile__last_name',
-        ):
-            key = result.render_category()
-            results_marathon[key] = results_marathon.get(key) or []
-            results_marathon[key].append(result)
-
-        for result in Result.objects.filter(
-                event=event, 
-                active=True, 
-                route__halfmarathon=False,
-            ).order_by(
-                'status', 
-                F('time').asc(nulls_last=True),
-        ):
-            key = "Марафон - абсолют"
-            results_marathon[key] = results_marathon.get(key) or []
-            results_marathon[key].append(result)
-
-        results_marathon = sorted(list(results_marathon.items()), key=lambda x: (not x[0].startswith("Элита"),  x[0] == "Марафон - абсолют", x[0]))
-        for category, items in results_marathon:
-            for i, result in enumerate(items, start=1):
-                if result.status == ResultStatus.OK:
-                    result.place = i
-                else:
-                    result.place = ""
-
-        results_halfmarathon = [
-            (
-                'Полумарафон', 
-                Result.objects.filter(
+        if len(distances) == 2:
+            results_marathon = {}
+            for result in Result.objects.filter(
                     event=event, 
                     active=True, 
-                    route__halfmarathon=True,
-                    category=Category.Default,
+                    route__halfmarathon=False,
                 ).order_by(
                     'status', 
                     F('time').asc(nulls_last=True),
-                )
-            ),
-            (
-                'Юниоры', 
-                Result.objects.filter(
+                    'user_profile__last_name',
+            ):
+                key = result.render_category()
+                results_marathon[key] = results_marathon.get(key) or []
+                results_marathon[key].append(result)
+
+            for result in Result.objects.filter(
                     event=event, 
                     active=True, 
-                    route__halfmarathon=True,
-                    category=Category.Junior,
+                    route__halfmarathon=False,
                 ).order_by(
                     'status', 
                     F('time').asc(nulls_last=True),
-                )
-            )
+            ):
+                key = "Марафон - абсолют"
+                results_marathon[key] = results_marathon.get(key) or []
+                results_marathon[key].append(result)
 
-        ]
-        for category, items in results_halfmarathon:
-            for i, result in enumerate(items, start=1):
-                if result.status == ResultStatus.OK:
-                    result.place = i
-                else:
-                    result.place = ""
-               
-        context = {
-            'event': event,
-            'results_marathon': results_marathon,
-            'results_halfmarathon': results_halfmarathon,
-            'marathon_distance': max(distances),
-            'halfmarathon_distance': min(distances),
-        }
-        return render(request=self.request, template_name=event.results_template, context=context)
+            results_marathon = sorted(list(results_marathon.items()), key=lambda x: (not x[0].startswith("Элита"),  x[0] == "Марафон - абсолют", x[0]))
+            for category, items in results_marathon:
+                for i, result in enumerate(items, start=1):
+                    if result.status == ResultStatus.OK:
+                        result.place = i
+                    else:
+                        result.place = ""
+
+            results_halfmarathon = [
+                (
+                    'Полумарафон', 
+                    Result.objects.filter(
+                        event=event, 
+                        active=True, 
+                        route__halfmarathon=True,
+                        category=Category.Default,
+                    ).order_by(
+                        'status', 
+                        F('time').asc(nulls_last=True),
+                    )
+                ),
+                (
+                    'Юниоры', 
+                    Result.objects.filter(
+                        event=event, 
+                        active=True, 
+                        route__halfmarathon=True,
+                        category=Category.Junior,
+                    ).order_by(
+                        'status', 
+                        F('time').asc(nulls_last=True),
+                    )
+                )
+
+            ]
+            for category, items in results_halfmarathon:
+                for i, result in enumerate(items, start=1):
+                    if result.status == ResultStatus.OK:
+                        result.place = i
+                    else:
+                        result.place = ""
+                
+            context = {
+                'event': event,
+                'results_marathon': results_marathon,
+                'results_halfmarathon': results_halfmarathon,
+                'marathon_distance': max(distances),
+                'halfmarathon_distance': min(distances),
+            }
+            return render(request=self.request, template_name=event.results_template, context=context)
+
+        else:
+            results = {}
+            for result in Result.objects.filter(
+                    event=event, 
+                    active=True, 
+                ).order_by(
+                    'status', 
+                    F('time').asc(nulls_last=True),
+                    'user_profile__last_name',
+            ):
+                key = result.render_category()
+                results[key] = results.get(key) or []
+                results[key].append(result)
+
+            for result in Result.objects.filter(
+                    event=event, 
+                    active=True, 
+                ).order_by(
+                    'status', 
+                    F('time').asc(nulls_last=True),
+            ):
+                key = "Абсолют"
+                results[key] = results.get(key) or []
+                results[key].append(result)
+
+            results = sorted(list(results.items()), key=lambda x: (x[0] == "Абсолют", x[0]))
+            for category, items in results:
+                for i, result in enumerate(items, start=1):
+                    if result.status == ResultStatus.OK:
+                        result.place = i
+                    else:
+                        result.place = ""
+
+            context = {
+                'event': event,
+                'results': results,
+                'distance': distances[0],
+            }
+            return render(request=self.request, template_name=event.results_template, context=context)
+
+
 
 
 def organizer_list(request, pk:int, order='user_profile__last_name'):

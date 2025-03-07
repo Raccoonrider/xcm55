@@ -53,12 +53,16 @@
     .sponsor-logo-right{
         margin-left: auto;
     }
+    .container{
+        background-image: url("{{ host }}/static/app/img/tsar/number_bg.png");
+        background-size: cover;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
     {% for application in applications %}
-        <div class="break-after container" style="background-color: {{ application.render_background }};">
+        <div class="break-after container">
             <table width="100%">
                 <tr>
                     <td width="30%" style="text-align: left;">
@@ -134,7 +138,7 @@
         </div>
     {% endfor %}
     {% for x in extra_numbers %}
-        <div class="break-after container" style="background-color: #FFF;">
+        <div class="break-after container">
             <table width="100%">
                 <tr>
                     <td width="30%" style="text-align: left;">
