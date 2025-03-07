@@ -119,19 +119,15 @@
             <table width="100%">
                 <tr>
                     <td width="40%" style="text-align: left;">
-                        {% if event.emegrency_phone_number %}
-                            <p>Телефон для экстренной связи:</p>
-                            <p>{{ event.emegrency_phone_number }}</p>
-                        {% endif %}
+                        <div>
+                            <img width="140px" height="140px" src="{{ host }}{{ event.result_qr.url }}"> 
+                            <p>Протокол</p>
+                        </div>
                     </td>
                     <td width="20%" >
                         XCM55.RU
                     </td>
                     <td width="40%" style="text-align: right;">
-                        <div>
-                            <img width="140px" height="140px" src="{{ host }}{{ event.result_qr.url }}"> 
-                            <p>Протокол</p>
-                        </div>
                     </td>
                 </tr>
             </table>
@@ -193,19 +189,15 @@
             <table width="100%">
                 <tr>
                     <td width="40%" style="text-align: left;">
-                        {% if event.emegrency_phone_number %}
-                            <p>Телефон для экстренной связи:</p>
-                            <p>{{ event.emegrency_phone_number }}</p>
-                        {% endif %}
+                        <div>
+                            <img width="140px" height="140px" src="{{ host }}{{ event.result_qr.url }}"> 
+                            <p>Протокол</p>
+                        </div>
                     </td>
                     <td width="20%" >
                         XCM55.RU
                     </td>
                     <td width="40%" style="text-align: right;">
-                        <div>
-                            <img width="140px" height="140px" src="{{ host }}{{ event.result_qr.url }}"> 
-                            <p>Протокол</p>
-                        </div>
                     </td>
                 </tr>
             </table>
