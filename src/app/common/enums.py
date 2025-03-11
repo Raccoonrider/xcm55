@@ -39,3 +39,7 @@ class Category(BaseEnum):
     Elite = 1
     Junior = 2
     EliteW = 3
+
+class EventType(BaseEnum):
+    Marathon = 0
+    HeatRace = 1

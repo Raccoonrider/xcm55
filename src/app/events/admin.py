@@ -41,6 +41,15 @@ class ResultModelAdmin(admin.ModelAdmin):
     autocomplete_fields = ('event', 'route', 'user_profile')
     ordering = ('-event__date', 'status')
 
+@admin.register(HeatResult)
+class HeatResultModelAdmin(admin.ModelAdmin):
+    model = HeatResult
+    search_fields = ('user_profile__last_name', 'user_profile__first_name')
+    list_display = ('user_profile', 'number', 'render_category', 'time', 'status')
+    list_filter = ('event', 'route', 'status')
+    autocomplete_fields = ('event', 'route', 'user_profile')
+    ordering = ('-event__date', 'status')
+
 
 @admin.register(Application)
 class ApplicationModelAdmin(admin.ModelAdmin):

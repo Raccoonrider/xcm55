@@ -10,7 +10,7 @@ from colorfield.fields import ColorField
 from segno import make_qr
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
-from common.enums import ResultStatus, Category, Gender
+from common.enums import *
 from common.shortcuts import render_date
 
 class Series(BaseViewableModel):
@@ -67,6 +67,11 @@ class Event(BaseViewableModel):
     time = models.TimeField(
         null=True,
         verbose_name="Время старта",
+    )
+    event_type = models.IntegerField(
+        default=EventType.Marathon,
+        choices=EventType.choices(),
+        verbose_name="Тип события",
     )
     start_location = models.CharField(
         null=True,
@@ -460,6 +465,108 @@ class Result(BaseModel):
             return "Полумарафон"
         if self.category == Category.Default:
             return str(self.age_group)
+
+    def avg_speed(self):
+        if self.time:
+            return "{:.02f} км/ч".format(self.route.distance / self.time.total_seconds() * 3600)
+        return "-"
+
+    def __str__(self):
+        return F"{self.number} | {self.render_time()}"
+
+
+class HeatResult(BaseModel):
+    event = models.ForeignKey(
+        to=Event,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Событие",
+    )
+    route = models.ForeignKey(
+        to=Route,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Маршрут"
+    )
+    number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Номер"
+    )
+    category = models.IntegerField(
+        null=True,
+        blank=True,
+        choices=Category.choices(),
+        verbose_name="Категория",
+        default=Category.Default,
+    )
+    age_group = models.ForeignKey(
+        to='events.AgeGroup',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Возрастная группа"
+    )
+    place = models.IntegerField(
+        verbose_name="Место в заезде"
+    )
+    heat = models.CharField(
+        blank=True,
+        max_length=255,
+        verbose_name='Название заезда (например, "Финал")'
+    )
+    user_profile = models.ForeignKey(
+        to='users.UserProfile',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Профиль пользователя"
+    )
+    time = models.DurationField(
+        null=True,
+        blank=True,
+        verbose_name="Время"
+    )
+    status = models.IntegerField(
+        default=ResultStatus.OK,
+        choices=ResultStatus.choices(),
+        verbose_name="Статус",
+    )
+    
+    class Meta:
+        verbose_name = 'Результат [на вылет]'
+        verbose_name_plural = 'Результаты [на вылет]'
+
+    def render_time(self):
+        if self.time:
+            t = round(self.time.total_seconds())
+            h, t = divmod(t, 3600)
+            m, s = divmod(t, 60)
+
+            return F"{h:02d}:{m:02d}:{s:02d} {self.render_status()}" 
+        return f"--:--:-- {self.render_status()}"
+    
+    def render_status(self):
+        if self.status == ResultStatus.OK:
+            return ""
+        return ResultStatus.name_int(self.status)
+    
+    def render_category(self):
+        if self.category == Category.Elite:
+            return "Элита"
+        if self.category == Category.EliteW:
+            return "Элита - Женщины"
+        if self.category == Category.Junior:
+            return "Юниоры"
+        if self.route.halfmarathon == True:
+            return "Полумарафон"
+        if self.category == Category.Default:
+            if self.heat:
+                return self.heat
+            else:
+                return str(self.age_group)
 
     def avg_speed(self):
         if self.time:
