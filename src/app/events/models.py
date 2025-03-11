@@ -511,7 +511,8 @@ class HeatResult(BaseModel):
         verbose_name="Возрастная группа"
     )
     place = models.IntegerField(
-        verbose_name="Место в заезде"
+        verbose_name="Место в заезде",
+        blank=True
     )
     heat = models.CharField(
         blank=True,
@@ -588,6 +589,19 @@ class HeatResult(BaseModel):
             if app:
                 self.user_profile = app.user_profile
                 self.age_group = app.agegroup
+
+        if self.place is None:
+            prev = HeatResult.objects.filter(
+                event=self.event,
+                route=self.route,
+                age_group=self.age_group,
+                heat=self.heat
+            ).first()
+
+            if prev:
+                self.place = prev.place + 1
+            else:
+                self.place = 1
 
 
         super().save(*args, **kwargs)
