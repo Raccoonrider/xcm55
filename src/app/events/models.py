@@ -310,6 +310,7 @@ class Application(BaseModel):
         verbose_name="Номер",
     )
 
+    @property
     def agegroup(self):
         age = self.user_profile.age(self.event.date)
 
@@ -492,7 +493,7 @@ class HeatResult(BaseModel):
     )
     number = models.IntegerField(
         null=True,
-        blank=True,
+        blank=False,
         verbose_name="Номер"
     )
     category = models.IntegerField(
@@ -575,6 +576,21 @@ class HeatResult(BaseModel):
 
     def __str__(self):
         return F"{self.number} | {self.render_time()}"
+    
+    def save(self, *args, **kwargs):
+        if self.user_profile is None:
+            app = Application.objects.filter(
+                event=self.event,
+                route=self.route,
+                number=self.number
+            ).first()
+
+            if app:
+                self.user_profile = app.user_profile
+                self.age_group = app.agegroup
+
+
+        super().save(*args, **kwargs)
 
 
 
