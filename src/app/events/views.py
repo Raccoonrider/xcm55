@@ -8,8 +8,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.db.models import F
 
-from common.enums import ResultStatus, Category, Gender
-from events.models import Event, Application, PaymentWindow, AgeGroup, Result
+from common.enums import *
+from events.models import Event, Application, PaymentWindow, AgeGroup, Result, HeatResult
 from events.forms import ApplicationForm
 from sponsors.models import Referral
 
@@ -305,7 +305,34 @@ class EventResults(View):
         event = get_object_or_404(Event, pk=pk, active=True)
         distances = [x.distance for x in event.routes.all()]
 
-        if len(distances) == 2:
+        if event.event_type == EventType.HeatRace:
+            results = {}
+            for result in HeatResult.objects.filter(
+                    event=event, 
+                    active=True, 
+                ).order_by(
+                    'status', 
+                    'place',
+                    'user_profile__last_name',
+            ):
+                key = result.render_category()
+                results[key] = results.get(key) or []
+                results[key].append(result)
+
+            results = sorted(
+                list(results.items()), 
+                key=lambda x: (x[0] != "Финал", x[0])
+            )
+
+            context = {
+                'event': event,
+                'results': results,
+                'distance': distances[0],
+            }
+            return render(request=self.request, template_name=event.results_template, context=context)
+
+
+        elif event.event_type == EventType.Marathon:
             results_marathon = {}
             for result in Result.objects.filter(
                     event=event, 
@@ -382,47 +409,6 @@ class EventResults(View):
                 'halfmarathon_distance': min(distances),
             }
             return render(request=self.request, template_name=event.results_template, context=context)
-
-        else:
-            results = {}
-            for result in Result.objects.filter(
-                    event=event, 
-                    active=True, 
-                ).order_by(
-                    'status', 
-                    F('time').asc(nulls_last=True),
-                    'user_profile__last_name',
-            ):
-                key = result.render_category()
-                results[key] = results.get(key) or []
-                results[key].append(result)
-
-            for result in Result.objects.filter(
-                    event=event, 
-                    active=True, 
-                ).order_by(
-                    'status', 
-                    F('time').asc(nulls_last=True),
-            ):
-                key = "Абсолют"
-                results[key] = results.get(key) or []
-                results[key].append(result)
-
-            results = sorted(list(results.items()), key=lambda x: (x[0] == "Абсолют", x[0]))
-            for category, items in results:
-                for i, result in enumerate(items, start=1):
-                    if result.status == ResultStatus.OK:
-                        result.place = i
-                    else:
-                        result.place = ""
-
-            context = {
-                'event': event,
-                'results': results,
-                'distance': distances[0],
-            }
-            return render(request=self.request, template_name=event.results_template, context=context)
-
 
 
 

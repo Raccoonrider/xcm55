@@ -87,7 +87,7 @@
     
     {% if event.finished %}
     <hr>
-        {% with image='app/img/osenniy/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! О своих результатах можно узнать из официального протокола."%}
+        {% with image='app/img/tsar/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! О своих результатах можно узнать из официального протокола."%}
             {% include 'hero-left.html'%}
         {% endwith %}
     {% endif %}
