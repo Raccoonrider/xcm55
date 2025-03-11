@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from events.models import *
+from common.admin import ChainedPrepopulatedFieldsMixin
 
 class BaseModelAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
@@ -33,22 +34,24 @@ class RouteModelAdmin(BaseModelAdmin):
     autocomplete_fields = ('series',)
 
 @admin.register(Result)
-class ResultModelAdmin(admin.ModelAdmin):
+class ResultModelAdmin(ChainedPrepopulatedFieldsMixin, admin.ModelAdmin):
     model = Result
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
     list_display = ('user_profile', 'number', 'render_category', 'time', 'status')
     list_filter = ('event', 'route', 'status')
     autocomplete_fields = ('event', 'route', 'user_profile')
     ordering = ('-event__date', 'status')
+    chained_prepopulated_fields = ('event', 'route', 'category', 'age_group')
 
 @admin.register(HeatResult)
-class HeatResultModelAdmin(admin.ModelAdmin):
+class HeatResultModelAdmin(ChainedPrepopulatedFieldsMixin, admin.ModelAdmin):
     model = HeatResult
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
     list_display = ('user_profile', 'number', 'render_category', 'time', 'status')
     list_filter = ('event', 'route', 'status')
     autocomplete_fields = ('event', 'route', 'user_profile')
     ordering = ('-event__date', 'status')
+    chained_prepopulated_fields = ('event', 'route', 'category', 'age_group', 'heat')
 
 
 @admin.register(Application)
