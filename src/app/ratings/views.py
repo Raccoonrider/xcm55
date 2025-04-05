@@ -73,7 +73,7 @@ def rating(request, year:int=None):
 def hx_ratings(request):
         events = Event.objects.filter(active=True, finished=True)
 
-        years = sorted([event.date.year for event in events], reverse=True)
+        years = sorted({event.date.year for event in events}, reverse=True)
         if date.today().month < 11 and years[0] == date.today().year:
             years = years[1:]
         data = [DropdownData(url=reverse('rating_detail', kwargs = {'year':year}), text=F"Рейтинг-{year}") for year in years]
