@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title %}
+    Омские веломарафоны
+{% endblock head_title %}
+
+{% block cover %}
+<style>       
+    .cover {
+        background-image: 
+        linear-gradient(to bottom, #ffffff99, #ffffff00),
+        conic-gradient(
+            from 90deg at 50% 50%,
+            #03a3ff,
+            #8c12d9, 
+            #d9138a,
+            #12d94a,
+            #f0ff03,
+            #03a3ff
+            )
+        ;
+        background-position: 50% 38%;
+        background-size:cover;
+        min-height: 400px;
+    }
+    
+    .image-cover {
+        max-height: 400px;
+        max-width: 85%;
+    }
+    
+    .marathon-card{
+        aspect-ratio: 210 / 297;
+    }
+
+    .default-marathon-card{
+        background-image: 
+        linear-gradient(to bottom, #00000055, #00000000, #00000000),
+        url("{% static 'app/img/index/default_marathon.png'%}");
+        background-size: cover;
+    }
+
+    .default-marathon-card h3{
+        color: #FFF;
+        text-decoration: none;
+        margin-bottom: auto;
+    }
+
+    .desktop-only {
+        display: initial;
+    }
+    .mobile-only {
+        display: none;
+    }
+
+    @media only screen and (max-device-width: 768px) {
+        .cover{
+            min-height: 300px;
+        }
+        .image-cover {
+            max-height: 300px;
+        }
+        .desktop-only {
+            display: none;
+        }
+        .mobile-only {
+            display: initial;
+        }
+    }
+</style>
+{% load static %}
+
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    <img class="image-cover desktop-only" src="{% static 'app/img/index/icon_large.png'%}" alt="Омские веломарафоны">
+    <img class="image-cover mobile-only" src="{% static 'app/img/index/icon_round.png'%}" alt="Омские веломарафоны">
+</h1>
+
+{% endblock %}
+
+{% block body %}
+    {% if calendar %}
+        <div class="container-md py-5">  
+            <h1 class="display-5 fw-bold text-center" id="calendar"> Календарь</h1>
+            <hr class="w-50 mx-auto">
+            <div class="row align-items-center justify-content-top gy-5 g-sm-5 py-5">
+                {% for event in calendar %}
+                    <div class="col-sm-4 mb-auto">
+                        <div class="d-block ">
+                            <a class="text-decoration-none" href="{{ event.get_absolute_url }}">
+                                {% if event.image %}
+                                    <img class="marathon-card w-100 rounded shadow-lg" width="300" src="{{ event.image.url }}"/>
+                                {% else %}
+                                    <div class="marathon-card marathon-card-default rounded shadow-lg">
+                                        <h3 class="text-center fw-bold pt-4">{{event.name}}</h3>
+                                    </div>
+                                {% endif %}
+                            </a>
+                            {% if not event.registration_disabled and not event.my_application %}
+                            <a class="btn btn-large btn-success my-2 w-100 shadow-lg" href="{{ event.application_url }}">
+                                Зарегистрироваться
+                            </a>
+                            {% else %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if past_events %}
+        <div class="container-md py-5">  
+            <h1 class="display-5 fw-bold text-center" id="results"> Результаты</h1>
+            <hr class="w-50 mx-auto">
+            <div class="row align-items-center justify-content-top gy-5 g-sm-5 py-5">
+                {% for event in past_events %}
+                    <div class="col-sm-4 mb-auto">
+                        <div class="d-block ">
+                            <a class="text-decoration-none" href="{{ event.get_absolute_url }}">
+                                {% if event.image %}
+                                    <img class="marathon-card w-100 rounded shadow-lg" width="300" src="{{ event.image.url }}"/>
+                                {% else %}
+                                    <div class="marathon-card marathon-card-default rounded shadow-lg">
+                                        <h3 class="text-center fw-bold pt-4">{{event.name}}</h3>
+                                    </div>
+                                {% endif %}
+                            </a>
+                            {% if not event.registration_disabled and not event.my_application %}
+                            <a class="btn btn-large btn-success my-2 w-100 shadow-lg" href="{{ event.get_results_url }}">
+                                Протокол
+                            </a>
+                            {% else %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+
+    {% if sponsors %}
+    <div class="container-md py-5">  
+    <hr>
+        <section class="py-5">
+            <div class="text-center">
+                <h1 class="display-5 fw-bold lh-1">
+                    Наши спонсоры
+                </h1>
+                <p class="lead mx-auto my-4 mb-md-5">
+                    Выражаем искреннюю благодарность нашим спонсорам за помощь в подготовке стартов
+                </p>
+            </div>
+                <hr class="w-50 mx-auto">
+        
+            <div class="container-md">
+                <div class="row flex-sm-row align-items-center gx-0 gy-5 g-sm-5 py-5">
+                    {% for s in sponsors %}
+                    <div class="col-sm-4">
+                        <a href="{{ s.xref }}" target="_blank">
+                            <img class="d-block img-fluid rounded" width="300" height="150" src="{{ s.image.url }}"/>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+    {% endif %}
+{% endblock body %}

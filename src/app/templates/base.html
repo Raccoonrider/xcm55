@@ -11,6 +11,7 @@
             {% endblock head_title %} | XCM55
         </title>
         
+        <link rel="shortcut icon" href="{% static 'app/favicon.ico' %}">
         <link rel="icon" type="image/png" sizes="64x64" href="{% static 'app/img/icon.png' %}">
         {% include 'base_css.html' %}
 
@@ -19,20 +20,26 @@
 
     </head>
     <body>       
-        <header class="cover shadow-lg navbar">
+        <header class="cover shadow-lg navbar bg-success">
             <div class="container-fluid">
                 <div></div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                {% include 'nav.html' %}
+                {% include 'navbar.html' %}
             </div>
             {% block cover %}
             {% endblock cover %}
         </header>
+        <div class="d-md-block d-none bg-success shadow-lg">
+            <div class="container-md d-md-flex justify-content-space-between">
+                {% include 'nav.html' %}
+            </div>
+        </div>
         
         {% block body %}
         {% endblock body %}
+        {% include 'footer.html'%}
         <div class="notification">notification</div>
     </body>
     {% include 'base_js.html' %}

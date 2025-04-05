@@ -10,6 +10,46 @@
     {% include 'events/krutogan/cover.html' %}
 {% endblock %}
 
+{% block css %}
+<style>
+    .btn-success {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #0d6efd;
+        --bs-btn-border-color: #0d6efd;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #0b5ed7;
+        --bs-btn-hover-border-color: #0a58ca;
+        --bs-btn-focus-shadow-rgb: 49, 132, 253;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #0a58ca;
+        --bs-btn-active-border-color: #0a53be;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #0d6efd;
+        --bs-btn-disabled-border-color: #0d6efd;
+    }
+    .btn-outline-success {
+        --bs-btn-color: #0d6efd;
+        --bs-btn-border-color: #0d6efd;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #0d6efd;
+        --bs-btn-hover-border-color: #0d6efd;
+        --bs-btn-focus-shadow-rgb: 13, 110, 253;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #0d6efd;
+        --bs-btn-active-border-color: #0d6efd;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #0d6efd;
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color: #0d6efd;
+        --bs-gradient: none;
+    }
+    :root{
+        --bs-success-rgb: 13,110,253;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
     <div class="container-md">  
     <p class="lead m-5 text-center">
@@ -20,14 +60,14 @@
     
     <div class="mx-auto my-4">
         <p class="fs-2 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0C65E7" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
               </svg>
             {{ event.date }}
         </p>
         {% if event.time %}
         <p class="fs-2 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-clock-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0C65E7" class="bi bi-clock-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
             </svg>
                 {{ event.time }}
@@ -35,7 +75,7 @@
         {% endif %}
         {% if event.start_location %}
         <p class="fs-4 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" class="bi bi-geo-alt-fill fs-2" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0C65E7" class="bi bi-geo-alt-fill fs-2" viewBox="0 0 16 16">
                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
             </svg>
             {{ event.start_location }}
@@ -82,10 +122,13 @@
 
     <hr>
 
+    {% if event.rules_doc %}
+
     {% with image='app/img/crab/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-left.html'%}
     {% endwith %}
 
+    {% endif %}
     </div>
 
 

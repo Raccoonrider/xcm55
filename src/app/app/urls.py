@@ -19,10 +19,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from events.views import EventDetail
+from events.views import EventDetail, EventList
 
 urlpatterns = [
-    path('', EventDetail.as_view()),
+    path('', EventList.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('users.urls')),

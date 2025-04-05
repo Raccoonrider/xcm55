@@ -11,7 +11,7 @@ from django.db.models import F
 from common.enums import *
 from events.models import Event, Application, PaymentWindow, AgeGroup, Result, HeatResult
 from events.forms import ApplicationForm
-from sponsors.models import Referral
+from sponsors.models import Referral, Sponsor
 
 class EventDetail(View):
     model = Event
@@ -236,7 +236,39 @@ class EventDetail(View):
         }
         return render(request=request, template_name='hx-results.html', context=context)
 
+
+class EventList(View):
+    model = Event
+
+    def get(self, *args, **kwargs):
+        calendar = (self.model.objects
+            .filter(active=True, finished=False)
+            .order_by('date')
+        )
+
+        if self.request.user.is_authenticated:
+            for event in calendar:
+                event.my_application = (Application.objects
+                    .filter(event=event, user_profile=self.request.user.profile)
+                    .first()
+                    )
                 
+        past_events = (self.model.objects
+            .filter(active=True, finished=True)
+            .order_by('-date')
+        )
+
+        
+        sponsors = Sponsor.objects.filter(general=True).order_by('name')
+
+        print(calendar)
+        context = {
+            'calendar': calendar,
+            'past_events': past_events,
+            'sponsors': sponsors,
+        }
+
+        return render(request=self.request, template_name='index.html', context=context)    
 
 
 class ApplicationCreate(FormView):
@@ -289,10 +321,10 @@ class ApplicationCreate(FormView):
         application = Application()
         application.event = self.event
         application.route = form.cleaned_data['route']
-        application.helmet_not_needed = form.cleaned_data['helmet_not_needed']
-        application.rented_bike_needed = form.cleaned_data['rented_bike_needed']
-        application.self_transfer_needed = form.cleaned_data['self_transfer_needed']
-        application.bike_transfer_needed = form.cleaned_data['bike_transfer_needed']
+        application.helmet_not_needed = form.cleaned_data.get('helmet_not_needed', False)
+        application.rented_bike_needed = form.cleaned_data.get('rented_bike_needed', False)
+        application.self_transfer_needed = form.cleaned_data.get('self_transfer_needed', False)
+        application.bike_transfer_needed = form.cleaned_data.get('bike_transfer_needed', False)
         application.user_profile = self.request.user.profile
         application.category = form.cleaned_data['category']
         application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))

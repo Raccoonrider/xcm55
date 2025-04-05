@@ -12,6 +12,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from common.models import BaseViewableModel, BaseRelation, BaseModel
 
 class Sponsor(BaseViewableModel):
+    general = models.BooleanField(
+        default=False,
+        verbose_name="Генеральный",
+        help_text="Показывать этого спонсора на главной"
+    )
     xref = models.URLField(
         blank=True, 
         verbose_name="Ссылка на сайт",

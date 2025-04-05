@@ -1,0 +1,11 @@
+{% if data %}
+<ul class="dropdown-menu">
+    {% for item in data %}
+        <li>
+            <a class="dropdown-item" href="{{ item.url }}">
+                {{ item.text }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
