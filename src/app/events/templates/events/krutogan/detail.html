@@ -85,38 +85,47 @@
     
     {% if event.finished %}
     <hr>
-        {% with image='app/img/crab/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке, несмотря на сложные условия! О своих результатах можно узнать из официального протокола."%}
+        {% with image='app/img/krutogan/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке, несмотря на сложные условия! О своих результатах можно узнать из официального протокола."%}
             {% include 'hero-left.html'%}
         {% endwith %}
     {% endif %}
 
     <hr>
-
-    {% with image='app/img/crab/marathon.webp' header='Марафон' text=marathon.description button_text='Скачать трек' button_href=marathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=marathon.map_embed_src %}
-        {% include 'hero-right.html'%}
+    {% if marathon.gpx %}
+    {% with image='app/img/krutogan/marathon.webp' header='Марафон' text=marathon.description button_text='Скачать трек' button_href=marathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=marathon.map_embed_src %}
+    {% include 'hero-right.html'%}
     {% endwith %}
-
+    {% else %}
+    {% with image='app/img/krutogan/marathon.webp' header='Марафон' text=marathon.description %}
+    {% include 'hero-right.html'%}
+    {% endwith %}
+    {% endif %}
+    <hr>
+    
+    {% if halfmarathon.gpx %}
+    {% with image='app/img/krutogan/halfmarathon.webp' header='Полумарафон' text=halfmarathon.description button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
+    {% include 'hero-left.html'%}
+    {% endwith %}
+    {% else %}
+    {% with image='app/img/krutogan/halfmarathon.webp' header='Полумарафон' text=halfmarathon.description %}
+    {% include 'hero-left.html'%}
+    {% endwith %}
+    {% endif %}
     <hr>
 
-    {% with image='app/img/crab/half-marathon.webp' header='Полумарафон' text=halfmarathon.description button_text='Скачать трек' button_href=halfmarathon.gpx.url button_secondary_text='Смотреть карту' button_secondary_href=halfmarathon.map_embed_src %}
-        {% include 'hero-left.html'%}
-    {% endwith %}
-
-    <hr>
-
-    {% with image='app/img/crab/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
+    {% with image='app/img/krutogan/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
         {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
     
-    {% with image='app/img/crab/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
+    {% with image='app/img/krutogan/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
     <hr>
     
-    {% with image='app/img/crab/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церемонии награждения медалями и ценными призами от наших спонсоров.' %}
+    {% with image='app/img/krutogan/medals.webp' header='Награждение' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Участники, преодолевшие дистанцию в пределах контрольного времени, будут награждены медалями финишера. Победители в категории "Элита" и лучшие в своих возрастных группах "Любители" будут дополнительно награждены на церемонии награждения медалями и ценными призами от наших спонсоров.' %}
     {% include 'hero-right.html'%}
     {% endwith %}
 
@@ -124,7 +133,7 @@
 
     {% if event.rules_doc %}
 
-    {% with image='app/img/crab/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+    {% with image='app/img/krutogan/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-left.html'%}
     {% endwith %}
 
