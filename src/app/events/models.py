@@ -164,14 +164,7 @@ class Event(BaseViewableModel):
         max_length=127,
         verbose_name="Шаблон протокола",
     )
-    hx_payment_template = models.CharField(
-        null=False,
-        blank=False,
-        default='events/hx_payment_info.html',
-        max_length=127,
-        verbose_name="Шаблон платежа",
-    )
-
+    
     class Meta:
         verbose_name = "Событие"
         verbose_name_plural = "Cобытия"
