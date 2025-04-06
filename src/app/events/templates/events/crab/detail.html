@@ -64,13 +64,13 @@
 
     <hr>
 
-    {% with image='app/img/crab/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
+    {% with image='app/img/crab/elite.webp' header='Категория "Элита"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_elite_url text="Элита - сильнейшие атлеты. В этой категории участвуют люди с профессиональным спортивным опытом, уверенные в своих силах и обладающие отличным скиллом владения велосипедом. Для элиты предусмотрена только одна соревновательная категория - абсолютный зачет - и только одна дистанция - марафон."%}
         {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
     
-    {% with image='app/img/crab/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
+    {% with image='app/img/crab/amateur.webp' header='Категория "Любители"' button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_marathon_url text='Спорту, как и любви, все возрасты покорны. Не важно, 20 Вам или 60, в категории "Любители" Вы всегда сможете найти себе соперников по силам и посоревноваться с ними за призовые места в возрастной группе.' %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
