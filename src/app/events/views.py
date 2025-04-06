@@ -9,8 +9,8 @@ from django.urls import reverse
 from django.db.models import F
 
 from common.enums import *
-from events.models import Event, Application, PaymentWindow, AgeGroup, Result, HeatResult
-from events.forms import ApplicationForm
+from events.models import *
+from events.forms import ApplicationForm, ApplicationBundleForm
 from sponsors.models import Referral, Sponsor
 
 class EventDetail(View):
@@ -261,9 +261,26 @@ class EventList(View):
         
         sponsors = Sponsor.objects.filter(general=True).order_by('name')
 
-        print(calendar)
+        bundle = (Bundle.objects
+            .filter(payment_window__gt=date.today())
+            .order_by("-payment_window")
+            .first()
+        )
+
+        if self.request.user.is_authenticated:
+            my_application = (BundleApplication.objects
+                .filter(
+                    user_profile=self.request.user.profile,
+                    bundle=bundle,)
+                .first()
+            )
+        else:
+            my_application = None
+
         context = {
             'calendar': calendar,
+            'bundle': bundle,
+            'my_application': my_application,
             'past_events': past_events,
             'sponsors': sponsors,
         }
@@ -331,6 +348,78 @@ class ApplicationCreate(FormView):
         application.save()
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
 
+
+
+class BundleApplicationCreate(FormView):
+    events:list[Event]
+    template_name = "events/application_bundle.html"
+    form_class = ApplicationBundleForm
+
+
+    def redirect_user(self):
+        self.request.session['redirect'] = self.request.path
+        if self.request.user.is_authenticated == False:
+            return HttpResponseRedirect(settings.LOGIN_URL)
+        if self.request.user.profile is None:
+            return HttpResponseRedirect(reverse('user_profile_create'))
+        
+        application = Application.objects.filter(
+            event__in=self.events.all(), 
+            payment_confirmed=True,
+            user_profile=self.request.user.profile
+        )
+        if application:
+            return HttpResponseRedirect('/')
+
+    def get(self, *args, pk:int=None, **kwargs):
+        self.bundle = Bundle.objects.get(pk=pk)
+        self.events = self.bundle.events.all()
+        return self.redirect_user() or super().get(*args, **kwargs)
+    
+    def post(self, *args, pk:int=None, **kwargs):
+        self.bundle = Bundle.objects.get(pk=pk)
+        self.events = self.bundle.events.all()
+        for event in self.events:
+            if event.finished or event.registration_closed:
+                return HttpResponseRedirect('/')
+        return self.redirect_user() or super().post(*args, **kwargs)
+    
+    def form_valid(self, form) -> HttpResponse:
+        bundle_application = BundleApplication()
+        bundle_application.bundle = self.bundle
+        bundle_application.user_profile = self.request.user.profile
+        bundle_application.save()
+
+        for event in self.events:
+            route = event.routes.filter(halfmarathon=False).first()
+
+            application, created = Application.objects.get_or_create(
+                event = event,
+                route = route,
+                user_profile = self.request.user.profile,
+                category = form.cleaned_data['category']
+
+            )
+            
+            application.helmet_not_needed = form.cleaned_data.get('helmet_not_needed', False)
+            application.rented_bike_needed = form.cleaned_data.get('rented_bike_needed', False)
+            application.self_transfer_needed = form.cleaned_data.get('self_transfer_needed', False)
+            application.bike_transfer_needed = form.cleaned_data.get('bike_transfer_needed', False)
+            application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
+            application.save()
+        return HttpResponseRedirect(reverse('index') + "#payment_info")
+
+
+def hx_bundle_payment_info(request, pk):
+    if request.user.is_authenticated and request.user.profile:
+        bundle = get_object_or_404(Bundle, pk=pk)
+        context = {
+            'bundle': bundle,
+        }
+        return render(request=request, template_name="events/hx_bundle_payment_info.html", context=context)
+    else:
+        return HttpResponse("")
+        
 
 class EventResults(View):
     def get(self, *args, pk, **kwargs):

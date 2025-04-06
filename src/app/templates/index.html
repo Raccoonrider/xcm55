@@ -112,6 +112,87 @@
         </div>
     {% endif %}
 
+    {% if bundle %}
+    <div class="text-light bg-success d-align-items-center shadow-lg">  
+        <div class="container-md row flex-lg-row align-items-center text-center py-5 mx-auto">
+            <h1 class="display-5 fw-bold lh-1" id="pricing">
+                {{ bundle.name }}
+            </h1>
+            <p class="lead mx-auto">
+                Предложение действует до {{ bundle.payment_window }}
+            </p>
+            <p class="lead mx-auto my-4 mb-md-5">
+                {{ bundle.description }}
+            </p>
+            <div class="row align-items-center justify-content-top g-2 py-2">
+                {% for event in bundle.events.all %}
+                {% if forloop.counter0 %}
+                <div class="col d-block ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                      </svg>
+                </div>
+                {% endif %}
+                <div class="col-3 d-block ">
+                    <a class="text-decoration-none" href="{{ event.get_absolute_url }}">
+                        <img class="marathon-card w-100 rounded shadow-lg" width="100" src="{{ event.image.url }}"/>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if not my_application %}
+        <ul class="list-unstyled mx-0 text-center">
+            <hr class="w-50 mx-auto">
+            <li>
+                <p class="fs-2 text-decoration-line-through mb-1">
+                    {{ bundle.price_items }}₽
+                </p>
+                <p>
+                    При регистрации на каждый старт отдельно
+                </p>
+            </li>
+            <hr class="w-50 mx-auto">
+            <li>
+                <p class="fs-2 fw-bold  mb-1">
+                    {{ bundle.price }}₽
+                </p>
+                <p>
+                    При регистрации на весь сезон сразу
+                </p>
+            </li>
+            <hr class="w-50 mx-auto">
+        </ul> 
+        <div class="d-block text-center">
+            <a class="btn btn-large btn-light mb-5 mx-auto shadow-lg" href="{{ bundle.application_url }}">
+                Зарегистрироваться
+            </a>
+        </div>
+        {% else %}
+        <div class="container-md py-5">         
+            {% if not my_application.payment_confirmed %}
+                <div 
+                    hx-get="{% url 'hx_bundle_payment_info' bundle.id %}"
+                    hx-swap="outerHTML"
+                    hx-trigger="revealed"
+                    id="payment_info">
+                </div>
+            {% else %}
+            <div class="alert alert-success mb-4 fs-5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+                </svg>
+                Ваша заявка на участие успешно оплачена. До встречи на старте!           
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+
     {% if past_events %}
         <div class="container-md py-5">  
             <h1 class="display-5 fw-bold text-center" id="results"> Результаты</h1>

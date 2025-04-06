@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from events.views import EventResults, EventDetail, ApplicationCreate, organizer_list
+from events.views import *
 
 urlpatterns = [
     path('<int:pk>/', EventDetail.as_view(), name='event_detail'),
@@ -11,5 +11,6 @@ urlpatterns = [
     path('<int:pk>/application/create/', ApplicationCreate.as_view(), name="application_create"),
     path('hx-calendar/', EventDetail.hx_calendar, name='hx_calendar'),
     path('hx-results/', EventDetail.hx_results, name='hx_results'),
-
+    path('bundle/<int:pk>/hx-payment-info/', hx_bundle_payment_info, name='hx_bundle_payment_info'),
+    path('bundle/<int:pk>/application/create/', BundleApplicationCreate.as_view(), name="bundle_application_create"),
     ]

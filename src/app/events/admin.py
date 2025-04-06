@@ -86,3 +86,16 @@ class PaymentWindowModelAdmin(admin.ModelAdmin):
     ordering = ('-active_until',)
     autocomplete_fields = ('event',)
 
+@admin.register(Bundle)
+class BundleModelsAdmin(admin.ModelAdmin):
+    model = Bundle
+    ordering = ('-payment_window',)
+    filter_horizontal = ('events',)
+
+@admin.register(BundleApplication)
+class BundleApplicationModelsAdmin(admin.ModelAdmin):
+    model = BundleApplication
+    search_fields = ('user_profile__last_name', 'user_profile__first_name')
+    list_display = ('user_profile', 'bundle', 'payment_confirmed', 'created')
+    autocomplete_fields = ('user_profile',)
+    list_filter = ('payment_confirmed', 'bundle')

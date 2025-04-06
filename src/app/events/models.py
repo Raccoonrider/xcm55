@@ -107,6 +107,12 @@ class Event(BaseViewableModel):
         max_length=255,
         verbose_name="Номер карты",
     )
+    payment_bank = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name="Название банка",
+    )
     payment_url = models.URLField(
         null=True,
         blank=True,
@@ -164,10 +170,13 @@ class Event(BaseViewableModel):
         max_length=127,
         verbose_name="Шаблон протокола",
     )
-    
+
     class Meta:
         verbose_name = "Событие"
         verbose_name_plural = "Cобытия"
+
+    def __str__(self):
+        return f"{self.name} - {self.date.year}"
     
     def get_display_name(self):
         return f"{self.name} - {self.date.year}"
@@ -376,6 +385,92 @@ class Application(BaseModel):
 
     def distance(self):
         return self.route.distance
+
+class Bundle(BaseModel):
+    name = models.CharField(
+        max_length=255, 
+        verbose_name="Название",
+    )
+    description = models.TextField(
+        blank=True, 
+        verbose_name='Описание',
+    )
+    events = models.ManyToManyField(
+        to=Event, 
+        verbose_name="События",
+    )
+    payment_window = models.DateField(
+        verbose_name="Действует до",
+    )
+    price_items = models.IntegerField(
+        verbose_name="Цена отдельно",
+    )
+    price = models.IntegerField(
+        verbose_name="Цена вместе",
+    )
+    payment_info = models.CharField(
+        blank=True,
+        max_length=255,
+        verbose_name="Номер карты",
+    )
+    payment_bank = models.CharField(
+        blank=True,
+        max_length=255,
+        verbose_name="Название банка",
+    )
+    payment_sbp_phone = PhoneNumberField(
+        blank=True,
+        verbose_name="Телефон для оплаты по СБП",   
+    )
+    payment_sbp_name = models.CharField(
+        blank=True,
+        max_length=32,
+        verbose_name="ФИО для оплаты по СБП",   
+    )
+
+
+    class Meta:
+        verbose_name = 'Наборы'
+        verbose_name_plural = 'Наборы'
+
+    def __str__(self):
+        return self.name
+    
+    def application_url(self):
+        return reverse('bundle_application_create', kwargs={'pk':self.pk})
+    
+
+class BundleApplication(BaseModel):
+    bundle = models.ForeignKey(
+        to=Bundle, 
+        on_delete=models.CASCADE, 
+        verbose_name="Набор")
+    user_profile = models.ForeignKey(
+        to='users.UserProfile',
+        on_delete=models.CASCADE,
+        verbose_name="Профиль пользователя"
+    )
+    payment_confirmed = models.BooleanField(
+        default=False,
+        verbose_name="Оплата прошла"
+    )
+
+    def save(self, *args, **kwargs):
+        if self.payment_confirmed:
+            applications = (Application.objects
+                .filter(
+                    user_profile=self.user_profile,
+                    event__in=self.bundle.events.all(),
+                )    
+            )
+            for application in applications:
+                application.payment_confirmed = True
+                application.save()
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Заявки на наборы'
+        verbose_name_plural = 'Заявки на наборы'
 
 
 class Result(BaseModel):
