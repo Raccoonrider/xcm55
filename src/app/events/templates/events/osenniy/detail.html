@@ -356,14 +356,18 @@
                     </div>
                 {% endif %}
             </div>
-            {% if my_application %}
+            {% endif %}
+        {% endif %}
+
+        {% if my_application %}
+            <div class="container-md py-5">         
                 {% if not my_application.payment_confirmed %}
                     <div 
                         hx-get="{% url 'hx_event_payment_info' event.id %}"
                         hx-swap="outerHTML"
                         hx-trigger="revealed"
                         id="payment_info">
-                    ></div>
+                    </div>
                 {% else %}
                 <div class="alert alert-success mb-4 fs-5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
@@ -372,9 +376,8 @@
                     Ваша заявка на участие успешно оплачена. До встречи на старте!           
                 </div>
                 {% endif %}
-            {% endif %}
+            </div>
         {% endif %}
-    {% endif %}
 
         {% if event.sponsors.all %}
         <hr>

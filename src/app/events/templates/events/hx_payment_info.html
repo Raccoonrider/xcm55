@@ -1,8 +1,11 @@
 {% load static %}
 
 <div class="alert alert-primary m-4">
+    <h3>
+        Актуальная стоимость участия - <strong>{{ payment_window_active.render_price }}</strong>.
+    </h3>
     <h4 class="mb-4">
-        Для завершения регистрации необходимо оплатить стартовый взнос. Актуальная стоимость участия - <strong>{{ payment_window_active.render_price }}</strong>.
+        Для завершения регистрации необходимо оплатить стартовый взнос.
     </h4>
     <p>
         Оплату стартового слота можно произвести на карту <button class="btn btn-light" id="sbp-button">{{ event.payment_info }}</button> (Т-банк)
