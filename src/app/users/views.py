@@ -1,9 +1,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from users.forms import *
 
-class UserProfileCreateUpdate(FormView):
+class UserProfileCreateUpdate(LoginRequiredMixin, FormView):
     template_name = "users/user_profile.html"
     form_class = UserProfileForm
 
