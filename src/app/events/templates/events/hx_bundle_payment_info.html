@@ -8,8 +8,8 @@
         Для завершения регистрации необходимо оплатить стартовый взнос.
     </h4>
     <p>
-        Оплату стартового взноса можно произвести на карту <button class="btn btn-light" id="sbp-button">{{ bundle.payment_info }}</button> ({{ bundle.payment_bank }})
-        или через СБП по номеру телефона <button class="btn btn-light" id="sbp-button">{{ bundle.payment_sbp_phone}}</button> {{ bundle.payment_sbp_name }}
+        Оплату стартового взноса можно произвести на карту <button class="btn btn-light copy-button">{{ bundle.payment_info }}</button> ({{ bundle.payment_bank }})
+        или через СБП по номеру телефона <button class="btn btn-light copy-button">{{ bundle.payment_sbp_phone}}</button> {{ bundle.payment_sbp_name }}
     </p>
     <p>
         Пожалуйста, не забудьте указать Вашу фамилию в комментарии к платежу.               
@@ -17,13 +17,14 @@
 </div>
 
 <script>
-    let spbButton = document.querySelector("#sbp-button")
-    spbButton.addbundleListener('click', function(e) {
-        navigator.clipboard.writeText(spbButton.innerText).then(
-            () => {document.showNotification("Скопировано в буфер обмена")},
-            () => {document.showNotification("Невозможно скопировать в буфер обмена")}
-        )
-    })
-
+    let copyBtns = document.querySelectorAll(".copy-button")
+    copyBtns.forEach(button => {
+            button.addEventListener('click', function(e) {
+            navigator.clipboard.writeText(button.innerText).then(
+                () => {document.showNotification("Скопировано в буфер обмена")},
+                () => {document.showNotification("Невозможно скопировать в буфер обмена")}
+            )
+        })
+    });
 </script>
 
