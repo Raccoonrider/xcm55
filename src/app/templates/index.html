@@ -97,7 +97,7 @@
                                     </div>
                                 {% endif %}
                             </a>
-                            {% if not event.registration_disabled and not event.my_application %}
+                            {% if not event.registration_closed and not event.my_application %}
                             <a class="btn btn-large btn-success my-2 w-100 shadow-lg" href="{{ event.application_url }}">
                                 Зарегистрироваться
                             </a>
