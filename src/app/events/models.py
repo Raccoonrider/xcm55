@@ -363,7 +363,7 @@ class Application(BaseModel):
         if self.route.halfmarathon:
             return "Полумарафон"
         if self.category == Category.Default:
-            return str(self.agegroup())
+            return str(self.agegroup)
         
     def render_number(self):
         return str(self.number)
