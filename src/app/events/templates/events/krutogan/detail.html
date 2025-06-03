@@ -85,7 +85,7 @@
     
     {% if event.finished %}
     <hr>
-        {% with image='app/img/krutogan/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке, несмотря на сложные условия! О своих результатах можно узнать из официального протокола."%}
+        {% with image='app/img/krutogan/results.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Кросс-кантри марафон успешно завершен! Спасибо всем бесстрашным велосипедистам, принявшим участие в гонке, несмотря на сложные условия! О своих результатах можно узнать из официального протокола."%}
             {% include 'hero-left.html'%}
         {% endwith %}
     {% endif %}
