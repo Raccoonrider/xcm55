@@ -382,6 +382,17 @@ class Application(BaseModel):
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
+        constraints = (
+            models.UniqueConstraint(
+                name = 'unique_application_number',
+                fields = ('event', 'number'),
+            ),
+            models.UniqueConstraint(
+                name = 'unique_application_person',
+                fields = ('event', 'user_profile'),
+            ),
+        )
+
 
     def distance(self):
         return self.route.distance
