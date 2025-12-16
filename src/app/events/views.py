@@ -200,7 +200,7 @@ class EventDetail(View):
         
     @classmethod
     def hx_calendar(cls, request):
-        events = Event.objects.filter(active=True, finished=False)
+        events = Event.objects.filter(active=True, finished=False).order_by('date')
         for event in events:
             event.checkmark = (
                 request.user.is_authenticated 
@@ -219,7 +219,7 @@ class EventDetail(View):
        
     @classmethod
     def hx_results(cls, request):
-        events = Event.objects.filter(active=True, finished=True)
+        events = Event.objects.filter(active=True, finished=True).order_by('-date')
         for event in events:
             event.checkmark = (
                 request.user.is_authenticated 
