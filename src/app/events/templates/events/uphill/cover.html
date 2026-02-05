@@ -1,0 +1,30 @@
+{% load static %}
+
+<style>       
+    .cover {
+        background-image: 
+        /* linear-gradient(to bottom, #ff990000, #ff990040), */
+        linear-gradient(to bottom, #00000000, #00000000, #00000020),
+        url("{% static 'app/img/uphill/cover.webp' %}");
+        background-position: 50% 38%;
+        background-size:cover;
+        min-height: 500px;
+    }
+    
+    .image-cover {
+        max-height: 400px;
+        max-width: 80%;
+    }
+
+    @media only screen and (max-device-width: 768px) {
+        .cover{
+            min-height: 300px;
+        }
+        .image-cover {
+            max-height: 200px;
+        }
+    }
+</style>
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    <img class="image-cover" src="{% static 'app/img/uphill/crown_logo.webp'%}" alt="{{ event.name }}">
+</h1>

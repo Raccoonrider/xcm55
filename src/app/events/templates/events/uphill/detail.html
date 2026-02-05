@@ -48,7 +48,7 @@
 {% endblock %}
 
 {% block cover %}
-    {% include 'events/tsar/cover.html' %}
+    {% include 'events/uphill/cover.html' %}
 {% endblock cover %}
 
 {% block body %}
@@ -87,26 +87,26 @@
     
     {% if event.finished %}
     <hr>
-        {% with image='app/img/tsar/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Гонка завершена! О своих результатах можно узнать из официального протокола."%}
+        {% with image='app/img/uphill/protocol.webp' header='Результаты' button_text='Смотреть протокол' button_href=event.get_results_url text="Гонка завершена! О своих результатах можно узнать из официального протокола."%}
             {% include 'hero-left.html'%}
         {% endwith %}
     {% endif %}
 
     <hr>
 
-    {% with image='app/img/tsar/ascent.jpg' header='Маршрут' text='Крутоганский мегаапхилл длиной <strong>300</strong> метров с набором высоты <strong>50</strong> метров!'  button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url %}
+    {% with image='app/img/uphill/ascent.jpg' header='Маршрут' text=event.description  button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url %}
         {% include 'hero-right.html'%}
     {% endwith %}
 
     <hr>
 
-    {% with image='app/img/tsar/categories.jpg' header='Категории' text='Соревнуйтесь в своей возрастной категории за место в финале, где лучшие из лучших будут бороться за кубок Крутогана и звание <strong>Царя Горы</strong>!'  button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url %}
+    {% with image='app/img/uphill/crowd.jpg' header='Категории' text='Соревнуйтесь в своей возрастной категории за место в финале, где лучшие из лучших будут бороться за звание <strong>Царя Горы</strong>!'  button_text='Зарегистрироваться' button_hide=registration_disabled button_href=event.application_url %}
         {% include 'hero-left.html'%}
     {% endwith %}
 
     <hr>
 
-    {% with image='app/img/osenniy/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+    {% with image='app/img/uphill/medals.jpg' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-right.html'%}
     {% endwith %}
 
