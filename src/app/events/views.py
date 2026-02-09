@@ -15,8 +15,9 @@ from sponsors.models import Referral, Sponsor
 
 class EventDetail(View):
     model = Event
+    rules = False
 
-    def get(self, *args, pk=None, **kwargs):
+    def get(self, *args, pk=None, protocol=False, **kwargs):
         if pk is not None:
             event = get_object_or_404(self.model, pk=pk)
         else:
@@ -113,14 +114,15 @@ class EventDetail(View):
                 'amateurs_halfmarathon': amateurs_halfmarathon,
                 'marathon': route_marathon,
                 'halfmarathon': route_halfmarathon,
+                'marathon_payment_windows_all': marathon_payment_windows, 
                 'marathon_payment_windows_stale' : marathon_payment_windows_stale,
                 'marathon_payment_window_active' : marathon_payment_window_active,
                 'marathon_payment_windows_next' : marathon_payment_windows_next,
+                'halfmarathon_payment_windows_all': halfmarathon_payment_windows, 
                 'halfmarathon_payment_windows_stale' : halfmarathon_payment_windows_stale,
                 'halfmarathon_payment_window_active' : halfmarathon_payment_window_active,
                 'halfmarathon_payment_windows_next' : halfmarathon_payment_windows_next,
             }
-            return render(request=self.request, template_name=event.detail_template, context=context)
         
         else:
             route = event.routes.all().first()
@@ -176,8 +178,11 @@ class EventDetail(View):
                 'payment_windows_next'  : payment_windows_next,
             }
 
-            return render(request=self.request, template_name=event.detail_template, context=context)
-    
+        if self.rules:
+            return render(request=self.request, template_name='events/documents/rules.html', context=context)
+
+        return render(request=self.request, template_name=event.detail_template, context=context)
+
     @classmethod
     def hx_get_payment_info(cls, request, pk):
         if request.user.is_authenticated and request.user.profile:

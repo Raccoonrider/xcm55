@@ -64,14 +64,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#c0262d" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
               </svg>
-            {{ event.date }}
+            {{ event.format_date }}
         </p>
         {% if event.time %}
         <p class="fs-2 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#c0262d" class="bi bi-clock-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
             </svg>
-                {{ event.time }}
+                {{ event.format_time }}
         </p>
         {% endif %}
         {% if event.start_location %}
@@ -106,7 +106,7 @@
 
     <hr>
 
-    {% with image='app/img/uphill/medals.jpg' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+    {% with image='app/img/uphill/medals.jpg' header='Правила' button_text='Скачать регламент' button_href=event.get_rules_url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-right.html'%}
     {% endwith %}
 

@@ -25,6 +25,19 @@ class Route(BaseViewableModel):
     distance = models.IntegerField(
         verbose_name="Дистанция",
         )
+    distance_unit = models.IntegerField(
+        verbose_name="Дистанция, размерность",
+        default=1,
+        choices=[
+            (1, "км"),
+            (2, "м"),
+        ]
+    )
+    time_limit = models.DurationField(
+        verbose_name="Лимит времени",
+        default=timedelta(hours=4)
+        )
+
     map_embed_src = models.CharField(
         max_length=500, 
         blank=True, 
@@ -58,6 +71,15 @@ class Route(BaseViewableModel):
     def __str__(self):
         return f"{self.name} {self.distance} км"
 
+    def render_time_limit(self):
+        if int(self.time_limit.total_seconds()) % 3600 == 0:
+            return f"{self.time_limit.total_seconds() // 3600:.0f} ч"
+        else:
+            return f"{self.time_limit.total_seconds() // 3600:.0f} ч {self.time_limit.total_seconds() // 60 % 60:.0f} мин"
+
+    def render_distance(self):
+        return f"{self.distance} {['', 'км', 'м'][self.distance_unit]}"
+    
 
 class Event(BaseViewableModel):
     date = models.DateField(
@@ -76,6 +98,11 @@ class Event(BaseViewableModel):
     start_location = models.CharField(
         null=True,
         verbose_name="Место старта",
+        max_length=255,
+    )
+    full_address = models.CharField(
+        null=True,
+        verbose_name="Адрес точки старта (для регламента)",
         max_length=255,
     )
     series = models.ForeignKey(
@@ -217,6 +244,44 @@ class Event(BaseViewableModel):
         if not self.result_qr:
             self.generate_result_qr()
         super().save(*args, **kwargs)
+
+    def format_date(self, date_=None):
+        date_ = date_ or self.date
+        print(self.date.month)
+        months = [
+            "",
+            "января",
+            "февраля",
+            "марта",
+            "апреля",
+            "мая",
+            "июня",
+            "июля",
+            "августа",
+            "сентября",
+            "октября",
+            "ноября",
+            "декабря",
+        ]
+        return f"{date_.day} {months[date_.month]} {date_.year} г."
+    
+    def format_time(self, time_=None):
+        time_ = time_ or self.time
+        return time_.strftime(f"%H:%M")
+    
+    def get_routes(self):
+        qs = EventRoute.objects.filter(event=self).order_by('priority').prefetch_related()
+        return [x.route for x in qs]
+
+    def get_rules_url(self):
+        if self.rules_doc:
+            return self.rules_doc.url
+        else:
+            return reverse('event_rules', kwargs={'pk':self.pk})
+
+    def no_refund_date(self):
+        return self.format_date(self.date - timedelta(days=5))
+
 
 class EventRoute(BaseRelation):
     event = models.ForeignKey(
