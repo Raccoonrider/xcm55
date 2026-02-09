@@ -102,7 +102,7 @@
     <li class="h3 mt-3">Стоимость участия </li>
     <ol>
         {% if marathon %}
-        <li>Cоревновательная дистанция "Марафон" <span class="fw-bold">{{ marathon.distance }}</span> км.</li>
+        <li>Cоревновательная дистанция "Марафон" <span class="fw-bold">{{ marathon.render_distance  }}</span> км.</li>
         <ul>
             {% for payment_window in marathon_payment_windows_all %}
                 <li><strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}</li>
@@ -110,9 +110,17 @@
         </ul>
         {% endif %}
         {% if halfmarathon %}
-        <li>Несоревновательная дистанция "Полумарафон" <span class="fw-bold">{{ halfmarathon.distance }}</span> км.</li>
+        <li>Несоревновательная дистанция "Полумарафон" <span class="fw-bold">{{ halfmarathon.render_distance }}</span>.</li>
         <ul>
             {% for payment_window in halfmarathon_payment_windows_all %}
+                <li><strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if route %}
+        <li>Дистанция <span class="fw-bold">{{ route.render_distance }}</span></li>
+        <ul>
+            {% for payment_window in payment_windows_all %}
                 <li><strong>{{ payment_window.render_price }}</strong> при оплате до {{ payment_window.render_date }}</li>
             {% endfor %}
         </ul>
