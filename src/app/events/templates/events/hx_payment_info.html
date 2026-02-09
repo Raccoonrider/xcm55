@@ -9,7 +9,7 @@
     </h4>
     <p>
         Оплату стартового взноса можно произвести на карту <button class="btn btn-light copy-button">{{ event.payment_info }}</button> ({{ event.payment_bank }})
-        {% if event.payment_info %}
+        {% if event.payment_sbp_phone %}
         или через СБП по номеру телефона <button class="btn btn-light copy-button">{{ event.payment_sbp_phone}}</button> 
         {% endif %}
         {{ event.payment_sbp_name }}
