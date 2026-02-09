@@ -173,6 +173,7 @@ class EventDetail(View):
                 'agegroups': agegroups,
                 'amateurs': amateurs,
                 'route': route,
+                'payment_windows_all' : payment_windows,
                 'payment_windows_stale' : payment_windows_stale,
                 'payment_window_active' : payment_window_active,
                 'payment_windows_next'  : payment_windows_next,
