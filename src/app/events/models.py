@@ -69,7 +69,7 @@ class Route(BaseViewableModel):
         ordering = ('-active', '-created',)
 
     def __str__(self):
-        return f"{self.name} {self.distance} км"
+        return f"{self.name} {self.render_distance()}"
 
     def render_time_limit(self):
         if int(self.time_limit.total_seconds()) % 3600 == 0:
