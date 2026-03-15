@@ -607,11 +607,14 @@ class Result(BaseModel):
 
     def render_time(self):
         if self.time:
-            t = round(self.time.total_seconds())
+            t = self.time.total_seconds()
             h, t = divmod(t, 3600)
             m, s = divmod(t, 60)
 
-            return F"{h:02d}:{m:02d}:{s:02d} {self.render_status()}" 
+            if h == 0:
+                return F"{round(m):02d}:{s:5.2f} {self.render_status()}" 
+            
+            return F"{round(h):02d}:{round(m):02d}:{s:5.2f} {self.render_status()}" 
         return f"--:--:-- {self.render_status()}"
     
     def render_status(self):
