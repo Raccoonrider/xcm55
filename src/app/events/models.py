@@ -614,7 +614,7 @@ class Result(BaseModel):
             if h == 0:
                 return F"{round(m):02d}:{s:5.2f} {self.render_status()}" 
             
-            return F"{round(h):02d}:{round(m):02d}:{s:5.2f} {self.render_status()}" 
+            return F"{round(h):02d}:{round(m):02d}:{s:05.2f} {self.render_status()}" 
         return f"--:--:-- {self.render_status()}"
     
     def render_status(self):
