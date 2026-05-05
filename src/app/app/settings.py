@@ -106,7 +106,7 @@ TEMPLATES = [
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-HONEYPOT_FIELD_NAME = "extra-terrestrial-address"
+HONEYPOT_FIELD_NAME = "planet-of-origin"
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
