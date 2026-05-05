@@ -15,7 +15,7 @@ pyjwt = "*"
 markdown = "*"
 phonenumbers = "*"
 iuliia = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
@@ -26,6 +26,7 @@ pip = "*"
 pdfkit = "*"
 segno = "*"
 django-colorfield = "*"
+django-honeypot = "*"
 
 [dev-packages]
 

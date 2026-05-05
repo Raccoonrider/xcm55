@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'honeypot',
     'crispy_forms',
     'crispy_bootstrap5',
 
@@ -80,8 +81,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-
-    # Allauth
+    'honeypot.middleware.HoneypotMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -106,6 +106,7 @@ TEMPLATES = [
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+HONEYPOT_FIELD_NAME = "extra-terrestrial-address"
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
