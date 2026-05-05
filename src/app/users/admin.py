@@ -21,7 +21,7 @@ class UserAdminForm(admin.ModelAdmin):
     model = User
     autocomplete_fields = ('profile',)
     list_display = ("email", "is_staff", "is_active", "profile")
-    list_filter = ("email", "is_staff", "is_active",)
+    list_filter = ("is_staff", "is_active",)
     fieldsets = (
         (None, {"fields": ("email", "password", "profile")}),
         ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
