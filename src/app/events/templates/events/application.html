@@ -10,11 +10,27 @@
 {% block body %}   
 <form method="post">
     <h1>Заявка на участие</h1>
+    <h4>{{event}}</h4>
 
     {% csrf_token %}
     {{ form | crispy }}
+    {% for payment_window in payment_windows %}
+    <div class="alert alert-primary my-2 payment-window-alert" id="payment-window-{{ forloop.counter0 }}" style="display: none;">
+        К оплате: <strong>{{ payment_window.render_price }}</strong>
+    </div>
+    {% endfor %}
     <button class="w-100 btn btn-lg btn-primary" type="submit">
-        Зарегистрироваться
+        Зарегистрироваться и оплатить
     </button>
 </form>
+
+<script>
+    let routeInput = document.querySelector("#id_route")
+    let update_payment = function () {
+        document.querySelectorAll('.payment-window-alert').forEach((x) => {x.style.display='none'})
+        document.querySelector(`#payment-window-${routeInput.selectedIndex}`).style.display = 'block'
+        }
+    routeInput.addEventListener('click', update_payment)
+    update_payment()
+</script>
 {% endblock body %}

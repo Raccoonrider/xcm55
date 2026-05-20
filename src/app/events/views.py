@@ -335,6 +335,26 @@ class ApplicationCreate(FormView):
         application.save()
         return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = self.event
+
+        if len(self.event.routes.all()) == 2:
+            route_marathon, route_halfmarathon = self.event.routes.all().order_by('-distance')
+            marathon_payment_window = PaymentWindow.objects.filter(
+                event=self.event, 
+                route=route_marathon,
+                active_until__gte=date.today()
+                ).first()
+            halfmarathon_payment_window = PaymentWindow.objects.filter(
+                event=self.event, 
+                route=route_halfmarathon,
+                active_until__gte=date.today()
+                ).first()
+            
+            context['payment_windows'] = [marathon_payment_window, halfmarathon_payment_window]
+
+        return context
 
 
 class BundleApplicationCreate(FormView):

@@ -213,7 +213,6 @@ class Event(BaseViewableModel):
 
     def format_date(self, date_=None):
         date_ = date_ or self.date
-        print(self.date.month)
         months = [
             "",
             "января",
