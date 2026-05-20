@@ -184,26 +184,7 @@ class EventDetail(View):
 
         return render(request=self.request, template_name=event.detail_template, context=context)
 
-    @classmethod
-    def hx_get_payment_info(cls, request, pk):
-        if request.user.is_authenticated and request.user.profile:
-            event = get_object_or_404(cls.model, pk=pk)
-            my_application = (Application.objects
-                .filter(event=event, user_profile=request.user.profile)
-                .first()
-                )
-            payment_windows = PaymentWindow.objects.filter(event=event, route=my_application.route)
-            payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
-            
-            context = {
-                'event': event,
-                'my_application': my_application,
-                'payment_window_active' : payment_window_active,
-            }
-            return render(request=request, template_name="events/hx_payment_info.html", context=context)
-        else:
-            return HttpResponse("")
-        
+       
     @classmethod
     def hx_calendar(cls, request):
         events = Event.objects.filter(active=True, finished=False).order_by('date')

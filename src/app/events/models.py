@@ -128,40 +128,6 @@ class Event(BaseViewableModel):
         default=False,
         verbose_name="Регистрация закрыта",
     )
-    payment_info = models.CharField(
-        null=True,
-        blank=True,
-        max_length=255,
-        verbose_name="Номер карты",
-    )
-    payment_bank = models.CharField(
-        null=True,
-        blank=True,
-        max_length=255,
-        verbose_name="Название банка",
-    )
-    payment_url = models.URLField(
-        null=True,
-        blank=True,
-        verbose_name="URL для оплаты",
-    )
-    payment_qr = models.ImageField(
-        null=True,
-        blank=True,
-        verbose_name="QR для оплаты",
-        upload_to='events/payment_qr',
-    )
-    payment_sbp_phone = PhoneNumberField(
-        null=True,
-        blank=True,
-        verbose_name="Телефон для оплаты по СБП",   
-    )
-    payment_sbp_name = models.CharField(
-        null=True,
-        blank=True,
-        max_length=32,
-        verbose_name="ФИО для оплаты по СБП",   
-    )
     routes = models.ManyToManyField(
         to=Route,
         through='EventRoute'
@@ -483,25 +449,6 @@ class Bundle(BaseModel):
     )
     price = models.IntegerField(
         verbose_name="Цена вместе",
-    )
-    payment_info = models.CharField(
-        blank=True,
-        max_length=255,
-        verbose_name="Номер карты",
-    )
-    payment_bank = models.CharField(
-        blank=True,
-        max_length=255,
-        verbose_name="Название банка",
-    )
-    payment_sbp_phone = PhoneNumberField(
-        blank=True,
-        verbose_name="Телефон для оплаты по СБП",   
-    )
-    payment_sbp_name = models.CharField(
-        blank=True,
-        max_length=32,
-        verbose_name="ФИО для оплаты по СБП",   
     )
 
 
