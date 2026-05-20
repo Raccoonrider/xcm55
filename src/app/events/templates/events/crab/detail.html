@@ -82,7 +82,7 @@
 
     <hr>
 
-    {% with image='app/img/crab/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.rules_doc.url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
+    {% with image='app/img/crab/judge.webp' header='Правила' button_text='Скачать регламент' button_href=event.get_rules_url text="Подробнее о правилах и проведении любительской кросс-кантри велогонки можно узнать в регламенте мероприятия."%}
         {% include 'hero-left.html'%}
     {% endwith %}
 
