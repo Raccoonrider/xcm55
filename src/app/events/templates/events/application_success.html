@@ -1,0 +1,32 @@
+{% extends 'forms_base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    Заявка на участие принята
+{% endblock head_title %}
+
+{% block body %}   
+    <h1>Спасибо!</h1>
+    <h4>
+        Ваша заявка на участие оплачена успешно!  
+    </h4>
+    <div class="alert alert-primary my-5">
+        <div class="text-start">
+            Ждём Вас на старте
+            <strong>{{ application.event.format_date }}</strong>
+            в <strong>{{ application.event.format_time }}</strong>! 
+        </div>
+        <div class="text-start">
+            Желаем успешной подготовки и мощного финиша! 
+        </div>
+        <div class="text-end">
+            Команда XCM55.RU
+        </div>
+    </div>
+    <a class="w-100 btn btn-lg btn-primary" href="/">
+        Вернуться на главную
+    </a>
+
+{% endblock body %}

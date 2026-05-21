@@ -1,3 +1,4 @@
+import os
 from datetime import date, time, timedelta
 from secrets import token_hex
 from pathlib import Path
@@ -5,9 +6,11 @@ from pathlib import Path
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.http import Http404
 from phonenumber_field.modelfields import PhoneNumberField
 from colorfield.fields import ColorField
 from segno import make_qr
+import requests
 
 from common.models import BaseViewableModel, BaseRelation, BaseModel
 from common.enums import *
@@ -322,6 +325,28 @@ class Application(BaseModel):
         default=False,
         verbose_name="Оплата прошла"
     )
+    payment_application_id = models.CharField(
+        blank=True,
+        null=True,
+        max_length=16,
+        default=lambda: token_hex(8),
+    )
+    payment_order_id = models.CharField(
+        blank=True,
+        null=True,
+        max_length=128,
+        verbose_name="Alpha bank order id"
+    )
+    payment_order_id_response = models.JSONField(
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    payment_transaction_response = models.JSONField(
+        blank=True,
+        null=True,
+        editable=False,
+    )
     result = models.ForeignKey(
         to='events.Result',
         on_delete=models.SET_NULL,
@@ -426,6 +451,69 @@ class Application(BaseModel):
 
     def distance(self):
         return self.route.distance
+    
+    def get_price(self):
+        window = PaymentWindow.objects.filter(
+            event=self.event, 
+            route=self.route,
+            active_until__gte=date.today()
+        ).first()
+
+        if not window:
+            raise Http404
+        
+        return window.price
+
+
+    def get_payment_form_url(self):
+        response = requests.post(
+            url = "https://alfa.rbsuat.com/payment/rest/register.do",
+            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+            data = {
+                'userName': os.environ.get("ALPHA_LOGIN"),
+                'password': os.environ.get("ALPHA_PASSWORD"),
+                'orderNumber': self.payment_application_id,
+                'amount': self.get_price() * 100,
+                'description': "{self.event.name} - стартовый взнос",
+                'returnUrl': "https://xcm55.ru/events/order/38/success/",
+                'failUrl': "https://xcm55.ru/events/order/failure/",
+            }
+        )
+
+        if response.ok:
+            data = response.json()
+            self.payment_order_id = data.get('orderId')
+            self.payment_order_id_response = data
+            self.save()
+
+            return data.get('formUrl') or reverse('application_failure')
+        
+        return reverse('application_failure')
+
+        
+
+    def get_payment_result(self):
+        response = requests.post(
+            url = "https://alfa.rbsuat.com/payment/rest/getOrderStatus.do",
+            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+            data = {
+                'userName': os.environ.get("ALPHA_LOGIN"),
+                'password': os.environ.get("ALPHA_PASSWORD"),
+                'orderId': self.payment_order_id,
+            }
+        )        
+
+        if response.ok:
+            data = response.json()
+            self.payment_confirmed = str(data.get('OrderStatus')) == '2'
+            self.payment_transaction_response = data
+            self.save()
+            return self.payment_confirmed
+        
+        else:
+            return False
+
+
 
 class Bundle(BaseModel):
     name = models.CharField(

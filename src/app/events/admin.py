@@ -1,4 +1,6 @@
+import json
 from django.contrib import admin
+from django.utils.safestring  import mark_safe
 
 from events.models import *
 from common.admin import ChainedPrepopulatedFieldsMixin
@@ -61,6 +63,26 @@ class ApplicationModelAdmin(admin.ModelAdmin):
     list_display = ('user_profile', 'number', 'event', 'payment_confirmed', 'helmet_not_needed', 'route', 'category', 'created')
     autocomplete_fields = ('event', 'route', 'user_profile', 'result')
     list_filter = ('event', 'payment_confirmed', 'helmet_not_needed', 'rented_bike_needed', 'self_transfer_needed', 'bike_transfer_needed', 'route', 'category', 'referral')
+    readonly_fields = ('payment_order_id', 'get_payment_order_id_response', 'get_payment_transaction_response')
+    
+    def get_payment_order_id_response(self, instance: Application):
+        try:
+            data = json.dumps(instance.payment_order_id_response, indent=4, ensure_ascii=False)
+            html = f"<pre>{data}</pre>"
+            return mark_safe(html)
+        except Exception:
+            return "-"
+    get_payment_order_id_response.short_description = "Alpha bank order registration response"
+    
+    def get_payment_transaction_response(self, instance: Application):
+        try:
+            data = json.dumps(instance.payment_transaction_response, indent=4, ensure_ascii=False)
+            html = f"<pre>{data}</pre>"
+            return mark_safe(html)
+        except Exception:
+            return "-"
+    get_payment_transaction_response.short_description = "Alpha bank transaction response"
+    
 
 @admin.register(EventRoute)
 class EventRouteModelAdmin(admin.ModelAdmin):

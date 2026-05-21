@@ -1,4 +1,5 @@
 from datetime import date
+from secrets import token_hex
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -32,7 +33,11 @@ class EventDetail(View):
                 )
         if self.request.user.is_authenticated and self.request.user.profile:
             my_application = (Application.objects
-                .filter(event=event, user_profile=self.request.user.profile)
+                .filter(
+                    event=event, 
+                    user_profile=self.request.user.profile,
+                    payment_confirmed=True,
+                    )
                 .first()
                 )
         else:
@@ -236,7 +241,11 @@ class EventList(View):
         if self.request.user.is_authenticated:
             for event in calendar:
                 event.my_application = (Application.objects
-                    .filter(event=event, user_profile=self.request.user.profile)
+                    .filter(
+                        event=event, 
+                        user_profile=self.request.user.profile,
+                        payment_confirmed=True,
+                        )
                     .first()
                     )
                 
@@ -286,10 +295,11 @@ class ApplicationCreate(FormView):
         if self.request.user.profile is None:
             return HttpResponseRedirect(reverse('user_profile_create'))
         
-        application = Application.objects.filter(
+        self.application = Application.objects.filter(
             event=self.event, 
-            user_profile=self.request.user.profile)
-        if application:
+            user_profile=self.request.user.profile
+        ).first()
+        if self.application and self.application.payment_confirmed:
             return HttpResponseRedirect('/')
 
     def get(self, *args, pk:int=None, **kwargs):
@@ -322,18 +332,21 @@ class ApplicationCreate(FormView):
         return form
     
     def form_valid(self, form) -> HttpResponse:
-        application = Application()
-        application.event = self.event
-        application.route = form.cleaned_data['route']
-        application.helmet_not_needed = form.cleaned_data.get('helmet_not_needed', False)
-        application.rented_bike_needed = form.cleaned_data.get('rented_bike_needed', False)
-        application.self_transfer_needed = form.cleaned_data.get('self_transfer_needed', False)
-        application.bike_transfer_needed = form.cleaned_data.get('bike_transfer_needed', False)
-        application.user_profile = self.request.user.profile
-        application.category = form.cleaned_data['category']
-        application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
-        application.save()
-        return HttpResponseRedirect(self.event.get_absolute_url() + "#payment_info")
+        self.application = self.application or Application()
+        self.application.event = self.event
+        self.application.route = form.cleaned_data['route']
+        self.application.helmet_not_needed = form.cleaned_data.get('helmet_not_needed', False)
+        self.application.rented_bike_needed = form.cleaned_data.get('rented_bike_needed', False)
+        self.application.self_transfer_needed = form.cleaned_data.get('self_transfer_needed', False)
+        self.application.bike_transfer_needed = form.cleaned_data.get('bike_transfer_needed', False)
+        self.application.user_profile = self.request.user.profile
+        self.application.category = form.cleaned_data['category']
+        self.application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
+        self.application.payment_application_id = token_hex(8)
+        self.application.save()
+
+        form_url = self.application.get_payment_form_url()
+        return HttpResponseRedirect(form_url)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -353,8 +366,22 @@ class ApplicationCreate(FormView):
                 ).first()
             
             context['payment_windows'] = [marathon_payment_window, halfmarathon_payment_window]
+        else:
+            payment_window = PaymentWindow.objects.filter(
+                event=self.event, 
+                active_until__gte=date.today()
+                ).first()
+            context['payment_windows'] = [payment_window]
 
         return context
+    
+    @classmethod
+    def success(self, request, application_id):
+        application = Application.objects.get(pk=application_id)
+        if application.get_payment_result():
+            return render(request, 'events/application_success.html', context={'application': application})
+        else:
+            return render(request, 'events/application_failure.html')
 
 
 class BundleApplicationCreate(FormView):

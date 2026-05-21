@@ -1,0 +1,27 @@
+{% extends 'forms_base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    Заявка на участие не оплачена
+{% endblock head_title %}
+
+{% block body %}   
+    <h1>Упс...</h1>
+    <h4>
+        Заявка на участие не оплачена  
+    </h4>
+    <div class="alert alert-primary my-5">
+        <div class="text-start">
+            Нам не удалось проверить оплату заявки на стороне банка. Если Вы не передумали, а деньги по какой-то причине списались - пожалуйста, свяжитесь с нами.
+        </div>
+        <div class="text-end">
+            Команда XCM55.RU
+        </div>
+    </div>
+    <a class="w-100 btn btn-lg btn-primary" href="/">
+        Вернуться на главную
+    </a>
+
+{% endblock body %}
