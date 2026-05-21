@@ -474,7 +474,7 @@ class Application(BaseModel):
                 'password': os.environ.get("ALPHA_PASSWORD"),
                 'orderNumber': self.payment_application_id,
                 'amount': self.get_price() * 100,
-                'description': f"{self.event.name} - стартовый взнос",
+                'description': f"{self.event.name} - стартовый взнос ({self.user_profile})",
                 'returnUrl': f"https://xcm55.ru/events/order/{self.id}/success/",
             }
         )
