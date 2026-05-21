@@ -467,16 +467,15 @@ class Application(BaseModel):
 
     def get_payment_form_url(self):
         response = requests.post(
-            url = "https://alfa.rbsuat.com/payment/rest/register.do",
+            url = "https://pay.alfabank.ru/payment/rest/register.do",
             headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
             data = {
                 'userName': os.environ.get("ALPHA_LOGIN"),
                 'password': os.environ.get("ALPHA_PASSWORD"),
                 'orderNumber': self.payment_application_id,
                 'amount': self.get_price() * 100,
-                'description': "{self.event.name} - стартовый взнос",
-                'returnUrl': "https://xcm55.ru/events/order/38/success/",
-                'failUrl': "https://xcm55.ru/events/order/failure/",
+                'description': f"{self.event.name} - стартовый взнос",
+                'returnUrl': f"https://xcm55.ru/events/order/{self.id}/success/",
             }
         )
 
@@ -494,7 +493,7 @@ class Application(BaseModel):
 
     def get_payment_result(self):
         response = requests.post(
-            url = "https://alfa.rbsuat.com/payment/rest/getOrderStatus.do",
+            url = "https://pay.alfabank.ru/payment/rest/getOrderStatus.do",
             headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
             data = {
                 'userName': os.environ.get("ALPHA_LOGIN"),
