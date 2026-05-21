@@ -467,7 +467,7 @@ class Application(BaseModel):
 
     def get_payment_form_url(self):
         response = requests.post(
-            url = "https://pay.alfabank.ru/payment/rest/register.do",
+            url = f"{os.environ['ALPHA_HOST']}/payment/rest/register.do",
             headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
             data = {
                 'userName': os.environ.get("ALPHA_LOGIN"),
@@ -493,7 +493,7 @@ class Application(BaseModel):
 
     def get_payment_result(self):
         response = requests.post(
-            url = "https://pay.alfabank.ru/payment/rest/getOrderStatus.do",
+            url = f"{os.environ['ALPHA_HOST']}/payment/rest/getOrderStatus.do",
             headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
             data = {
                 'userName': os.environ.get("ALPHA_LOGIN"),
