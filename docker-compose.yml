@@ -5,7 +5,8 @@ services:
     container_name: xcm55
     build: .
     command: sh -c "
-      cd /home/app
+      supercronic /home/crontab
+      & cd /home/app
       && python manage.py migrate
       && python manage.py collectstatic --noinput
       && gunicorn app.wsgi --bind 0.0.0.0:8000 --timeout 100 --workers=3"

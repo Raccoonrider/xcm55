@@ -1,0 +1,3 @@
+# Django management commands to be executed as cron jobs
+*/5 * * * * python /home/app/manage.py refresh_payment_status
+# An empty line is required at the end of this file for a valid cron file.

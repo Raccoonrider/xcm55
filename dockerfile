@@ -24,5 +24,10 @@ RUN apk add nano
 COPY Pipfile Pipfile.lock ./
 RUN pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
 
+# Install cron jobs
+RUN apk add supercronic shadow
+COPY crontab .
+RUN chmod 0644 crontab
+
 # Install application
 COPY ./src /home
