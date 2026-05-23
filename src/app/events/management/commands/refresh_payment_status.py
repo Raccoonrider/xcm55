@@ -9,7 +9,7 @@ class Command(BaseCommand):
         applications = (
             Application.objects.filter(
                 payment_confirmed=False,
-                saved__gte=(datetime.now() - timedelta(days=1))
+                saved__gte=(datetime.now() - timedelta(minutes=20))
             )
         )
 
