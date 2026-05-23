@@ -504,9 +504,11 @@ class Application(BaseModel):
 
         if response.ok:
             data = response.json()
-            self.payment_confirmed = str(data.get('OrderStatus')) == '2'
-            self.payment_transaction_response = data
-            self.save()
+            
+            if str(data.get('OrderStatus')) == '2':
+                self.payment_confirmed = True
+                self.payment_transaction_response = data
+                self.save()
             return self.payment_confirmed
         
         else:
