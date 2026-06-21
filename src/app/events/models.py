@@ -16,6 +16,9 @@ from common.models import BaseViewableModel, BaseRelation, BaseModel
 from common.enums import *
 from common.shortcuts import render_date
 
+def default_payment_application_id():
+    return token_hex(8)
+
 class Series(BaseViewableModel):
     pass
 
@@ -165,6 +168,11 @@ class Event(BaseViewableModel):
         default='events/results.html',
         max_length=127,
         verbose_name="Шаблон протокола",
+    )
+    max_slots = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Максимум слотов"
     )
 
     class Meta:
@@ -329,7 +337,7 @@ class Application(BaseModel):
         blank=True,
         null=True,
         max_length=16,
-        default=lambda: token_hex(8),
+        default=default_payment_application_id,
     )
     payment_order_id = models.CharField(
         blank=True,
@@ -509,10 +517,20 @@ class Application(BaseModel):
                 self.payment_confirmed = True
                 self.payment_transaction_response = data
                 self.save()
+
             return self.payment_confirmed
         
         else:
             return False
+
+    def save(self, *args, **kwargs):
+        if self.event.max_slots:
+            if len(Application.objects.filter(event=self.event, payment_confirmed=True)) == self.event.max_slots:
+                self.event.registration_closed = True
+                self.event.save()
+        
+        super().save(*args, **kwargs)
+
 
 
 
