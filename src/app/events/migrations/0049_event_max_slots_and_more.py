@@ -18,6 +18,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='application',
             name='payment_application_id',
-            field=models.CharField(blank=True, default=events.models.default_payment_application_id, max_length=16, null=True),
+            field=models.CharField(blank=True, default=events.models.default_payment_application_id, max_length=128, null=True),
         ),
     ]

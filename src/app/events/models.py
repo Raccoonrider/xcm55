@@ -336,7 +336,7 @@ class Application(BaseModel):
     payment_application_id = models.CharField(
         blank=True,
         null=True,
-        max_length=16,
+        max_length=128,
         default=default_payment_application_id,
     )
     payment_order_id = models.CharField(
