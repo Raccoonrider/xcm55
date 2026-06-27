@@ -21,12 +21,11 @@ django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
 pillow = "*"
 django-extensions = "*"
-django-allauth = "==0.61.1"
+django-allauth = "==65.16.1"
 pip = "*"
 pdfkit = "*"
 segno = "*"
 django-colorfield = "*"
-django-honeypot = "*"
 
 [dev-packages]
 

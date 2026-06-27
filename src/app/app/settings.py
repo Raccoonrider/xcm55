@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'honeypot',
     'crispy_forms',
     'crispy_bootstrap5',
 
@@ -81,7 +80,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'honeypot.middleware.HoneypotMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -106,7 +104,6 @@ TEMPLATES = [
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-HONEYPOT_FIELD_NAME = "planet-of-origin"
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
@@ -160,6 +157,7 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = "latest_alien_adbuction_date"
 
 # Allauth provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
