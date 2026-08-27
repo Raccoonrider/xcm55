@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import date, time, timedelta
 from secrets import token_hex
 from pathlib import Path
@@ -333,28 +334,7 @@ class Application(BaseModel):
         default=False,
         verbose_name="Оплата прошла"
     )
-    payment_application_id = models.CharField(
-        blank=True,
-        null=True,
-        max_length=128,
-        default=default_payment_application_id,
-    )
-    payment_order_id = models.CharField(
-        blank=True,
-        null=True,
-        max_length=128,
-        verbose_name="Alpha bank order id"
-    )
-    payment_order_id_response = models.JSONField(
-        blank=True,
-        null=True,
-        editable=False,
-    )
-    payment_transaction_response = models.JSONField(
-        blank=True,
-        null=True,
-        editable=False,
-    )
+
     result = models.ForeignKey(
         to='events.Result',
         on_delete=models.SET_NULL,
@@ -456,7 +436,6 @@ class Application(BaseModel):
             ),
         )
 
-
     def distance(self):
         return self.route.distance
     
@@ -471,57 +450,13 @@ class Application(BaseModel):
             raise Http404
         
         return window.price
-
-
-    def get_payment_form_url(self):
-        response = requests.post(
-            url = f"{os.environ['ALPHA_HOST']}/payment/rest/register.do",
-            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
-            data = {
-                'userName': os.environ.get("ALPHA_LOGIN"),
-                'password': os.environ.get("ALPHA_PASSWORD"),
-                'orderNumber': self.payment_application_id,
-                'amount': self.get_price() * 100,
-                'description': f"{self.event.name} - стартовый взнос ({self.user_profile})",
-                'returnUrl': f"https://xcm55.ru/events/order/{self.id}/success/",
-            }
-        )
-
-        if response.ok:
-            data = response.json()
-            self.payment_order_id = data.get('orderId')
-            self.payment_order_id_response = data
-            self.save()
-
-            return data.get('formUrl') or reverse('application_failure')
-        
-        return reverse('application_failure')
-
-        
+    
 
     def get_payment_result(self):
-        response = requests.post(
-            url = f"{os.environ['ALPHA_HOST']}/payment/rest/getOrderStatus.do",
-            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
-            data = {
-                'userName': os.environ.get("ALPHA_LOGIN"),
-                'password': os.environ.get("ALPHA_PASSWORD"),
-                'orderId': self.payment_order_id,
-            }
-        )        
-
-        if response.ok:
-            data = response.json()
+        for order in ApplicationOrder.objects.filter(application=self):
+            if order.get_payment_result():
+                return True
             
-            if str(data.get('OrderStatus')) == '2':
-                self.payment_confirmed = True
-                self.payment_transaction_response = data
-                self.save()
-
-            return self.payment_confirmed
-        
-        else:
-            return False
 
     def save(self, *args, **kwargs):
         if self.event.max_slots:
@@ -532,6 +467,88 @@ class Application(BaseModel):
         super().save(*args, **kwargs)
 
 
+class ApplicationOrder(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    application = models.ForeignKey(
+        Application, 
+        on_delete=models.CASCADE, 
+        verbose_name="Заявка"
+    )
+    order_id = models.CharField(
+        blank=True,
+        null=True,
+        max_length=128,
+        verbose_name="Alpha bank order id"
+    )
+    order_id_response = models.JSONField(
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    transaction_response = models.JSONField(
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    saved = models.DateTimeField(
+        auto_now=True,
+    )
+
+
+    def get_payment_form_url(self):
+        response = requests.post(
+            url = f"{os.environ['ALPHA_HOST']}/payment/rest/register.do",
+            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+            data = {
+                'userName': os.environ.get("ALPHA_LOGIN"),
+                'password': os.environ.get("ALPHA_PASSWORD"),
+                'orderNumber': self.id,
+                'amount': self.application.get_price() * 100,
+                'description': f"{self.application.event.name} - стартовый взнос ({self.application.user_profile})",
+                'returnUrl': f"https://xcm55.ru/events/order/{self.application.id}/success/",
+            }
+        )
+
+        if response.ok:
+            data = response.json()
+            self.order_id = data.get('orderId')
+            self.order_id_response = data
+            self.save()
+
+            return data.get('formUrl') or reverse('application_failure')
+        
+        return reverse('application_failure')
+           
+
+    def get_payment_result(self):
+        response = requests.post(
+            url = f"{os.environ['ALPHA_HOST']}/payment/rest/getOrderStatus.do",
+            headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+            data = {
+                'userName': os.environ.get("ALPHA_LOGIN"),
+                'password': os.environ.get("ALPHA_PASSWORD"),
+                'orderId': self.order_id,
+            }
+        )        
+
+        if response.ok:
+            data = response.json()
+            
+            if str(data.get('OrderStatus')) == '2':
+                self.application.payment_confirmed = True
+                self.application.save()
+
+                self.transaction_response = data
+                self.save()
+
+            return self.application.payment_confirmed
+        
+        else:
+            return False
 
 
 class Bundle(BaseModel):

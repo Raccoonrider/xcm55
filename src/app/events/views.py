@@ -342,10 +342,12 @@ class ApplicationCreate(FormView):
         self.application.user_profile = self.request.user.profile
         self.application.category = form.cleaned_data['category']
         self.application.referral = Referral.from_uuid(self.request.session.get('ref_uuid'))
-        self.application.payment_application_id = token_hex(8)
         self.application.save()
 
-        form_url = self.application.get_payment_form_url()
+        order = ApplicationOrder(application=self.application)
+        order.save()
+
+        form_url = order.get_payment_form_url()
         return HttpResponseRedirect(form_url)
 
     def get_context_data(self, **kwargs):
