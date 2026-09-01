@@ -497,6 +497,10 @@ class ApplicationOrder(models.Model):
     saved = models.DateTimeField(
         auto_now=True,
     )
+    payment_confirmed = models.BooleanField(
+        default=False,
+        verbose_name="Оплата прошла"
+    )
 
 
     def get_payment_form_url(self):
@@ -539,6 +543,7 @@ class ApplicationOrder(models.Model):
             data = response.json()
             
             if str(data.get('OrderStatus')) == '2':
+                self.payment_confirmed = True
                 self.application.payment_confirmed = True
                 self.application.save()
 
