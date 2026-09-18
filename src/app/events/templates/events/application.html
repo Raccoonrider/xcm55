@@ -30,7 +30,7 @@
         document.querySelectorAll('.payment-window-alert').forEach((x) => {x.style.display='none'})
         document.querySelector(`#payment-window-${routeInput.selectedIndex}`).style.display = 'block'
         }
-    routeInput.addEventListener('click', update_payment)
+    routeInput.addEventListener('change', update_payment)
     update_payment()
 </script>
 {% endblock body %}
