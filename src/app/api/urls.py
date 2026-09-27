@@ -8,6 +8,5 @@ urlpatterns = [
         path('events/<int:event__pk>/age_groups/', api.views.AgeGroupListAPIView.as_view()),
         path('events/<int:event__pk>/applications/', api.views.ApplicationListAPIView.as_view()),
         path('events/<int:event__pk>/results/', api.views.ResultListCreateUpdateAPIView.as_view()),
-        path('events/<int:event__pk>/results/', api.views.ResultListCreateUpdateAPIView.as_view()),
         path('events/results/add/', api.views.ResultListCreateUpdateAPIView.as_view()),
     ]   

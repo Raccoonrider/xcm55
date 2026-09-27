@@ -79,7 +79,7 @@ class ResultListCreateUpdateAPIView(ListCreateAPIView):
                     application.result = instance
                     application.save()
 
-                    instance.age_group = application.agegroup()
+                    instance.age_group = application.agegroup
                     instance.save()
 
 
