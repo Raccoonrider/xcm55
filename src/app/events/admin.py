@@ -59,7 +59,7 @@ class HeatResultModelAdmin(ChainedPrepopulatedFieldsMixin, admin.ModelAdmin):
 
 class ApplicationOrderInline(admin.StackedInline):
     model = ApplicationOrder
-    readonly_fields = ('get_order_id_response', 'get_transaction_response')
+    readonly_fields = ('get_order_id_response', 'get_transaction_response', 'get_refund_url')
                        
     def get_order_id_response(self, instance: ApplicationOrder):
         try:
@@ -78,6 +78,14 @@ class ApplicationOrderInline(admin.StackedInline):
         except Exception:
             return "-"
     get_transaction_response.short_description = "Alpha bank transaction response"
+
+    def get_refund_url(self, instance: ApplicationOrder):
+        if instance.order_id and instance.payment_confirmed:
+            url = f"https://payment.alfabank.ru/generalmp3/admin/transactions/{instance.order_id}"
+            html = f"<a href={url}>Вернуть деньги</a>"
+            return mark_safe(html)        
+        return "-"
+    get_refund_url.short_description = "Refund URL"
 
     def has_add_permission(self, request: HttpRequest, obj) -> bool:
         return False
